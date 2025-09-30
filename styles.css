@@ -526,6 +526,54 @@ body {
     .search-bar {
         flex-direction: column;
     }
+
+    /* Stats grid responsive - 3 columns on mobile */
+    .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+    }
+
+    .stat-card {
+        padding: 15px 10px;
+    }
+
+    .stat-icon {
+        font-size: 1.2rem;
+        margin-bottom: 8px;
+    }
+
+    .stat-value {
+        font-size: 1.2rem;
+    }
+
+    .stat-label {
+        font-size: 0.7rem;
+    }
+}
+
+/* Extra small devices (phones in portrait) */
+@media (max-width: 480px) {
+    .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+    }
+
+    .stat-card {
+        padding: 12px 8px;
+    }
+
+    .stat-icon {
+        font-size: 1rem;
+    }
+
+    .stat-value {
+        font-size: 1rem;
+    }
+
+    .stat-label {
+        font-size: 0.65rem;
+        line-height: 1.2;
+    }
 }
 
 .loading {
