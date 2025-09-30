@@ -1,0 +1,517 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "ultimaActualizacion": "2025-01-15",
+    "totalPropiedades": 150,
+    "descripcion": "Estructura de datos para sistema inmobiliario basado en modelo EAV"
+  },
+
+  "tiposInmueble": [
+    {
+      "id": 1,
+      "nombre": "Oficina",
+      "slug": "oficina",
+      "icono": "fa-briefcase",
+      "activo": true
+    },
+    {
+      "id": 2,
+      "nombre": "Casa Oficina",
+      "slug": "casa-oficina",
+      "icono": "fa-building",
+      "activo": true
+    },
+    {
+      "id": 3,
+      "nombre": "Casa",
+      "slug": "casa",
+      "icono": "fa-home",
+      "activo": true
+    },
+    {
+      "id": 4,
+      "nombre": "Departamento",
+      "slug": "departamento",
+      "icono": "fa-building",
+      "activo": true
+    },
+    {
+      "id": 5,
+      "nombre": "Terreno Residencial",
+      "slug": "terreno-residencial",
+      "icono": "fa-mountain",
+      "activo": true
+    },
+    {
+      "id": 6,
+      "nombre": "Casa de Temporada",
+      "slug": "casa-temporada",
+      "icono": "fa-umbrella-beach",
+      "activo": true
+    },
+    {
+      "id": 7,
+      "nombre": "Local Comercial",
+      "slug": "local-comercial",
+      "icono": "fa-store",
+      "activo": true
+    },
+    {
+      "id": 8,
+      "nombre": "Terreno Comercial",
+      "slug": "terreno-comercial",
+      "icono": "fa-map",
+      "activo": true
+    },
+    {
+      "id": 9,
+      "nombre": "Terreno Industrial",
+      "slug": "terreno-industrial",
+      "icono": "fa-industry",
+      "activo": true
+    },
+    {
+      "id": 10,
+      "nombre": "Local Industrial",
+      "slug": "local-industrial",
+      "icono": "fa-warehouse",
+      "activo": true
+    }
+  ],
+
+  "caracteristicasPorTipo": {
+    "oficina": [
+      "parqueos_simples",
+      "parqueos_dobles",
+      "ascensor",
+      "aire_acondicionado",
+      "gimnasio",
+      "zona_ninos",
+      "seguridad_24h",
+      "portero",
+      "sala_reuniones",
+      "kitchenette"
+    ],
+    "casa": [
+      "dormitorios",
+      "banos",
+      "cocheras",
+      "piscina",
+      "jardin",
+      "terraza",
+      "quincho",
+      "pisos",
+      "area_construida",
+      "area_terreno"
+    ],
+    "departamento": [
+      "dormitorios",
+      "banos",
+      "cocheras",
+      "gimnasio",
+      "zona_ninos",
+      "piscina",
+      "jardin_comun",
+      "ascensor",
+      "portero",
+      "vista"
+    ],
+    "terreno_residencial": [
+      "area_terreno",
+      "frente",
+      "fondo",
+      "zonificacion",
+      "servicios_basicos",
+      "acceso_pavimentado"
+    ],
+    "casa_temporada": [
+      "primera_fila",
+      "vista_mar",
+      "frente_parque",
+      "piscina",
+      "jardin",
+      "dormitorios",
+      "banos",
+      "club_playa"
+    ],
+    "local_comercial": [
+      "puerta_calle",
+      "puerta_interior",
+      "independiente",
+      "en_edificio",
+      "estacionamiento",
+      "vitrinas",
+      "banos"
+    ],
+    "terreno_comercial": [
+      "area_terreno",
+      "frente",
+      "zonificacion_comercial",
+      "esquina",
+      "via_principal"
+    ],
+    "terreno_industrial": [
+      "area_terreno",
+      "frente",
+      "via_acceso_asfaltada",
+      "zonificacion_industrial",
+      "servicios_industriales"
+    ],
+    "local_industrial": [
+      "area_total",
+      "area_oficinas",
+      "altura_libre",
+      "portones",
+      "via_acceso",
+      "energia_trifasica"
+    ]
+  },
+
+  "propiedadesEjemplo": [
+    {
+      "id": 1,
+      "codigo": "OF-LIM-2024-001",
+      "tipoInmueble": "oficina",
+      "tipoInmuebleId": 1,
+      "operacion": "venta",
+      "titulo": "Oficina Premium en San Isidro",
+      "descripcion": "Moderna oficina en edificio corporativo clase A. Ubicación estratégica con fácil acceso a principales avenidas. Acabados de primera calidad.",
+      "ubicacion": {
+        "pais": "Perú",
+        "departamento": "Lima",
+        "provincia": "Lima",
+        "distrito": "San Isidro",
+        "urbanizacion": "Centro Empresarial",
+        "direccion": "Av. Javier Prado Este 4567",
+        "referencia": "Frente al Golf",
+        "latitud": -12.0897,
+        "longitud": -77.0282
+      },
+      "precioVenta": 450000,
+      "precioAlquiler": null,
+      "moneda": "USD",
+      "areaConstruida": 120,
+      "areaTerreno": null,
+      "dormitorios": 0,
+      "banos": 2,
+      "cocheras": 2,
+      "pisos": null,
+      "antiguedad": 3,
+      "estado": "excelente",
+      "caracteristicas": [
+        {
+          "caracteristicaId": 1,
+          "slug": "parqueos_simples",
+          "nombre": "Parqueos Simples",
+          "valor": 2,
+          "tipo": "number"
+        },
+        {
+          "caracteristicaId": 2,
+          "slug": "ascensor",
+          "nombre": "Ascensor",
+          "valor": true,
+          "tipo": "boolean"
+        },
+        {
+          "caracteristicaId": 3,
+          "slug": "aire_acondicionado",
+          "nombre": "Aire Acondicionado",
+          "valor": true,
+          "tipo": "boolean"
+        },
+        {
+          "caracteristicaId": 4,
+          "slug": "seguridad_24h",
+          "nombre": "Seguridad 24 horas",
+          "valor": true,
+          "tipo": "boolean"
+        },
+        {
+          "caracteristicaId": 5,
+          "slug": "gimnasio",
+          "nombre": "Gimnasio",
+          "valor": true,
+          "tipo": "boolean"
+        },
+        {
+          "caracteristicaId": 6,
+          "slug": "sala_reuniones",
+          "nombre": "Sala de Reuniones",
+          "valor": true,
+          "tipo": "boolean"
+        }
+      ],
+      "imagenes": [
+        {
+          "id": 1,
+          "url": "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=600&fit=crop",
+          "orden": 1,
+          "esPrincipal": true,
+          "descripcion": "Vista principal"
+        },
+        {
+          "id": 2,
+          "url": "https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=800&h=600&fit=crop",
+          "orden": 2,
+          "esPrincipal": false,
+          "descripcion": "Área de trabajo"
+        },
+        {
+          "id": 3,
+          "url": "https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=800&h=600&fit=crop",
+          "orden": 3,
+          "esPrincipal": false,
+          "descripcion": "Sala de reuniones"
+        }
+      ],
+      "propietario": {
+        "nombre": "Inmobiliaria Premium SAC",
+        "telefono": "+51 999 888 777",
+        "email": "contacto@premium.pe",
+        "whatsapp": "+51999888777"
+      },
+      "publicacion": {
+        "destacada": true,
+        "activa": true,
+        "fechaPublicacion": "2024-01-15T10:00:00Z",
+        "fechaActualizacion": "2024-01-20T15:30:00Z",
+        "visitas": 247
+      }
+    },
+    {
+      "id": 2,
+      "codigo": "CS-LIM-2024-042",
+      "tipoInmueble": "casa",
+      "tipoInmuebleId": 3,
+      "operacion": "venta",
+      "titulo": "Casa Moderna en Surco con Jardín y Piscina",
+      "descripcion": "Hermosa casa de 3 pisos con amplios ambientes, acabados de lujo y excelente ubicación. Perfecta para familias grandes. Zona residencial tranquila y segura.",
+      "ubicacion": {
+        "pais": "Perú",
+        "departamento": "Lima",
+        "provincia": "Lima",
+        "distrito": "Santiago de Surco",
+        "urbanizacion": "Chacarilla del Estanque",
+        "direccion": "Calle Los Ficus 234",
+        "referencia": "A 2 cuadras del parque principal",
+        "latitud": -12.1203,
+        "longitud": -76.9897
+      },
+      "precioVenta": 650000,
+      "precioAlquiler": null,
+      "moneda": "USD",
+      "areaConstruida": 280,
+      "areaTerreno": 350,
+      "dormitorios": 5,
+      "banos": 4,
+      "cocheras": 3,
+      "pisos": 3,
+      "antiguedad": 8,
+      "estado": "muy-bueno",
+      "caracteristicas": [
+        {
+          "caracteristicaId": 10,
+          "slug": "piscina",
+          "nombre": "Piscina",
+          "valor": true,
+          "tipo": "boolean"
+        },
+        {
+          "caracteristicaId": 11,
+          "slug": "jardin",
+          "nombre": "Jardín",
+          "valor": true,
+          "tipo": "boolean"
+        },
+        {
+          "caracteristicaId": 12,
+          "slug": "quincho",
+          "nombre": "Quincho",
+          "valor": true,
+          "tipo": "boolean"
+        },
+        {
+          "caracteristicaId": 13,
+          "slug": "terraza",
+          "nombre": "Terraza",
+          "valor": true,
+          "tipo": "boolean"
+        },
+        {
+          "caracteristicaId": 14,
+          "slug": "aire_acondicionado",
+          "nombre": "Aire Acondicionado",
+          "valor": true,
+          "tipo": "boolean"
+        },
+        {
+          "caracteristicaId": 15,
+          "slug": "calefaccion",
+          "nombre": "Calefacción",
+          "valor": "Central",
+          "tipo": "select"
+        }
+      ],
+      "imagenes": [
+        {
+          "id": 10,
+          "url": "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&h=600&fit=crop",
+          "orden": 1,
+          "esPrincipal": true,
+          "descripcion": "Fachada principal"
+        },
+        {
+          "id": 11,
+          "url": "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800&h=600&fit=crop",
+          "orden": 2,
+          "esPrincipal": false,
+          "descripcion": "Sala de estar"
+        },
+        {
+          "id": 12,
+          "url": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&h=600&fit=crop",
+          "orden": 3,
+          "esPrincipal": false,
+          "descripcion": "Jardín con piscina"
+        }
+      ],
+      "propietario": {
+        "nombre": "María González",
+        "telefono": "+51 987 654 321",
+        "email": "maria.gonzalez@email.com",
+        "whatsapp": "+51987654321"
+      },
+      "publicacion": {
+        "destacada": true,
+        "activa": true,
+        "fechaPublicacion": "2024-01-10T08:00:00Z",
+        "fechaActualizacion": "2024-01-18T12:00:00Z",
+        "visitas": 523
+      }
+    },
+    {
+      "id": 3,
+      "codigo": "DP-LIM-2024-089",
+      "tipoInmueble": "departamento",
+      "tipoInmuebleId": 4,
+      "operacion": "alquiler",
+      "titulo": "Departamento Amoblado en Miraflores",
+      "descripcion": "Acogedor departamento totalmente amoblado con vista al parque. Edificio con todas las comodidades. Excelente ubicación cerca a supermercados, bancos y restaurantes.",
+      "ubicacion": {
+        "pais": "Perú",
+        "departamento": "Lima",
+        "provincia": "Lima",
+        "distrito": "Miraflores",
+        "urbanizacion": "Miraflores Central",
+        "direccion": "Av. Larco 1234",
+        "referencia": "Frente al Parque Kennedy",
+        "latitud": -12.1210,
+        "longitud": -77.0300
+      },
+      "precioVenta": null,
+      "precioAlquiler": 1200,
+      "moneda": "USD",
+      "areaConstruida": 85,
+      "areaTerreno": null,
+      "dormitorios": 2,
+      "banos": 2,
+      "cocheras": 1,
+      "pisos": null,
+      "antiguedad": 5,
+      "estado": "excelente",
+      "caracteristicas": [
+        {
+          "caracteristicaId": 20,
+          "slug": "amueblado",
+          "nombre": "Amueblado",
+          "valor": true,
+          "tipo": "boolean"
+        },
+        {
+          "caracteristicaId": 21,
+          "slug": "ascensor",
+          "nombre": "Ascensor",
+          "valor": true,
+          "tipo": "boolean"
+        },
+        {
+          "caracteristicaId": 22,
+          "slug": "gimnasio",
+          "nombre": "Gimnasio",
+          "valor": true,
+          "tipo": "boolean"
+        },
+        {
+          "caracteristicaId": 23,
+          "slug": "portero",
+          "nombre": "Portero",
+          "valor": true,
+          "tipo": "boolean"
+        },
+        {
+          "caracteristicaId": 24,
+          "slug": "vista",
+          "nombre": "Vista",
+          "valor": "Parque",
+          "tipo": "select"
+        }
+      ],
+      "imagenes": [
+        {
+          "id": 20,
+          "url": "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&h=600&fit=crop",
+          "orden": 1,
+          "esPrincipal": true,
+          "descripcion": "Sala y comedor"
+        },
+        {
+          "id": 21,
+          "url": "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&h=600&fit=crop",
+          "orden": 2,
+          "esPrincipal": false,
+          "descripcion": "Dormitorio principal"
+        },
+        {
+          "id": 22,
+          "url": "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop",
+          "orden": 3,
+          "esPrincipal": false,
+          "descripcion": "Cocina equipada"
+        }
+      ],
+      "propietario": {
+        "nombre": "Carlos Rodríguez",
+        "telefono": "+51 998 765 432",
+        "email": "carlos.rodriguez@email.com",
+        "whatsapp": "+51998765432"
+      },
+      "publicacion": {
+        "destacada": false,
+        "activa": true,
+        "fechaPublicacion": "2024-01-12T14:00:00Z",
+        "fechaActualizacion": "2024-01-19T09:30:00Z",
+        "visitas": 189
+      }
+    }
+  ],
+
+  "ejemploBusquedaGenerativa": {
+    "consulta": "Busco casa con piscina y jardín en Surco para familia grande, presupuesto 600-700 mil",
+    "parametrosExtraidos": {
+      "tipoInmueble": "casa",
+      "caracteristicasRequeridas": ["piscina", "jardin"],
+      "distrito": "Santiago de Surco",
+      "precioMin": 600000,
+      "precioMax": 700000,
+      "contexto": "familia grande",
+      "dormitoriosMin": 4
+    },
+    "sugerenciasAlternativas": [
+      "¿Te interesa una casa con quincho además de piscina y jardín?",
+      "¿Consideras otras zonas cercanas como La Molina o San Borja?",
+      "¿Prefieres una casa de 1 o 2 pisos?",
+      "¿Es importante que tenga cochera para varios autos?"
+    ]
+  }
+}
