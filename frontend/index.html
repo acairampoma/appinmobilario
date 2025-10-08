@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Match Property - Encuentra tu inmueble ideal</title>
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/components/carousel.css">
+    <link rel="stylesheet" href="css/pages/home.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <img src="assets/images/logos/logo.jpg" alt="Match Property" class="logo-img">
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="active">Inicio</a></li>
+                    <li><a href="busqueda.html">Buscar</a></li>
+                    <li><a href="sobre-nosotros.html">Nosotros</a></li>
+                    <li><a href="login.html" class="btn btn-outline">Iniciar Sesión</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Carousel -->
+    <section class="carousel-hero">
+        <div class="carousel-slides">
+            <div class="carousel-slide active">
+                <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&h=1080&fit=crop" alt="Oficina Moderna">
+            </div>
+            <div class="carousel-slide">
+                <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&h=1080&fit=crop" alt="Edificio Corporativo">
+            </div>
+            <div class="carousel-slide">
+                <img src="https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=1920&h=1080&fit=crop" alt="Espacio Empresarial">
+            </div>
+            <div class="carousel-slide">
+                <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=1920&h=1080&fit=crop" alt="Oficina Premium">
+            </div>
+            <div class="carousel-slide">
+                <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1920&h=1080&fit=crop" alt="Casa Moderna">
+            </div>
+        </div>
+
+        <div class="carousel-overlay"></div>
+
+        <div class="carousel-content">
+            <h1 id="heroTitle">Filtros de búsqueda a la medida de tu interés</h1>
+            <p id="heroSubtitle">Objetivo, rápido y confiable</p>
+            <p class="subtitle" id="heroDescription">Motor de Búsqueda Especializado por tipos de Inmuebles</p>
+            <div class="carousel-buttons">
+                <a href="busqueda.html" class="btn btn-primary">🔍 Buscar Inmueble</a>
+                <a href="registrar-propiedad.html" class="btn btn-secondary">📢 Publicar Propiedad</a>
+            </div>
+        </div>
+
+        <div class="carousel-arrow prev">‹</div>
+        <div class="carousel-arrow next">›</div>
+
+        <div class="carousel-controls">
+            <span class="carousel-dot active" data-slide="0"></span>
+            <span class="carousel-dot" data-slide="1"></span>
+            <span class="carousel-dot" data-slide="2"></span>
+            <span class="carousel-dot" data-slide="3"></span>
+            <span class="carousel-dot" data-slide="4"></span>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="container">
+            <h2 class="section-title">¿Por qué Match Property?</h2>
+            <div class="features-grid" id="featuresGrid">
+                <!-- Se cargará dinámicamente desde JSON -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services-section">
+        <div class="container">
+            <h2 class="section-title">Servicios Adicionales</h2>
+            <div class="services-grid" id="servicesGrid">
+                <!-- Se cargará dinámicamente desde JSON -->
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>¿Deseas anunciar un inmueble?</h2>
+            <p>Contáctanos y te ayudaremos a comercializar tu propiedad</p>
+            <a href="registrar-propiedad.html" class="btn btn-primary">Contactar Ahora</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>Match Property</h3>
+                    <p id="footerMision"><!-- Se carga dinámicamente --></p>
+                </div>
+                <div class="footer-col">
+                    <h3>Enlaces</h3>
+                    <ul>
+                        <li><a href="index.html">Inicio</a></li>
+                        <li><a href="busqueda.html">Buscar</a></li>
+                        <li><a href="sobre-nosotros.html">Nosotros</a></li>
+                        <li><a href="login.html">Iniciar Sesión</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Contacto</h3>
+                    <p id="footerDireccion"><!-- Se carga dinámicamente --></p>
+                    <p id="footerTelefono"><!-- Se carga dinámicamente --></p>
+                    <p id="footerEmail"><!-- Se carga dinámicamente --></p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Match Property. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/components/carousel.js"></script>
+    <script src="js/pages/home.js"></script>
+</body>
+</html>

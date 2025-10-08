@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar Inmueble - Match Property</title>
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/pages/busqueda.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <img src="assets/images/logos/logo.jpg" alt="Match Property" class="logo-img">
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="busqueda.html" class="active">Buscar</a></li>
+                    <li><a href="sobre-nosotros.html">Nosotros</a></li>
+                    <li><a href="login.html" class="btn btn-outline">Iniciar Sesión</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Búsqueda Section -->
+    <section class="busqueda-section">
+        <div class="container">
+            <h1 class="page-title">🔍 Buscar Inmueble</h1>
+
+            <!-- Filtros Básicos -->
+            <div class="filtros-basicos-card">
+                <h2>Filtros Básicos</h2>
+
+                <div class="form-group">
+                    <label>Ubicación</label>
+                    <div class="ubicacion-grid">
+                        <select id="pais" class="form-control">
+                            <option value="Peru">Perú</option>
+                        </select>
+                        <select id="departamento" class="form-control">
+                            <option value="Lima">Lima</option>
+                        </select>
+                        <select id="provincia" class="form-control">
+                            <option value="Lima">Lima</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Distritos (selecciona uno o varios)</label>
+                    <div id="distritosCheckboxes" class="checkboxes-grid">
+                        <!-- Se carga dinámicamente -->
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Tipo de Inmueble</label>
+                    <select id="tipoInmueble" class="form-control">
+                        <option value="">Selecciona un tipo...</option>
+                        <!-- Se carga dinámicamente -->
+                    </select>
+                </div>
+
+                <div class="botones-grupo">
+                    <button id="btnBuscar" class="btn btn-primary">🔍 Buscar Ahora</button>
+                    <button id="btnFiltrosAvanzados" class="btn btn-secondary">⚙️ Filtros Avanzados</button>
+                </div>
+            </div>
+
+            <!-- Filtros Avanzados (Ocultos por defecto) -->
+            <div id="filtrosAvanzados" class="filtros-avanzados-card" style="display: none;">
+                <h2>⚙️ Filtros Avanzados</h2>
+
+                <div class="form-group">
+                    <label>Transacción</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="transaccion" value="compra"> Compra</label>
+                        <label><input type="radio" name="transaccion" value="alquiler"> Alquiler</label>
+                        <label><input type="radio" name="transaccion" value="ambos" checked> Ambos</label>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Área Requerida (m²)</label>
+                        <input type="number" id="areaRequerida" class="form-control" placeholder="460">
+                        <small>💡 El sistema busca ±15%</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Parqueos Requeridos</label>
+                        <input type="number" id="parqueosRequeridos" class="form-control" placeholder="8">
+                        <small>💡 El sistema contempla ±20%</small>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Presupuesto Compra (USD)</label>
+                        <input type="number" id="presupuestoCompra" class="form-control" placeholder="750,000">
+                        <small>(Sin IGV) 💡 Tolerancia ±15%</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Presupuesto Alquiler (USD/mes)</label>
+                        <input type="number" id="presupuestoAlquiler" class="form-control" placeholder="8,500">
+                        <small>💡 Tolerancia ±15%</small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Antigüedad (No mayor a años)</label>
+                    <input type="number" id="antiguedad" class="form-control" placeholder="15">
+                </div>
+
+                <div class="form-group">
+                    <label>Nivel de Implementación</label>
+                    <select id="implementacion" class="form-control">
+                        <option value="">Cualquiera</option>
+                        <option value="Amoblado FULL">Amoblado FULL</option>
+                        <option value="Implementada">Implementada</option>
+                        <option value="Semi Implementada">Semi Implementada</option>
+                        <option value="Por Implementar">Por Implementar</option>
+                    </select>
+                </div>
+
+                <!-- Características Dinámicas por Tipo de Inmueble -->
+                <div id="caracteristicasAvanzadas" class="caracteristicas-container">
+                    <!-- Se carga dinámicamente según tipo de inmueble -->
+                </div>
+
+                <div class="botones-grupo">
+                    <button id="btnAplicarFiltros" class="btn btn-primary">Aplicar Filtros</button>
+                    <button id="btnLimpiarFiltros" class="btn btn-outline">Limpiar Todo</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="js/pages/busqueda.js"></script>
+</body>
+</html>

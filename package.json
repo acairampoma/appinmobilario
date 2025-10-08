@@ -1,24 +1,16 @@
 {
-  "name": "match-inmobiliaria",
+  "name": "match-property",
   "version": "1.0.0",
-  "description": "Sistema Inmobiliario Inteligente con Búsqueda NLP",
+  "description": "Plataforma inmobiliaria con búsqueda inteligente y mapa interactivo",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "python -m http.server 3000"
   },
-  "keywords": [
-    "real-estate",
-    "search",
-    "nlp",
-    "fuse.js"
-  ],
-  "author": "acairampoma",
+  "keywords": ["inmobiliaria", "real-estate", "property"],
+  "author": "Match Property",
   "license": "MIT",
   "dependencies": {
     "express": "^4.18.2"
-  },
-  "engines": {
-    "node": ">=18.0.0"
   }
 }

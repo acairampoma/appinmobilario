@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados - Match Property</title>
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/pages/resultados.css">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+    <!-- Header -->
+    <header class="header-resultados">
+        <div class="container-fluid">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="assets/images/logos/logo.jpg" alt="Match Property" class="logo-img">
+                </div>
+                <h1 id="resultadosCount">Cargando...</h1>
+                <div class="header-actions">
+                    <a href="busqueda.html" class="btn btn-outline">← Volver a Filtros</a>
+                    <span id="usuarioInfo" class="usuario-info">Usuario: Invitado</span>
+                </div>
+            </div>
+            <div id="filtrosAplicados" class="filtros-aplicados">
+                <!-- Se carga dinámicamente -->
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content: Cards + Mapa -->
+    <div class="main-container">
+        <!-- Columna Izquierda: Lista de Propiedades -->
+        <section class="listings-section" id="listingsSection">
+            <div id="propertiesList" class="properties-list">
+                <!-- Se carga dinámicamente -->
+            </div>
+        </section>
+
+        <!-- Columna Derecha: Mapa (Sticky) -->
+        <section class="map-section">
+            <div id="map" class="map-canvas"></div>
+        </section>
+    </div>
+
+    <!-- Modal Login (para usuarios no autenticados) -->
+    <div id="loginModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <h2>🔒 Inicia Sesión</h2>
+            <p>Para ver la información de contacto completa, debes iniciar sesión</p>
+            <div class="modal-buttons">
+                <a href="login.html" class="btn btn-primary">Iniciar Sesión</a>
+                <a href="registro.html" class="btn btn-secondary">Registrarse</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="js/pages/resultados.js"></script>
+</body>
+</html>

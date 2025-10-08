@@ -1,22 +1,17 @@
 const express = require('express');
 const path = require('path');
-
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Serve static files
-app.use(express.static(__dirname));
+// Servir archivos estáticos desde la carpeta frontend
+app.use(express.static(path.join(__dirname, 'frontend')));
 
-// Serve index.html for root route
+// Ruta principal
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname, 'frontend', 'index.html'));
 });
 
-// Handle 404
-app.use((req, res) => {
-    res.status(404).sendFile(path.join(__dirname, 'index.html'));
-});
-
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`🏠 MATCH Sistema Inmobiliario running on http://0.0.0.0:${PORT}`);
+// Iniciar servidor
+app.listen(PORT, () => {
+  console.log(`🏢 Match Property running on http://localhost:${PORT}`);
 });
