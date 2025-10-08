@@ -1,5 +1,6 @@
 /* Logo Animation - Match Property */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&display=swap');
 
 /* Pantalla de carga */
 .loading-screen {
@@ -81,17 +82,22 @@ body.ready .animated-logo {
   opacity: 1;
 }
 
-/* Texto MATCH con efecto circuitos tecnológicos */
+/* Texto MATCH - Tipografía ELEPHANT (usando Playfair Display Black como alternativa) */
 .logo-text-match {
-  font-family: 'Montserrat', 'Arial Black', sans-serif;
+  font-family: 'Playfair Display', serif;
   font-size: 120px;
   font-weight: 900;
-  letter-spacing: 12px;
-  fill: url(#circuit-pattern);
-  stroke: var(--azul-corporativo);
-  stroke-width: 2;
+  letter-spacing: 8px;
+  fill: var(--azul-corporativo);
   opacity: 0;
   text-transform: uppercase;
+}
+
+/* Solo la M tiene circuitos BLANCOS */
+#letter-m {
+  fill: url(#circuit-pattern);
+  stroke: var(--azul-corporativo);
+  stroke-width: 3;
   paint-order: stroke fill;
 }
 
@@ -210,35 +216,43 @@ body.ready .animated-logo {
 
   /* SVG con layout vertical centrado en móvil */
   .animated-logo {
-    max-width: 90%;
+    max-width: 95%;
     height: auto;
   }
 
   .logo-text-match {
-    font-size: 35px;
-    letter-spacing: 2px;
-    stroke-width: 1.5;
+    font-size: 32px;
+    letter-spacing: 1.5px;
+  }
+
+  #letter-m {
+    stroke-width: 2;
   }
 
   .logo-text-property {
-    font-size: 18px;
-    letter-spacing: 1px;
+    font-size: 16px;
+    letter-spacing: 0.8px;
   }
 
   .logo-text-realestate {
-    font-size: 12px;
-    letter-spacing: 0.3px;
+    font-size: 11px;
+    letter-spacing: 0.2px;
   }
 
-  /* Círculos visibles en mobile - más grandes para ver íconos */
+  /* Círculos MÁS GRANDES en mobile - r=40 */
   .logo-circle circle {
-    r: 30;
+    r: 40;
   }
 
-  /* Iconos mejor visibles en mobile */
+  /* Iconos MUCHO MÁS GRANDES en mobile */
+  .circle-icon {
+    transform: scale(1.5);
+    transform-origin: center;
+  }
+
   .circle-icon rect,
   .circle-icon path {
-    stroke-width: 0.8;
+    stroke-width: 1.2;
   }
 
   /* Fondo vertical en mobile - imágenes apiladas */
