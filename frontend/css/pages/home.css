@@ -20,6 +20,11 @@
   font-size: 1.5rem;
 }
 
+.logo-img {
+  height: 80px;
+  width: auto;
+}
+
 .nav-menu {
   display: flex;
   gap: var(--spacing-lg);

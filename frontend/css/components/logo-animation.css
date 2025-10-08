@@ -42,11 +42,13 @@
 /* Logo SVG */
 .animated-logo {
   width: 100%;
+  max-width: 600px;
   height: auto;
-  opacity: 0;
+  display: block;
+  margin: 0 auto;
 }
 
-.animated-logo.ready {
+body.ready .animated-logo {
   opacity: 1;
 }
 

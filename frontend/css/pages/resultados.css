@@ -1,12 +1,13 @@
 /* Header Resultados */
 .header-resultados {
-  background: linear-gradient(135deg, var(--azul-corporativo) 0%, var(--azul-medio) 100%);
-  color: var(--blanco);
+  background: var(--blanco);
+  color: var(--azul-corporativo);
   padding: var(--spacing-lg);
   box-shadow: var(--shadow-md);
   position: sticky;
   top: 0;
   z-index: 100;
+  border-bottom: 2px solid var(--borde);
 }
 
 .header-content {
@@ -17,8 +18,13 @@
 }
 
 .header-content h1 {
-  color: var(--blanco);
+  color: var(--azul-corporativo);
   font-size: 1.8rem;
+}
+
+.logo-img {
+  height: 80px;
+  width: auto;
 }
 
 .header-actions {
@@ -28,10 +34,12 @@
 }
 
 .usuario-info {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--gris-claro);
+  color: var(--azul-corporativo);
   padding: 8px 16px;
   border-radius: var(--radius-md);
   font-size: 0.9rem;
+  border: 1px solid var(--borde);
 }
 
 .filtros-aplicados {
@@ -64,7 +72,7 @@
 .hamburger span {
   width: 28px;
   height: 3px;
-  background: var(--blanco);
+  background: var(--azul-corporativo);
   border-radius: 3px;
   transition: all 0.3s ease;
 }

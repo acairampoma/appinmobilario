@@ -1,17 +1,23 @@
 /* Header (compartido con otras páginas) */
 .header {
-  background: var(--azul-corporativo);
+  background: var(--blanco);
   padding: var(--spacing-md) 0;
   box-shadow: var(--shadow-md);
   position: sticky;
   top: 0;
   z-index: 100;
+  border-bottom: 2px solid var(--borde);
 }
 
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.logo-img {
+  height: 80px;
+  width: auto;
 }
 
 .nav-menu {
@@ -22,7 +28,7 @@
 }
 
 .nav-menu a {
-  color: var(--blanco);
+  color: var(--azul-corporativo);
   font-weight: 500;
   transition: color var(--transition-fast);
 }
@@ -47,7 +53,7 @@
 .hamburger span {
   width: 28px;
   height: 3px;
-  background: var(--blanco);
+  background: var(--azul-corporativo);
   border-radius: 3px;
   transition: all 0.3s ease;
 }

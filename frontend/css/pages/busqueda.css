@@ -1,11 +1,12 @@
 /* Header (compartido) */
 .header {
-  background: var(--azul-corporativo);
+  background: var(--blanco);
   padding: var(--spacing-md) 0;
   box-shadow: var(--shadow-md);
   position: sticky;
   top: 0;
   z-index: 100;
+  border-bottom: 2px solid var(--borde);
 }
 
 .navbar {
@@ -15,8 +16,13 @@
 }
 
 .logo h2 {
-  color: var(--blanco);
+  color: var(--azul-corporativo);
   font-size: 1.5rem;
+}
+
+.logo-img {
+  height: 80px;
+  width: auto;
 }
 
 .nav-menu {
@@ -27,13 +33,24 @@
 }
 
 .nav-menu a {
-  color: var(--blanco);
+  color: var(--azul-corporativo);
   font-weight: 500;
+  transition: color var(--transition-fast);
 }
 
 .nav-menu a:hover,
 .nav-menu a.active {
   color: var(--dorado);
+}
+
+.nav-menu .btn-outline {
+  color: var(--azul-corporativo);
+  border-color: var(--azul-corporativo);
+}
+
+.nav-menu .btn-outline:hover {
+  background: var(--azul-corporativo);
+  color: var(--blanco);
 }
 
 /* Hamburger Menu */
@@ -51,7 +68,7 @@
 .hamburger span {
   width: 28px;
   height: 3px;
-  background: var(--blanco);
+  background: var(--azul-corporativo);
   border-radius: 3px;
   transition: all 0.3s ease;
 }

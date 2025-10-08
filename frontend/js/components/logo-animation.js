@@ -90,6 +90,10 @@ class LogoAnimation {
     this.animate();
     document.body.classList.add('ready');
 
+    // Hacer el logo visible desde el principio
+    const logo = document.querySelector('.animated-logo');
+    if (logo) logo.style.opacity = '1';
+
     const timeline = anime.timeline({
       easing: 'easeOutExpo'
     });
