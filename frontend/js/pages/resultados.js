@@ -19,6 +19,26 @@ class ResultadosPage {
     this.renderResultados();
     this.renderMapa();
     this.setupEventListeners();
+    this.setupHamburgerMenu();
+  }
+
+  setupHamburgerMenu() {
+    const hamburger = document.getElementById('hamburger');
+    const headerActions = document.getElementById('headerActions');
+
+    if (hamburger && headerActions) {
+      hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('active');
+        headerActions.classList.toggle('active');
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!hamburger.contains(e.target) && !headerActions.contains(e.target)) {
+          hamburger.classList.remove('active');
+          headerActions.classList.remove('active');
+        }
+      });
+    }
   }
 
   cargarUsuarioLogueado() {
