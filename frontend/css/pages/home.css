@@ -220,7 +220,7 @@
 
 /* Footer */
 .footer {
-  background: var(--gris-oscuro);
+  background: linear-gradient(135deg, var(--azul-corporativo) 0%, #002244 100%);
   color: var(--blanco);
   padding: var(--spacing-xxl) 0 var(--spacing-md);
 }

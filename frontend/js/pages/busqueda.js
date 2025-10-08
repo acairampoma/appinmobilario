@@ -28,6 +28,39 @@ class BusquedaPage {
     this.setupHamburgerMenu();
   }
 
+  setupBackgroundChanger() {
+    const tipoInmuebleCheckboxes = document.querySelectorAll('input[name="tipo_inmueble"]');
+    const filtrosCard = document.querySelector('.filtros-basicos-card');
+
+    const tipoMap = {
+      '1': 'casa',
+      '2': 'departamento',
+      '3': 'terreno',
+      '4': 'oficina',
+      '5': 'local',
+      '6': 'cochera'
+    };
+
+    tipoInmuebleCheckboxes.forEach(checkbox => {
+      checkbox.addEventListener('change', (e) => {
+        // Remover todos los data-tipo previos
+        Object.values(tipoMap).forEach(tipo => {
+          filtrosCard.removeAttribute('data-tipo');
+        });
+
+        // Si hay algún checkbox marcado, agregar el data-tipo correspondiente
+        const checkedCheckbox = document.querySelector('input[name="tipo_inmueble"]:checked');
+        if (checkedCheckbox) {
+          const tipoId = checkedCheckbox.value;
+          const tipoSlug = tipoMap[tipoId];
+          if (tipoSlug) {
+            filtrosCard.setAttribute('data-tipo', tipoSlug);
+          }
+        }
+      });
+    });
+  }
+
   setupHamburgerMenu() {
     const hamburger = document.getElementById('hamburger');
     const navMenu = document.getElementById('navMenu');
@@ -186,6 +219,9 @@ class BusquedaPage {
   }
 
   setupEventListeners() {
+    // Cambiar fondo según tipo de inmueble seleccionado
+    this.setupBackgroundChanger();
+
     // Botón Filtros Avanzados
     const btnFiltrosAvanzados = document.getElementById('btnFiltrosAvanzados');
     const filtrosAvanzados = document.getElementById('filtrosAvanzados');
