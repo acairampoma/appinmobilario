@@ -155,33 +155,60 @@
 /* Responsive */
 @media (max-width: 768px) {
   .carousel-hero {
-    height: 400px;
+    height: 500px; /* Más alto para que el contenido no se sobreponga */
+  }
+
+  .carousel-content {
+    width: 85%;
+    padding: 0 10px;
   }
 
   .carousel-content h1 {
-    font-size: 2rem;
+    font-size: 1.6rem;
+    margin-bottom: var(--spacing-sm);
+    line-height: 1.2;
   }
 
   .carousel-content p {
-    font-size: 1.2rem;
+    font-size: 1rem;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .carousel-content .subtitle {
+    font-size: 0.9rem;
+    margin-bottom: var(--spacing-md);
   }
 
   .carousel-buttons {
     flex-direction: column;
     align-items: center;
+    gap: var(--spacing-sm);
   }
 
+  .carousel-buttons .btn {
+    min-width: 180px;
+    padding: 10px 16px;
+    font-size: 0.9rem;
+  }
+
+  /* Flechas más alejadas del centro para no chocar con botones */
   .carousel-arrow {
-    width: 40px;
-    height: 40px;
-    font-size: 20px;
+    width: 45px;
+    height: 45px;
+    font-size: 22px;
+    top: 20%; /* Mover arriba para que no choque con contenido */
   }
 
   .carousel-arrow.prev {
-    left: 10px;
+    left: 15px;
   }
 
   .carousel-arrow.next {
-    right: 10px;
+    right: 15px;
+  }
+
+  /* Controles (dots) más arriba */
+  .carousel-controls {
+    bottom: 15px;
   }
 }

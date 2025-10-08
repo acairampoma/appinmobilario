@@ -467,8 +467,26 @@
   }
 
   .map-section {
-    height: 350px !important;
+    height: 400px !important;
+    min-height: 400px !important;
     display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+  }
+
+  .map-canvas {
+    height: 100% !important;
+    min-height: 400px !important;
+    display: block !important;
+    visibility: visible !important;
+  }
+
+  #map {
+    height: 400px !important;
+    min-height: 400px !important;
+    display: block !important;
+    visibility: visible !important;
   }
 
   .property-card {
