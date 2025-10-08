@@ -1,4 +1,5 @@
 /* Logo Animation - Match Property */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap');
 
 /* Pantalla de carga */
 .loading-screen {
@@ -14,6 +15,30 @@
   justify-content: center;
   opacity: 1;
   transition: opacity 0.8s ease;
+  overflow: hidden;
+}
+
+/* Imágenes de fondo durante animación */
+.loading-screen::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)),
+    url('https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1200&q=80') center left / 33.33% 100% no-repeat,
+    url('https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=1200&q=80') center center / 33.33% 100% no-repeat,
+    url('https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&q=80') center right / 33.33% 100% no-repeat;
+  z-index: 0;
+  opacity: 0;
+  animation: fadeInBackground 2s ease-in-out 0.5s forwards;
+}
+
+@keyframes fadeInBackground {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .loading-screen.hidden {
@@ -25,8 +50,12 @@
 .logo-animation-container {
   position: relative;
   width: 100%;
-  max-width: 600px;
+  max-width: 700px;
   padding: 20px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Canvas para partículas */
@@ -54,12 +83,13 @@ body.ready .animated-logo {
 
 /* Texto MATCH */
 .logo-text-match {
-  font-family: 'Arial Black', sans-serif;
+  font-family: 'Montserrat', 'Arial Black', sans-serif;
   font-size: 120px;
   font-weight: 900;
-  letter-spacing: 8px;
+  letter-spacing: 12px;
   fill: var(--azul-corporativo);
   opacity: 0;
+  text-transform: uppercase;
 }
 
 /* Círculos con iconos */
@@ -79,20 +109,23 @@ body.ready .animated-logo {
 
 /* Texto PROPERTY */
 .logo-text-property {
-  font-family: 'Arial', sans-serif;
+  font-family: 'Montserrat', 'Arial', sans-serif;
   font-size: 48px;
-  font-weight: 600;
-  letter-spacing: 4px;
+  font-weight: 700;
+  letter-spacing: 6px;
   fill: #5B9BD5;
   opacity: 0;
+  text-transform: uppercase;
 }
 
 /* Texto IA REAL ESTATE */
 .logo-text-realestate {
-  font-family: 'Arial', sans-serif;
+  font-family: 'Montserrat', 'Arial', sans-serif;
   font-size: 32px;
-  font-weight: 400;
+  font-weight: 600;
+  letter-spacing: 2px;
   opacity: 0;
+  text-transform: uppercase;
 }
 
 .text-ia {
@@ -128,25 +161,47 @@ body.ready .animated-logo {
 /* Responsive */
 @media (max-width: 768px) {
   .logo-animation-container {
-    max-width: 90%;
+    max-width: 95%;
+    padding: 15px;
+  }
+
+  .animated-logo {
+    max-width: 100%;
   }
 
   .logo-text-match {
-    font-size: 60px;
-    letter-spacing: 4px;
+    font-size: 70px;
+    letter-spacing: 6px;
   }
 
   .logo-text-property {
-    font-size: 28px;
-    letter-spacing: 2px;
+    font-size: 32px;
+    letter-spacing: 3px;
   }
 
   .logo-text-realestate {
-    font-size: 20px;
+    font-size: 22px;
+    letter-spacing: 1px;
+  }
+
+  /* Ajustar círculos en tablet - más grandes y mejor espaciados */
+  .logo-circle circle {
+    r: 32;
+  }
+
+  /* Iconos más visibles en tablet */
+  .circle-icon rect,
+  .circle-icon path {
+    stroke-width: 0.5;
   }
 }
 
 @media (max-width: 480px) {
+  .logo-animation-container {
+    max-width: 100%;
+    padding: 10px;
+  }
+
   .logo-text-match {
     font-size: 40px;
     letter-spacing: 2px;
@@ -154,9 +209,31 @@ body.ready .animated-logo {
 
   .logo-text-property {
     font-size: 20px;
+    letter-spacing: 1.5px;
   }
 
   .logo-text-realestate {
-    font-size: 16px;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+  }
+
+  /* Círculos visibles en mobile - más grandes para ver íconos */
+  .logo-circle circle {
+    r: 28;
+  }
+
+  /* Iconos mejor visibles en mobile */
+  .circle-icon rect,
+  .circle-icon path {
+    stroke-width: 0.8;
+  }
+
+  /* Fondo más sutil en mobile */
+  .loading-screen::before {
+    background:
+      linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)),
+      url('https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80') center left / 33.33% 100% no-repeat,
+      url('https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&q=80') center center / 33.33% 100% no-repeat,
+      url('https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80') center right / 33.33% 100% no-repeat;
   }
 }
