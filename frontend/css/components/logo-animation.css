@@ -93,12 +93,19 @@ body.ready .animated-logo {
   text-transform: uppercase;
 }
 
-/* Solo la M tiene circuitos BLANCOS */
+/* Solo la M tiene circuitos BLANCOS DENTRO con fondo azul */
+#letter-m {
+  fill: var(--azul-corporativo);
+  stroke: var(--azul-corporativo);
+  stroke-width: 2;
+}
+
+/* Overlay de circuitos blancos sobre la M */
 #letter-m {
   fill: url(#circuit-pattern);
   stroke: var(--azul-corporativo);
   stroke-width: 3;
-  paint-order: stroke fill;
+  paint-order: fill stroke;
 }
 
 /* Círculos con iconos */
@@ -239,20 +246,17 @@ body.ready .animated-logo {
     letter-spacing: 0.2px;
   }
 
-  /* Círculos MÁS GRANDES en mobile - r=40 */
+  /* Círculos MÁS GRANDES en mobile - r=45 */
   .logo-circle circle {
-    r: 40;
+    r: 45;
   }
 
-  /* Iconos MUCHO MÁS GRANDES en mobile */
-  .circle-icon {
-    transform: scale(1.5);
-    transform-origin: center;
-  }
-
+  /* Iconos visibles en mobile - SIN transform */
   .circle-icon rect,
-  .circle-icon path {
-    stroke-width: 1.2;
+  .circle-icon path,
+  .circle-icon circle {
+    stroke: var(--blanco);
+    stroke-width: 0.5;
   }
 
   /* Fondo vertical en mobile - imágenes apiladas */
