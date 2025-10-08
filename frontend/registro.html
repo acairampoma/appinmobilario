@@ -44,17 +44,13 @@
                 <form id="registroForm" class="auth-form">
                     <!-- Tipo de Persona -->
                     <div class="form-group">
-                        <label>👤 Tipo de Persona</label>
-                        <div class="radio-group">
-                            <label class="radio-label">
-                                <input type="radio" name="tipoPersona" value="natural" checked>
-                                <span>Persona Natural</span>
-                            </label>
-                            <label class="radio-label">
-                                <input type="radio" name="tipoPersona" value="juridica">
-                                <span>Persona Jurídica (Empresa)</span>
-                            </label>
-                        </div>
+                        <label for="tipoPersona">👤 Tipo de Persona</label>
+                        <select id="tipoPersona" name="tipoPersona" class="form-control" required>
+                            <option value="">Selecciona el tipo de persona</option>
+                            <option value="natural" selected>Persona Natural</option>
+                            <option value="juridica">Persona Jurídica (Empresa)</option>
+                        </select>
+                        <small class="form-help">Selecciona si eres persona natural o representas una empresa</small>
                     </div>
 
                     <!-- Datos Empresa (solo si es jurídica) -->

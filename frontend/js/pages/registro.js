@@ -37,26 +37,24 @@ class RegistroPage {
   }
 
   setupTipoPersonaToggle() {
-    const radios = document.querySelectorAll('input[name="tipoPersona"]');
+    const tipoPersonaSelect = document.getElementById('tipoPersona');
     const datosEmpresa = document.getElementById('datosEmpresa');
     const razonSocial = document.getElementById('razonSocial');
     const ruc = document.getElementById('ruc');
     const representanteLegal = document.getElementById('representanteLegal');
 
-    radios.forEach(radio => {
-      radio.addEventListener('change', (e) => {
-        if (e.target.value === 'juridica') {
-          datosEmpresa.style.display = 'block';
-          razonSocial.required = true;
-          ruc.required = true;
-          representanteLegal.required = true;
-        } else {
-          datosEmpresa.style.display = 'none';
-          razonSocial.required = false;
-          ruc.required = false;
-          representanteLegal.required = false;
-        }
-      });
+    tipoPersonaSelect.addEventListener('change', (e) => {
+      if (e.target.value === 'juridica') {
+        datosEmpresa.style.display = 'block';
+        razonSocial.required = true;
+        ruc.required = true;
+        representanteLegal.required = true;
+      } else {
+        datosEmpresa.style.display = 'none';
+        razonSocial.required = false;
+        ruc.required = false;
+        representanteLegal.required = false;
+      }
     });
   }
 
@@ -81,7 +79,7 @@ class RegistroPage {
       }
 
       // Obtener datos del formulario
-      const tipoPersona = document.querySelector('input[name="tipoPersona"]:checked').value;
+      const tipoPersona = document.getElementById('tipoPersona').value;
       const nombre = document.getElementById('nombre').value;
       const apellido = document.getElementById('apellido').value;
       const tipoDoc = document.getElementById('tipoDoc').value;

@@ -140,6 +140,31 @@
   box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.1);
 }
 
+/* Select styling */
+.form-control select,
+select.form-control {
+  cursor: pointer;
+  background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%23003366" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"%3e%3cpolyline points="6 9 12 15 18 9"%3e%3c/polyline%3e%3c/svg%3e');
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 20px;
+  padding-right: 40px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.form-control select:focus,
+select.form-control:focus {
+  background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%23F5A623" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"%3e%3cpolyline points="6 9 12 15 18 9"%3e%3c/polyline%3e%3c/svg%3e');
+}
+
+.form-control option {
+  padding: 10px;
+  background: var(--blanco);
+  color: var(--gris-oscuro);
+}
+
 .form-control::placeholder {
   color: var(--gris-medio);
 }
