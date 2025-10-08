@@ -490,11 +490,26 @@
 @media (max-width: 768px) {
   .hamburger {
     display: flex;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }
+
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+    position: relative;
+    padding-right: 60px;
+  }
+
+  .header-content h1 {
+    font-size: 1.2rem;
+    width: 100%;
   }
 
   .header-actions {
     position: fixed;
-    top: 140px;
+    top: 80px;
     right: -100%;
     width: 250px;
     background: var(--azul-corporativo);
@@ -504,21 +519,16 @@
     box-shadow: -4px 0 12px rgba(0, 0, 0, 0.3);
     transition: right 0.3s ease;
     border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+    z-index: 999;
   }
 
   .header-actions.active {
     right: 0;
   }
 
-  .header-content {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: var(--spacing-sm);
-  }
-
-  .header-content h1 {
-    font-size: 1.3rem;
-    flex: 1;
+  .usuario-info {
+    width: 100%;
+    text-align: center;
   }
 
   .map-section {
