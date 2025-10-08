@@ -81,15 +81,18 @@ body.ready .animated-logo {
   opacity: 1;
 }
 
-/* Texto MATCH */
+/* Texto MATCH con efecto circuitos tecnológicos */
 .logo-text-match {
   font-family: 'Montserrat', 'Arial Black', sans-serif;
   font-size: 120px;
   font-weight: 900;
   letter-spacing: 12px;
-  fill: var(--azul-corporativo);
+  fill: url(#circuit-pattern);
+  stroke: var(--azul-corporativo);
+  stroke-width: 2;
   opacity: 0;
   text-transform: uppercase;
+  paint-order: stroke fill;
 }
 
 /* Círculos con iconos */
@@ -200,26 +203,36 @@ body.ready .animated-logo {
   .logo-animation-container {
     max-width: 100%;
     padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* SVG con layout vertical centrado en móvil */
+  .animated-logo {
+    max-width: 90%;
+    height: auto;
   }
 
   .logo-text-match {
-    font-size: 40px;
+    font-size: 35px;
     letter-spacing: 2px;
+    stroke-width: 1.5;
   }
 
   .logo-text-property {
-    font-size: 20px;
-    letter-spacing: 1.5px;
+    font-size: 18px;
+    letter-spacing: 1px;
   }
 
   .logo-text-realestate {
-    font-size: 14px;
-    letter-spacing: 0.5px;
+    font-size: 12px;
+    letter-spacing: 0.3px;
   }
 
   /* Círculos visibles en mobile - más grandes para ver íconos */
   .logo-circle circle {
-    r: 28;
+    r: 30;
   }
 
   /* Iconos mejor visibles en mobile */
@@ -228,12 +241,12 @@ body.ready .animated-logo {
     stroke-width: 0.8;
   }
 
-  /* Fondo más sutil en mobile */
+  /* Fondo vertical en mobile - imágenes apiladas */
   .loading-screen::before {
     background:
-      linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)),
-      url('https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80') center left / 33.33% 100% no-repeat,
-      url('https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&q=80') center center / 33.33% 100% no-repeat,
-      url('https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80') center right / 33.33% 100% no-repeat;
+      linear-gradient(rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.92)),
+      url('https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80') center top / 100% 33.33% no-repeat,
+      url('https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&q=80') center center / 100% 33.33% no-repeat,
+      url('https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80') center bottom / 100% 33.33% no-repeat;
   }
 }
