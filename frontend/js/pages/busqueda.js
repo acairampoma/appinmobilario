@@ -29,35 +29,37 @@ class BusquedaPage {
   }
 
   setupBackgroundChanger() {
-    const tipoInmuebleCheckboxes = document.querySelectorAll('input[name="tipo_inmueble"]');
+    const tipoInmuebleSelect = document.getElementById('tipoInmueble');
     const filtrosCard = document.querySelector('.filtros-basicos-card');
 
-    const tipoMap = {
-      '1': 'casa',
-      '2': 'departamento',
-      '3': 'terreno',
-      '4': 'oficina',
-      '5': 'local',
-      '6': 'cochera'
-    };
+    if (!tipoInmuebleSelect || !filtrosCard) return;
 
-    tipoInmuebleCheckboxes.forEach(checkbox => {
-      checkbox.addEventListener('change', (e) => {
-        // Remover todos los data-tipo previos
-        Object.values(tipoMap).forEach(tipo => {
-          filtrosCard.removeAttribute('data-tipo');
-        });
+    tipoInmuebleSelect.addEventListener('change', (e) => {
+      // Remover el data-tipo previo
+      filtrosCard.removeAttribute('data-tipo');
 
-        // Si hay algún checkbox marcado, agregar el data-tipo correspondiente
-        const checkedCheckbox = document.querySelector('input[name="tipo_inmueble"]:checked');
-        if (checkedCheckbox) {
-          const tipoId = checkedCheckbox.value;
-          const tipoSlug = tipoMap[tipoId];
-          if (tipoSlug) {
-            filtrosCard.setAttribute('data-tipo', tipoSlug);
-          }
-        }
-      });
+      const tipoId = e.target.value;
+      if (!tipoId) return;
+
+      // Buscar el tipo de inmueble en el array
+      const tipoInmueble = this.tiposInmuebles.find(t => t.id == tipoId);
+      if (!tipoInmueble) return;
+
+      // Mapear nombre a slug para CSS
+      const nombreLower = tipoInmueble.nombre.toLowerCase();
+      let tipoSlug = '';
+
+      if (nombreLower.includes('casa')) tipoSlug = 'casa';
+      else if (nombreLower.includes('departamento')) tipoSlug = 'departamento';
+      else if (nombreLower.includes('terreno')) tipoSlug = 'terreno';
+      else if (nombreLower.includes('oficina')) tipoSlug = 'oficina';
+      else if (nombreLower.includes('local')) tipoSlug = 'local';
+      else if (nombreLower.includes('cochera') || nombreLower.includes('estacionamiento')) tipoSlug = 'cochera';
+
+      if (tipoSlug) {
+        filtrosCard.setAttribute('data-tipo', tipoSlug);
+        console.log('Fondo cambiado a:', tipoSlug, 'para', tipoInmueble.nombre);
+      }
     });
   }
 
