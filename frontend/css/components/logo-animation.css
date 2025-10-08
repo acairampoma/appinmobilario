@@ -1,0 +1,160 @@
+/* Logo Animation - Match Property */
+
+/* Pantalla de carga */
+.loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: var(--blanco);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  transition: opacity 0.8s ease;
+}
+
+.loading-screen.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Logo Container */
+.logo-animation-container {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  padding: 20px;
+}
+
+/* Canvas para partículas */
+.particles-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Logo SVG */
+.animated-logo {
+  width: 100%;
+  height: auto;
+  opacity: 0;
+}
+
+.animated-logo.ready {
+  opacity: 1;
+}
+
+/* Texto MATCH */
+.logo-text-match {
+  font-family: 'Arial Black', sans-serif;
+  font-size: 120px;
+  font-weight: 900;
+  letter-spacing: 8px;
+  fill: var(--azul-corporativo);
+  opacity: 0;
+}
+
+/* Círculos con iconos */
+.logo-circle {
+  opacity: 0;
+  transform-origin: center;
+}
+
+.circle-1 { fill: var(--azul-corporativo); }
+.circle-2 { fill: #5B9BD5; } /* Azul claro */
+.circle-3 { fill: var(--dorado); }
+
+/* Iconos dentro de los círculos */
+.circle-icon {
+  fill: var(--blanco);
+}
+
+/* Texto PROPERTY */
+.logo-text-property {
+  font-family: 'Arial', sans-serif;
+  font-size: 48px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  fill: #5B9BD5;
+  opacity: 0;
+}
+
+/* Texto IA REAL ESTATE */
+.logo-text-realestate {
+  font-family: 'Arial', sans-serif;
+  font-size: 32px;
+  font-weight: 400;
+  opacity: 0;
+}
+
+.text-ia {
+  fill: var(--azul-corporativo);
+}
+
+.text-realestate {
+  fill: var(--dorado);
+}
+
+/* Animación de latido para círculos */
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.circle-pulse {
+  animation: pulse 1s ease-in-out infinite;
+}
+
+/* Header con logo pequeño después de animación */
+.header-logo-small {
+  height: 60px;
+  width: auto;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.header-logo-small.visible {
+  opacity: 1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .logo-animation-container {
+    max-width: 90%;
+  }
+
+  .logo-text-match {
+    font-size: 60px;
+    letter-spacing: 4px;
+  }
+
+  .logo-text-property {
+    font-size: 28px;
+    letter-spacing: 2px;
+  }
+
+  .logo-text-realestate {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo-text-match {
+    font-size: 40px;
+    letter-spacing: 2px;
+  }
+
+  .logo-text-property {
+    font-size: 20px;
+  }
+
+  .logo-text-realestate {
+    font-size: 16px;
+  }
+}

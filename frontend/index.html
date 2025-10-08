@@ -7,9 +7,54 @@
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/global.css">
     <link rel="stylesheet" href="css/components/carousel.css">
+    <link rel="stylesheet" href="css/components/logo-animation.css">
     <link rel="stylesheet" href="css/pages/home.css">
 </head>
 <body>
+    <!-- Loading Screen con Animación de Logo -->
+    <div class="loading-screen">
+        <canvas class="particles-canvas"></canvas>
+        <div class="logo-animation-container">
+            <svg class="animated-logo" viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg">
+                <!-- Texto MATCH -->
+                <text id="letter-m" class="logo-text-match" x="20" y="100">M</text>
+                <text id="letter-a" class="logo-text-match" x="120" y="100">A</text>
+                <text id="letter-t" class="logo-text-match" x="210" y="100">T</text>
+                <text id="letter-c" class="logo-text-match" x="300" y="100">C</text>
+                <text id="letter-h" class="logo-text-match" x="390" y="100">H</text>
+
+                <!-- Círculos con iconos -->
+                <!-- Círculo 1: Edificio (Azul corporativo) -->
+                <g id="circle-1" class="logo-circle">
+                    <circle class="circle-1" cx="70" cy="180" r="30"/>
+                    <rect class="circle-icon" x="60" y="165" width="6" height="25"/>
+                    <rect class="circle-icon" x="70" y="165" width="6" height="25"/>
+                    <rect class="circle-icon" x="60" y="160" width="16" height="4"/>
+                </g>
+
+                <!-- Círculo 2: Industria (Azul claro) -->
+                <g id="circle-2" class="logo-circle">
+                    <circle class="circle-2" cx="180" cy="180" r="30"/>
+                    <path class="circle-icon" d="M165 185 L165 175 L175 170 L175 185 L185 185 L185 172 L192 168 L192 185 Z"/>
+                    <rect class="circle-icon" x="170" y="162" width="4" height="8"/>
+                </g>
+
+                <!-- Círculo 3: Casa/Oficina (Dorado) -->
+                <g id="circle-3" class="logo-circle">
+                    <circle class="circle-3" cx="290" cy="180" r="30"/>
+                    <path class="circle-icon" d="M280 172 L290 164 L300 172 L300 188 L280 188 Z"/>
+                    <rect class="circle-icon" x="285" y="178" width="10" height="10"/>
+                </g>
+
+                <!-- Texto PROPERTY -->
+                <text id="text-property" class="logo-text-property" x="330" y="190">PROPERTY</text>
+
+                <!-- Texto IA REAL ESTATE -->
+                <text id="text-ia" class="logo-text-realestate text-ia" x="100" y="240">IA</text>
+                <text id="text-realestate" class="logo-text-realestate text-realestate" x="135" y="240">REAL ESTATE</text>
+            </svg>
+        </div>
+    </div>
     <!-- Header -->
     <header class="header">
         <div class="container">
@@ -135,6 +180,11 @@
         </div>
     </footer>
 
+    <!-- Anime.js para animaciones -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+
+    <!-- Scripts propios -->
+    <script src="js/components/logo-animation.js"></script>
     <script src="js/components/carousel.js"></script>
     <script src="js/pages/home.js"></script>
 </body>
