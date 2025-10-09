@@ -225,56 +225,61 @@ body.ready .animated-logo {
   .animated-logo {
     max-width: 100%;
     height: auto;
-    transform: scale(1.3);
+    transform: scale(1.4);
   }
 
   /* Letras MATCH más grandes y MÁS JUNTAS */
   .logo-text-match {
-    font-size: 50px;
-    letter-spacing: -2px;
+    font-size: 55px;
+    letter-spacing: -1px;
   }
 
   /* Reposicionar letras MÁS JUNTAS en móvil */
   #letter-m { transform: translateX(0px); }
-  #letter-a { transform: translateX(-15px); }
-  #letter-t { transform: translateX(-25px); }
-  #letter-c { transform: translateX(-35px); }
-  #letter-h { transform: translateX(-45px); }
+  #letter-a { transform: translateX(-10px); }
+  #letter-t { transform: translateX(-18px); }
+  #letter-c { transform: translateX(-26px); }
+  #letter-h { transform: translateX(-34px); }
 
   #letter-m {
     stroke-width: 2.5;
   }
 
   .logo-text-property {
-    font-size: 22px;
-    letter-spacing: 1px;
+    font-size: 24px;
+    letter-spacing: 1.2px;
   }
 
   .logo-text-realestate {
-    font-size: 14px;
-    letter-spacing: 0.3px;
+    font-size: 15px;
+    letter-spacing: 0.4px;
   }
 
-  /* Círculos MÁS GRANDES y VISIBLES */
+  /* Círculos ENORMES en móvil para ver íconos */
   .logo-circle circle {
-    r: 50;
+    r: 65;
   }
 
   /* Círculos más juntos en móvil */
-  #circle-1 { transform: translateX(15px); }
+  #circle-1 { transform: translateX(20px); }
   #circle-2 { transform: translateX(0px); }
-  #circle-3 { transform: translateX(-15px); }
+  #circle-3 { transform: translateX(-20px); }
 
-  /* Iconos MÁS GRANDES y visibles */
-  .circle-icon {
-    transform: scale(1.8);
-    transform-origin: center;
+  /* Iconos ENORMES en móvil */
+  .circle-icon rect {
+    stroke: var(--blanco);
+    stroke-width: 0.5;
+    fill: var(--blanco) !important;
   }
 
-  .circle-icon rect,
   .circle-icon path {
     stroke: var(--blanco);
-    stroke-width: 0.3;
+    stroke-width: 0.5;
+    fill: var(--blanco) !important;
+  }
+
+  .circle-icon circle {
+    fill: var(--blanco) !important;
   }
 
   /* Fondo vertical en mobile - imágenes apiladas */
