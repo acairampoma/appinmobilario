@@ -18,7 +18,12 @@
                 <div class="logo">
                     <img src="assets/images/logos/logo.jpg" alt="Match Property" class="logo-img">
                 </div>
-                <h1 id="resultadosCount">Cargando...</h1>
+                <div class="header-info">
+                    <h1 id="resultadosCount">Cargando...</h1>
+                    <div id="filtrosAplicados" class="filtros-aplicados">
+                        <!-- Se carga dinámicamente -->
+                    </div>
+                </div>
                 <button class="hamburger" id="hamburger" aria-label="Menu">
                     <span></span>
                     <span></span>
@@ -29,14 +34,53 @@
                     <span id="usuarioInfo" class="usuario-info">Usuario: Invitado</span>
                 </div>
             </div>
-            <div id="filtrosAplicados" class="filtros-aplicados">
-                <!-- Se carga dinámicamente -->
-            </div>
         </div>
     </header>
 
+    <!-- Imagen Referencial Inicial -->
+    <div id="imagenReferencial" class="imagen-referencial">
+        <div class="imagen-referencial-content">
+            <div class="imagen-referencial-bg"></div>
+            <div class="imagen-referencial-overlay">
+                <div class="resultados-info">
+                    <h2 id="mensajeResultados">Se encontraron <span id="numResultados">0</span> propiedades</h2>
+                    <p id="detalleDistrito">en <span id="numDistritos">0</span> distrito(s) seleccionado(s)</p>
+                </div>
+                <div class="botones-filtros">
+                    <button id="btnFiltroBasico" class="btn btn-filtro">
+                        <span>📋</span>
+                        <span>Filtro Básico</span>
+                    </button>
+                    <button id="btnFiltroAvanzado" class="btn btn-filtro">
+                        <span>⚙️</span>
+                        <span>Filtro Avanzado</span>
+                    </button>
+                    <button id="btnFavoritos" class="btn btn-filtro btn-favoritos">
+                        <span>❤️</span>
+                        <span>Favoritos</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Panel de Filtros (Oculto inicialmente) -->
+    <div id="panelFiltros" class="panel-filtros" style="display: none;">
+        <div class="panel-filtros-header">
+            <h3 id="tituloFiltro">Filtro Básico</h3>
+            <button id="btnCerrarFiltros" class="btn-cerrar-filtros">&times;</button>
+        </div>
+        <div id="contenidoFiltros" class="panel-filtros-content">
+            <!-- Se carga dinámicamente -->
+        </div>
+        <div class="panel-filtros-footer">
+            <button id="btnAplicarFiltros" class="btn btn-primary">Aplicar Filtros</button>
+            <button id="btnLimpiarFiltros" class="btn btn-outline">Limpiar</button>
+        </div>
+    </div>
+
     <!-- Main Content: Cards + Mapa -->
-    <div class="main-container">
+    <div id="mainContainer" class="main-container" style="display: none;">
         <!-- Columna Izquierda: Lista de Propiedades -->
         <section class="listings-section" id="listingsSection">
             <div id="propertiesList" class="properties-list">

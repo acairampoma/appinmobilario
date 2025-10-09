@@ -1,20 +1,14 @@
-// Página de Búsqueda - Match Property
+// Página de Búsqueda Simplificada - Match Property
 class BusquedaPage {
   constructor() {
     this.distritos = [];
     this.tiposInmuebles = [];
-    this.caracteristicas = [];
     this.filtrosSeleccionados = {
       distritos: [],
       tipo_inmueble_id: null,
-      transaccion: 'ambos',
-      area: null,
-      parqueos: null,
-      presupuesto_compra: null,
-      presupuesto_alquiler: null,
-      antiguedad: null,
-      implementacion: null,
-      caracteristicas_valores: []
+      metraje: null,
+      transaccion: 'compra',
+      presupuesto: null
     };
 
     this.init();
@@ -26,41 +20,7 @@ class BusquedaPage {
     this.renderTiposInmuebles();
     this.setupEventListeners();
     this.setupHamburgerMenu();
-  }
-
-  setupBackgroundChanger() {
-    const tipoInmuebleSelect = document.getElementById('tipoInmueble');
-    const filtrosCard = document.querySelector('.filtros-basicos-card');
-
-    if (!tipoInmuebleSelect || !filtrosCard) return;
-
-    tipoInmuebleSelect.addEventListener('change', (e) => {
-      // Remover el data-tipo previo
-      filtrosCard.removeAttribute('data-tipo');
-
-      const tipoId = e.target.value;
-      if (!tipoId) return;
-
-      // Buscar el tipo de inmueble en el array
-      const tipoInmueble = this.tiposInmuebles.find(t => t.id == tipoId);
-      if (!tipoInmueble) return;
-
-      // Mapear nombre a slug para CSS
-      const nombreLower = tipoInmueble.nombre.toLowerCase();
-      let tipoSlug = '';
-
-      if (nombreLower.includes('casa')) tipoSlug = 'casa';
-      else if (nombreLower.includes('departamento')) tipoSlug = 'departamento';
-      else if (nombreLower.includes('terreno')) tipoSlug = 'terreno';
-      else if (nombreLower.includes('oficina')) tipoSlug = 'oficina';
-      else if (nombreLower.includes('local')) tipoSlug = 'local';
-      else if (nombreLower.includes('cochera') || nombreLower.includes('estacionamiento')) tipoSlug = 'cochera';
-
-      if (tipoSlug) {
-        filtrosCard.setAttribute('data-tipo', tipoSlug);
-        console.log('Fondo cambiado a:', tipoSlug, 'para', tipoInmueble.nombre);
-      }
-    });
+    this.setupPresupuestoDinamico();
   }
 
   setupHamburgerMenu() {
@@ -89,21 +49,80 @@ class BusquedaPage {
     }
   }
 
+  setupPresupuestoDinamico() {
+    const radioCompra = document.querySelector('input[name="transaccion"][value="compra"]');
+    const radioAlquiler = document.querySelector('input[name="transaccion"][value="alquiler"]');
+    const labelPresupuesto = document.getElementById('labelPresupuesto');
+    const inputPresupuesto = document.getElementById('presupuesto');
+    const helperPresupuesto = document.getElementById('helperPresupuesto');
+
+    const actualizarCampo = () => {
+      const esCompra = radioCompra.checked;
+      
+      if (esCompra) {
+        labelPresupuesto.textContent = '💰 Presupuesto Compra (USD)';
+        inputPresupuesto.placeholder = '750,000';
+        helperPresupuesto.textContent = '💡 Tolerancia ±15% (Sin IGV)';
+      } else {
+        labelPresupuesto.textContent = '💰 Presupuesto Alquiler (USD/mes)';
+        inputPresupuesto.placeholder = '8,500';
+        helperPresupuesto.textContent = '💡 Tolerancia ±15%';
+      }
+
+      // Actualizar valor en filtros
+      this.filtrosSeleccionados.transaccion = esCompra ? 'compra' : 'alquiler';
+    };
+
+    radioCompra.addEventListener('change', actualizarCampo);
+    radioAlquiler.addEventListener('change', actualizarCampo);
+  }
+
+  setupBackgroundChanger() {
+    const tipoInmuebleSelect = document.getElementById('tipoInmueble');
+    const filtrosCard = document.querySelector('.filtro-simplificado-card');
+
+    if (!tipoInmuebleSelect || !filtrosCard) return;
+
+    tipoInmuebleSelect.addEventListener('change', (e) => {
+      // Remover el data-tipo previo
+      filtrosCard.removeAttribute('data-tipo');
+
+      const tipoId = e.target.value;
+      if (!tipoId) return;
+
+      // Buscar el tipo de inmueble en el array
+      const tipoInmueble = this.tiposInmuebles.find(t => t.id == tipoId);
+      if (!tipoInmueble) return;
+
+      // Mapear nombre a slug para CSS
+      const nombreLower = tipoInmueble.nombre.toLowerCase();
+      let tipoSlug = '';
+
+      if (nombreLower.includes('casa')) tipoSlug = 'casa';
+      else if (nombreLower.includes('departamento')) tipoSlug = 'departamento';
+      else if (nombreLower.includes('terreno')) tipoSlug = 'terreno';
+      else if (nombreLower.includes('oficina')) tipoSlug = 'oficina';
+      else if (nombreLower.includes('local')) tipoSlug = 'local';
+      else if (nombreLower.includes('cochera') || nombreLower.includes('estacionamiento')) tipoSlug = 'cochera';
+
+      if (tipoSlug) {
+        filtrosCard.setAttribute('data-tipo', tipoSlug);
+      }
+    });
+  }
+
   async loadData() {
     try {
-      const [distritosRes, tiposRes, caracteristicasRes] = await Promise.all([
+      const [distritosRes, tiposRes] = await Promise.all([
         fetch('data/distritos.json'),
-        fetch('data/tipos-inmuebles.json'),
-        fetch('data/caracteristicas.json')
+        fetch('data/tipos-inmuebles.json')
       ]);
 
       const distritosData = await distritosRes.json();
       const tiposData = await tiposRes.json();
-      const caracteristicasData = await caracteristicasRes.json();
 
       this.distritos = distritosData.distritos;
       this.tiposInmuebles = tiposData.tipos;
-      this.caracteristicas = caracteristicasData.caracteristicas;
     } catch (error) {
       console.error('Error cargando datos:', error);
     }
@@ -150,172 +169,26 @@ class BusquedaPage {
     // Event listener para cambio de tipo
     select.addEventListener('change', (e) => {
       this.filtrosSeleccionados.tipo_inmueble_id = e.target.value ? parseInt(e.target.value) : null;
-      this.renderCaracteristicasAvanzadas();
     });
-  }
-
-  renderCaracteristicasAvanzadas() {
-    const container = document.getElementById('caracteristicasAvanzadas');
-    if (!container || !this.filtrosSeleccionados.tipo_inmueble_id) {
-      if (container) container.innerHTML = '';
-      return;
-    }
-
-    // Filtrar características por tipo de inmueble
-    const caracsDelTipo = this.caracteristicas.filter(
-      c => c.tipo_inmueble_id === this.filtrosSeleccionados.tipo_inmueble_id
-    );
-
-    // Agrupar por categoría
-    const categorias = {};
-    caracsDelTipo.forEach(carac => {
-      if (!categorias[carac.categoria]) {
-        categorias[carac.categoria] = [];
-      }
-      categorias[carac.categoria].push(carac);
-    });
-
-    // Renderizar por categoría
-    const html = Object.entries(categorias).map(([categoria, items]) => `
-      <div class="categoria-section">
-        <h3>${this.formatCategoria(categoria)}</h3>
-        <div class="categoria-items">
-          ${items.map(item => this.renderCaracteristicaInput(item)).join('')}
-        </div>
-      </div>
-    `).join('');
-
-    container.innerHTML = html;
-  }
-
-  formatCategoria(categoria) {
-    const nombres = {
-      'AREAS_COMUNES_EDIFICIO': '🏢 Áreas Comunes del Edificio',
-      'ASCENSORES': '🛗 Ascensores',
-      'IMPLEMENTACION_DETALLE': '🔧 Implementación / Detalle',
-      'SOPORTE_EDIFICIO': '⚡ Soporte del Edificio',
-      'CERCANIA_ESTRATEGICA': '📍 Cercanía Estratégica a',
-      'VISTA_OFICINA': '🏙️ Vista de la Oficina'
-    };
-    return nombres[categoria] || categoria;
-  }
-
-  renderCaracteristicaInput(carac) {
-    if (carac.tipo_input === 'checkbox') {
-      return `
-        <div class="checkbox-item">
-          <input type="checkbox" id="carac_${carac.id}" value="${carac.id}" name="caracteristicas">
-          <label for="carac_${carac.id}">${carac.nombre}</label>
-        </div>
-      `;
-    } else if (carac.tipo_input === 'number') {
-      return `
-        <div class="form-group">
-          <label for="carac_${carac.id}">${carac.nombre}</label>
-          <input type="number" id="carac_${carac.id}" class="form-control" placeholder="Cantidad" data-carac-id="${carac.id}">
-          ${carac.unidad ? `<small>${carac.unidad}</small>` : ''}
-        </div>
-      `;
-    }
-    return '';
   }
 
   setupEventListeners() {
     // Cambiar fondo según tipo de inmueble seleccionado
     this.setupBackgroundChanger();
 
-    // Botón Filtros Avanzados
-    const btnFiltrosAvanzados = document.getElementById('btnFiltrosAvanzados');
-    const filtrosAvanzados = document.getElementById('filtrosAvanzados');
-    btnFiltrosAvanzados?.addEventListener('click', () => {
-      if (filtrosAvanzados.style.display === 'none') {
-        filtrosAvanzados.style.display = 'block';
-        btnFiltrosAvanzados.textContent = '⚙️ Ocultar Filtros Avanzados';
-      } else {
-        filtrosAvanzados.style.display = 'none';
-        btnFiltrosAvanzados.textContent = '⚙️ Filtros Avanzados';
-      }
+    // Botón Hacer MATCH
+    const btnHacerMatch = document.getElementById('btnHacerMatch');
+    btnHacerMatch?.addEventListener('click', () => this.realizarBusqueda());
+
+    // Input de metraje
+    document.getElementById('metraje')?.addEventListener('input', (e) => {
+      this.filtrosSeleccionados.metraje = e.target.value ? parseInt(e.target.value) : null;
     });
 
-    // Botón Buscar
-    const btnBuscar = document.getElementById('btnBuscar');
-    btnBuscar?.addEventListener('click', () => this.realizarBusqueda());
-
-    // Botón Aplicar Filtros
-    const btnAplicar = document.getElementById('btnAplicarFiltros');
-    btnAplicar?.addEventListener('click', () => this.realizarBusqueda());
-
-    // Botón Limpiar
-    const btnLimpiar = document.getElementById('btnLimpiarFiltros');
-    btnLimpiar?.addEventListener('click', () => this.limpiarFiltros());
-
-    // Inputs de filtros avanzados
-    document.getElementById('areaRequerida')?.addEventListener('input', (e) => {
-      this.filtrosSeleccionados.area = e.target.value ? parseInt(e.target.value) : null;
+    // Input de presupuesto
+    document.getElementById('presupuesto')?.addEventListener('input', (e) => {
+      this.filtrosSeleccionados.presupuesto = e.target.value ? parseInt(e.target.value) : null;
     });
-
-    document.getElementById('parqueosRequeridos')?.addEventListener('input', (e) => {
-      this.filtrosSeleccionados.parqueos = e.target.value ? parseInt(e.target.value) : null;
-    });
-
-    document.getElementById('presupuestoCompra')?.addEventListener('input', (e) => {
-      this.filtrosSeleccionados.presupuesto_compra = e.target.value ? parseInt(e.target.value) : null;
-    });
-
-    document.getElementById('presupuestoAlquiler')?.addEventListener('input', (e) => {
-      this.filtrosSeleccionados.presupuesto_alquiler = e.target.value ? parseInt(e.target.value) : null;
-    });
-
-    document.getElementById('antiguedad')?.addEventListener('input', (e) => {
-      this.filtrosSeleccionados.antiguedad = e.target.value ? parseInt(e.target.value) : null;
-    });
-
-    document.getElementById('implementacion')?.addEventListener('change', (e) => {
-      this.filtrosSeleccionados.implementacion = e.target.value || null;
-    });
-
-    // Radio buttons transacción
-    document.querySelectorAll('input[name="transaccion"]').forEach(radio => {
-      radio.addEventListener('change', (e) => {
-        this.filtrosSeleccionados.transaccion = e.target.value;
-      });
-    });
-  }
-
-  limpiarFiltros() {
-    // Resetear filtros
-    this.filtrosSeleccionados = {
-      distritos: [],
-      tipo_inmueble_id: null,
-      transaccion: 'ambos',
-      area: null,
-      parqueos: null,
-      presupuesto_compra: null,
-      presupuesto_alquiler: null,
-      antiguedad: null,
-      implementacion: null,
-      caracteristicas_valores: []
-    };
-
-    // Limpiar checkboxes de distritos
-    document.querySelectorAll('input[name="distritos"]').forEach(cb => cb.checked = false);
-
-    // Limpiar select de tipo
-    document.getElementById('tipoInmueble').value = '';
-
-    // Limpiar inputs
-    document.getElementById('areaRequerida').value = '';
-    document.getElementById('parqueosRequeridos').value = '';
-    document.getElementById('presupuestoCompra').value = '';
-    document.getElementById('presupuestoAlquiler').value = '';
-    document.getElementById('antiguedad').value = '';
-    document.getElementById('implementacion').value = '';
-
-    // Resetear radio
-    document.querySelector('input[name="transaccion"][value="ambos"]').checked = true;
-
-    // Limpiar características avanzadas
-    document.getElementById('caracteristicasAvanzadas').innerHTML = '';
   }
 
   realizarBusqueda() {
@@ -330,8 +203,17 @@ class BusquedaPage {
       return;
     }
 
+    // Preparar objeto de filtros para enviar
+    const filtrosParaResultados = {
+      distritos: this.filtrosSeleccionados.distritos,
+      tipo_inmueble_id: this.filtrosSeleccionados.tipo_inmueble_id,
+      metraje: this.filtrosSeleccionados.metraje,
+      transaccion: this.filtrosSeleccionados.transaccion,
+      presupuesto: this.filtrosSeleccionados.presupuesto
+    };
+
     // Guardar filtros en localStorage
-    localStorage.setItem('filtros_busqueda', JSON.stringify(this.filtrosSeleccionados));
+    localStorage.setItem('filtros_simplificados', JSON.stringify(filtrosParaResultados));
 
     // Redirigir a página de resultados
     window.location.href = 'resultados.html';
