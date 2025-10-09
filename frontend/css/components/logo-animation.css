@@ -70,13 +70,14 @@
   pointer-events: none;
 }
 
-/* Logo SVG */
+/* Logo SVG - Responsive 2025 best practices */
 .animated-logo {
   width: 100%;
   max-width: 600px;
   height: auto;
   display: block;
   margin: 0 auto;
+  /* preserveAspectRatio="xMidYMid meet" en HTML centra automáticamente */
 }
 
 body.ready .animated-logo {
@@ -213,74 +214,66 @@ body.ready .animated-logo {
   }
 }
 
-@media (max-width: 480px) {
+/* Móvil - Mejores prácticas 2025 (touch devices) */
+@media (hover: none) and (pointer: coarse), (max-width: 480px) {
   .logo-animation-container {
+    width: 100%;
     max-width: 100%;
-    padding: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    padding: 20px 15px;
   }
 
-  /* SVG más grande en móvil */
+  /* SVG responsive sin transform - usa viewBox natural */
   .animated-logo {
+    width: 100%;
     max-width: 100%;
     height: auto;
-    transform: scale(1.4);
   }
 
-  /* Letras MATCH más grandes y MÁS JUNTAS */
+  /* MATCH text - proporcionado para móvil */
   .logo-text-match {
-    font-size: 55px;
-    letter-spacing: -1px;
+    font-size: 50px;
+    letter-spacing: 2px;
   }
 
-  /* Reposicionar letras MÁS JUNTAS en móvil */
-  #letter-m { transform: translateX(0px); }
-  #letter-a { transform: translateX(-10px); }
-  #letter-t { transform: translateX(-18px); }
-  #letter-c { transform: translateX(-26px); }
-  #letter-h { transform: translateX(-34px); }
+  /* Letras sin translateX - posición natural del SVG */
+  #letter-m,
+  #letter-a,
+  #letter-t,
+  #letter-c,
+  #letter-h {
+    transform: none;
+  }
 
   #letter-m {
-    stroke-width: 2.5;
+    stroke-width: 2;
   }
 
+  /* PROPERTY y AI REAL ESTATE */
   .logo-text-property {
-    font-size: 22px;
+    font-size: 20px;
     letter-spacing: 1px;
   }
 
   .logo-text-realestate {
-    font-size: 13px;
-    letter-spacing: 0.3px;
+    font-size: 12px;
+    letter-spacing: 0.5px;
   }
 
-  /* Círculos ENORMES en móvil para ver íconos */
+  /* Círculos tamaño moderado - NO se superponen */
   .logo-circle circle {
-    r: 65;
+    r: 30;
   }
 
-  /* Círculos más juntos en móvil */
-  #circle-1 { transform: translateX(20px); }
-  #circle-2 { transform: translateX(0px); }
-  #circle-3 { transform: translateX(-20px); }
-
-  /* Iconos ENORMES en móvil */
-  .circle-icon rect {
-    stroke: var(--blanco);
-    stroke-width: 0.5;
-    fill: var(--blanco) !important;
+  /* Iconos visibles pero proporcionales */
+  .circle-icon {
+    transform: scale(0.85);
   }
 
-  .circle-icon path {
-    stroke: var(--blanco);
-    stroke-width: 0.5;
-    fill: var(--blanco) !important;
-  }
-
+  .circle-icon rect,
+  .circle-icon path,
   .circle-icon circle {
-    fill: var(--blanco) !important;
+    fill: var(--blanco);
+    stroke: none;
   }
 
   /* Fondo vertical en mobile - imágenes apiladas */

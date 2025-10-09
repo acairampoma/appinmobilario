@@ -119,6 +119,12 @@
   .nav-menu a {
     display: block;
     width: 100%;
+    color: var(--blanco);
+  }
+
+  .nav-menu a:hover,
+  .nav-menu a.active {
+    color: var(--dorado);
   }
 
   .nav-menu .btn {
