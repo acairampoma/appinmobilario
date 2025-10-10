@@ -67,16 +67,12 @@ class ResultadosPage {
     const btnAplicar = document.getElementById('btnAplicarFiltrosMobile');
     const btnLimpiar = document.getElementById('btnLimpiarFiltrosMobile');
 
-    // Deshabilitar botones inicialmente (solo filtros genéricos abiertos)
+    // OCULTAR botones inicialmente (solo filtros genéricos abiertos)
     if (btnAplicar) {
-      btnAplicar.disabled = true;
-      btnAplicar.style.opacity = '0.5';
-      btnAplicar.style.cursor = 'not-allowed';
+      btnAplicar.style.display = 'none';
     }
     if (btnLimpiar) {
-      btnLimpiar.disabled = true;
-      btnLimpiar.style.opacity = '0.5';
-      btnLimpiar.style.cursor = 'not-allowed';
+      btnLimpiar.style.display = 'none';
     }
 
     const open = () => { 
@@ -99,17 +95,13 @@ class ResultadosPage {
       }
     };
 
-    // Función para habilitar botones cuando se abren filtros básicos o avanzados
-    const habilitarBotones = () => {
+    // Función para MOSTRAR botones cuando se abren filtros básicos o avanzados
+    const mostrarBotones = () => {
       if (btnAplicar) {
-        btnAplicar.disabled = false;
-        btnAplicar.style.opacity = '1';
-        btnAplicar.style.cursor = 'pointer';
+        btnAplicar.style.display = 'inline-flex';
       }
       if (btnLimpiar) {
-        btnLimpiar.disabled = false;
-        btnLimpiar.style.opacity = '1';
-        btnLimpiar.style.cursor = 'pointer';
+        btnLimpiar.style.display = 'inline-flex';
       }
     };
 
@@ -136,12 +128,12 @@ class ResultadosPage {
         
         if (headerBasico) {
           headerBasico.addEventListener('click', () => {
-            setTimeout(habilitarBotones, 100);
+            setTimeout(mostrarBotones, 100);
           });
         }
         if (headerAvanzado) {
           headerAvanzado.addEventListener('click', () => {
-            setTimeout(habilitarBotones, 100);
+            setTimeout(mostrarBotones, 100);
           });
         }
       }, 200);
@@ -150,7 +142,6 @@ class ResultadosPage {
     backdrop?.addEventListener('click', close); // Cerrar al hacer click en el backdrop
 
     btnAplicar?.addEventListener('click', () => {
-      if (btnAplicar.disabled) return;
       this.aplicarFiltrosCompletos();
       close();
     });
@@ -915,21 +906,17 @@ class ResultadosPage {
     const btnLimpiarCol = document.getElementById('btnLimpiarFiltrosCol');
 
     btnAplicarCol?.addEventListener('click', () => {
-      if (!btnAplicarCol.disabled) {
-        this.aplicarFiltrosCompletos();
-      }
+      this.aplicarFiltrosCompletos();
     });
 
     btnLimpiarCol?.addEventListener('click', () => {
-      if (!btnLimpiarCol.disabled) {
-        this.limpiarFiltrosAdicionales();
-        // Re-render contenido básico y avanzado vacíos
-        document.getElementById('contenedorBasico').innerHTML = this.generarHTMLFiltroBasico();
-        document.getElementById('contenedorAvanzado').innerHTML = this.generarHTMLFiltroAvanzado();
-        this.attachBasicoInlineListeners();
-        this.attachAvanzadoInlineListeners();
-        this.renderChipsActivos();
-      }
+      this.limpiarFiltrosAdicionales();
+      // Re-render contenido básico y avanzado vacíos
+      document.getElementById('contenedorBasico').innerHTML = this.generarHTMLFiltroBasico();
+      document.getElementById('contenedorAvanzado').innerHTML = this.generarHTMLFiltroAvanzado();
+      this.attachBasicoInlineListeners();
+      this.attachAvanzadoInlineListeners();
+      this.renderChipsActivos();
     });
   }
 
@@ -938,17 +925,16 @@ class ResultadosPage {
     const basicoAbierto = document.querySelector('.accordion-header[data-accordion="basico"][aria-expanded="true"]') !== null;
     const avanzadoAbierto = document.querySelector('.accordion-header[data-accordion="avanzado"][aria-expanded="true"]') !== null;
     
-    const habilitarBotones = basicoAbierto || avanzadoAbierto;
+    const mostrarBotones = basicoAbierto || avanzadoAbierto;
 
     // Botones de la columna desktop
     const btnAplicarCol = document.getElementById('btnAplicarFiltrosCol');
     const btnLimpiarCol = document.getElementById('btnLimpiarFiltrosCol');
 
+    // OCULTAR/MOSTRAR botones (no solo deshabilitar)
     [btnAplicarCol, btnLimpiarCol].forEach(btn => {
       if (btn) {
-        btn.disabled = !habilitarBotones;
-        btn.style.opacity = habilitarBotones ? '1' : '0.5';
-        btn.style.cursor = habilitarBotones ? 'pointer' : 'not-allowed';
+        btn.style.display = mostrarBotones ? 'inline-flex' : 'none';
       }
     });
   }

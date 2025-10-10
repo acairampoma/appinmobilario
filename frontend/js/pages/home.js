@@ -113,6 +113,12 @@ document.addEventListener('DOMContentLoaded', () => {
       loadingScreen.classList.add('hidden');
       document.body.classList.add('video-finished');
     }
+    // DETENER el video completamente
+    if (introVideo) {
+      introVideo.pause();
+      introVideo.currentTime = 0;
+      introVideo.src = ''; // Liberar el recurso
+    }
     // Inicializar home page
     new HomePage();
     return; // Salir de la función
@@ -139,6 +145,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Cuando el video termina, ocultar loading screen y mostrar home
     introVideo.addEventListener('ended', () => {
       console.log('✅ Video terminado, mostrando home...');
+      introVideo.pause();
+      introVideo.currentTime = 0;
+      introVideo.src = ''; // Liberar el recurso
       loadingScreen.classList.add('hidden');
       document.body.classList.add('video-finished');
       // Marcar video como mostrado en localStorage
@@ -163,6 +172,8 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         console.log('⏭️ Video saltado por el usuario');
         introVideo.pause();
+        introVideo.currentTime = 0;
+        introVideo.src = ''; // Liberar el recurso
         loadingScreen.classList.add('hidden');
         document.body.classList.add('video-finished');
         // Marcar video como mostrado en localStorage
