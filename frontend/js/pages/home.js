@@ -105,6 +105,23 @@ document.addEventListener('DOMContentLoaded', () => {
   const loadingScreen = document.querySelector('.loading-screen');
   
   if (introVideo) {
+    // Intentar reproducir el video automáticamente
+    const playPromise = introVideo.play();
+    
+    if (playPromise !== undefined) {
+      playPromise.then(() => {
+        console.log('✅ Video reproduciéndose automáticamente');
+      }).catch((error) => {
+        console.warn('⚠️ Autoplay bloqueado, requiere interacción del usuario:', error);
+        // Mostrar indicador de click para reproducir
+        loadingScreen.style.cursor = 'pointer';
+        const playIndicator = document.createElement('div');
+        playIndicator.className = 'play-indicator';
+        playIndicator.innerHTML = '<i class="fa-solid fa-play"></i><p>Click para reproducir</p>';
+        loadingScreen.appendChild(playIndicator);
+      });
+    }
+    
     // Cuando el video termina, ocultar loading screen y mostrar home
     introVideo.addEventListener('ended', () => {
       console.log('✅ Video terminado, mostrando home...');
@@ -122,10 +139,17 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Permitir saltar el video haciendo click
     loadingScreen.addEventListener('click', () => {
-      console.log('⏭️ Video saltado por el usuario');
-      introVideo.pause();
-      loadingScreen.classList.add('hidden');
-      document.body.classList.add('video-finished');
+      if (introVideo.paused) {
+        console.log('▶️ Reproduciendo video...');
+        introVideo.play();
+        const playIndicator = loadingScreen.querySelector('.play-indicator');
+        if (playIndicator) playIndicator.remove();
+      } else {
+        console.log('⏭️ Video saltado por el usuario');
+        introVideo.pause();
+        loadingScreen.classList.add('hidden');
+        document.body.classList.add('video-finished');
+      }
     });
   } else {
     // Si no hay video, ocultar loading screen inmediatamente

@@ -1,0 +1,331 @@
+/* ===========================
+   WHY MATCH PROPERTY SECTION
+   =========================== */
+
+.why-match-section {
+  padding: 80px 0;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.why-match-container {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 20px;
+  align-items: center;
+  position: relative;
+  min-height: 500px;
+}
+
+/* Título a la izquierda */
+.why-match-title {
+  text-align: left;
+  padding-right: 40px;
+}
+
+.why-match-title h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: var(--gris-oscuro);
+  line-height: 1.2;
+  margin: 0;
+}
+
+.why-match-title strong {
+  color: var(--azul-corporativo);
+  font-weight: 800;
+  display: block;
+}
+
+/* SVG con líneas conectoras */
+.connection-lines {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.connect-line {
+  stroke: var(--azul-corporativo);
+  stroke-width: 2;
+  fill: none;
+  opacity: 0.7;
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: drawLine 1.5s ease-out forwards;
+}
+
+/* Líneas principales más gruesas */
+.main-line {
+  stroke-width: 3 !important;
+  opacity: 0.8;
+  animation-delay: 0.2s;
+}
+
+/* Ramificaciones más delgadas */
+.branch-line {
+  stroke-width: 2 !important;
+  opacity: 0.6;
+}
+
+.branch-line:nth-of-type(4) { animation-delay: 0.5s; }
+.branch-line:nth-of-type(5) { animation-delay: 0.6s; }
+.branch-line:nth-of-type(6) { animation-delay: 0.7s; }
+.branch-line:nth-of-type(7) { animation-delay: 0.8s; }
+
+@keyframes drawLine {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Contenedor de círculos */
+.features-circles {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px;
+  position: relative;
+  z-index: 2;
+  padding: 20px;
+}
+
+/* Círculos 3D */
+.feature-circle {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #1a5a7a, #003366);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 
+    0 10px 30px rgba(0, 51, 102, 0.3),
+    inset 0 -5px 15px rgba(0, 0, 0, 0.2),
+    inset 0 5px 15px rgba(255, 255, 255, 0.1);
+}
+
+/* Colores específicos para cada círculo según la imagen */
+.circle-1 {
+  /* OFERTA INTEGRAL - Azul medio */
+  background: linear-gradient(145deg, #4a7ba7, #2d5f8f);
+  box-shadow: 
+    0 10px 30px rgba(45, 95, 143, 0.4),
+    inset 0 -5px 15px rgba(0, 0, 0, 0.2),
+    inset 0 5px 15px rgba(255, 255, 255, 0.1);
+}
+
+.circle-2 {
+  /* DATA ESTRUCTURADA - Azul oscuro/corporativo */
+  background: linear-gradient(145deg, #1a4d7a, #003366);
+  box-shadow: 
+    0 10px 30px rgba(0, 51, 102, 0.5),
+    inset 0 -5px 15px rgba(0, 0, 0, 0.2),
+    inset 0 5px 15px rgba(255, 255, 255, 0.1);
+}
+
+.circle-3 {
+  /* FILTROS DE BÚSQUEDA - Azul oscuro/corporativo */
+  background: linear-gradient(145deg, #1a4d7a, #003366);
+  box-shadow: 
+    0 10px 30px rgba(0, 51, 102, 0.5),
+    inset 0 -5px 15px rgba(0, 0, 0, 0.2),
+    inset 0 5px 15px rgba(255, 255, 255, 0.1);
+}
+
+.circle-4 {
+  /* PROCESO INTUITIVO CON AI - DORADO (destacado) */
+  background: linear-gradient(145deg, #f5a623, #e89e1c);
+  box-shadow: 
+    0 10px 30px rgba(245, 166, 35, 0.5),
+    inset 0 -5px 15px rgba(0, 0, 0, 0.2),
+    inset 0 5px 15px rgba(255, 255, 255, 0.15);
+}
+
+/* Efecto 3D con pseudo-elementos */
+.feature-circle::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, transparent, rgba(0, 51, 102, 0.4));
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.feature-circle:hover::before {
+  opacity: 1;
+}
+
+.feature-circle:hover {
+  transform: translateY(-10px) scale(1.05);
+  box-shadow: 
+    0 20px 40px rgba(0, 51, 102, 0.4),
+    inset 0 -5px 15px rgba(0, 0, 0, 0.3),
+    inset 0 5px 20px rgba(255, 255, 255, 0.2);
+}
+
+/* Contenido del círculo */
+.circle-content {
+  text-align: center;
+  padding: 20px;
+  z-index: 1;
+}
+
+.circle-content span {
+  color: var(--blanco);
+  font-size: clamp(0.85rem, 1.2vw, 1rem);
+  font-weight: 600;
+  line-height: 1.4;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Posicionamiento específico de cada círculo según imagen */
+.circle-1 {
+  /* OFERTA INTEGRAL - Arriba izquierda */
+  justify-self: start;
+  align-self: start;
+  margin-left: 0;
+}
+
+.circle-2 {
+  /* DATA ESTRUCTURADA - Arriba derecha */
+  justify-self: end;
+  align-self: start;
+  margin-right: 0;
+}
+
+.circle-3 {
+  /* FILTROS DE BÚSQUEDA - Derecha centro */
+  justify-self: end;
+  align-self: center;
+  margin-right: 0;
+  margin-top: 20px;
+}
+
+.circle-4 {
+  /* PROCESO INTUITIVO CON AI - Abajo izquierda (AMARILLO) */
+  justify-self: start;
+  align-self: end;
+  margin-left: 0;
+}
+
+/* Animación de entrada */
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.feature-circle {
+  animation: fadeInScale 0.6s ease-out backwards;
+}
+
+.circle-1 { animation-delay: 0.3s; }
+.circle-2 { animation-delay: 0.5s; }
+.circle-3 { animation-delay: 0.7s; }
+.circle-4 { animation-delay: 0.9s; }
+
+/* ===========================
+   RESPONSIVE - TABLET
+   =========================== */
+@media (max-width: 1024px) {
+  .why-match-container {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    text-align: center;
+  }
+
+  .why-match-title {
+    padding-right: 0;
+    text-align: center;
+  }
+
+  .features-circles {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    justify-items: center;
+  }
+
+  .feature-circle {
+    width: 180px;
+    height: 180px;
+  }
+
+  .connection-lines {
+    display: none; /* Ocultar líneas en tablet */
+  }
+}
+
+/* ===========================
+   RESPONSIVE - MÓVIL
+   =========================== */
+@media (max-width: 768px) {
+  .why-match-section {
+    padding: 60px 0;
+  }
+
+  .why-match-container {
+    gap: 30px;
+  }
+
+  .why-match-title h2 {
+    font-size: 2rem;
+  }
+
+  .features-circles {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    max-width: 250px;
+    margin: 0 auto;
+  }
+
+  .feature-circle {
+    width: 220px;
+    height: 220px;
+  }
+
+  .circle-content span {
+    font-size: 0.9rem;
+  }
+
+  /* Todos los círculos centrados en móvil */
+  .circle-1,
+  .circle-2,
+  .circle-3,
+  .circle-4 {
+    justify-self: center;
+    align-self: center;
+  }
+}
+
+/* ===========================
+   MÓVIL PEQUEÑO
+   =========================== */
+@media (max-width: 480px) {
+  .feature-circle {
+    width: 180px;
+    height: 180px;
+  }
+
+  .circle-content span {
+    font-size: 0.8rem;
+  }
+}

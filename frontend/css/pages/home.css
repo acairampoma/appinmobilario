@@ -113,11 +113,54 @@ body.video-finished .footer {
   display: none !important;
 }
 
+/* Indicador de play cuando autoplay está bloqueado */
+.play-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: var(--blanco);
+  z-index: 10;
+  animation: pulse 2s infinite;
+}
+
+.play-indicator i {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.play-indicator p {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+}
+
 /* Responsive para móvil */
 @media (max-width: 768px) {
   .intro-video {
     object-fit: contain; /* Asegurar que se vea completo en móvil */
     max-height: 100vh;
+  }
+  
+  .play-indicator i {
+    font-size: 3rem;
+  }
+  
+  .play-indicator p {
+    font-size: 1rem;
   }
 }
 

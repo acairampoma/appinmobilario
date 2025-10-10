@@ -9,12 +9,15 @@
     <link rel="stylesheet" href="css/components/carousel.css">
     <link rel="stylesheet" href="css/components/logo-animation.css">
     <link rel="stylesheet" href="css/pages/home.css">
+    <link rel="stylesheet" href="css/pages/why-match.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <!-- Loading Screen con Video de Intro -->
     <div class="loading-screen">
         <div class="video-intro-container">
-            <video id="introVideo" class="intro-video" autoplay muted playsinline disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback">
+            <video id="introVideo" class="intro-video" autoplay playsinline disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback">
                 <source src="assets/video/intro.mp4" type="video/mp4">
                 Tu navegador no soporta el elemento de video.
             </video>
@@ -86,33 +89,54 @@
         </div>
     </section>
 
-    <!-- Features Section -->
-    <section class="features-section">
+    <!-- Why Match Property Section -->
+    <section class="why-match-section">
         <div class="container">
-            <h2 class="section-title">¿Por qué <span class="highlight-match">MATCH</span> Property?</h2>
-
-            <!-- Gráfico CSS con círculos conectados -->
-            <div class="why-match-diagram">
-
-                <div class="diagram-lines">
-                    <div class="line line-1"></div>
-                    <div class="line line-2"></div>
-                    <div class="line line-3"></div>
-                    <div class="line line-4"></div>
+            <div class="why-match-container">
+                <!-- Título a la izquierda -->
+                <div class="why-match-title">
+                    <h2>Por qué<br><strong>MATCH Property?</strong></h2>
                 </div>
 
-                <div class="diagram-right">
-                    <div class="feature-circle circle-1">
-                        <span>OFERTA INTEGRAL<br>ACTUALIZADA</span>
+                <!-- Líneas conectoras -->
+                <svg class="connection-lines" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid meet">
+                    <!-- 3 líneas principales desde el título -->
+                    <line x1="280" y1="220" x2="450" y2="220" class="connect-line main-line" stroke-width="3" />
+                    <line x1="280" y1="260" x2="450" y2="260" class="connect-line main-line" stroke-width="3" />
+                    <line x1="280" y1="300" x2="450" y2="300" class="connect-line main-line" stroke-width="3" />
+                    
+                    <!-- Ramificaciones desde línea superior -->
+                    <line x1="450" y1="220" x2="550" y2="150" class="connect-line branch-line" />
+                    <line x1="450" y1="220" x2="750" y2="150" class="connect-line branch-line" />
+                    
+                    <!-- Ramificación desde línea media -->
+                    <line x1="450" y1="260" x2="750" y2="350" class="connect-line branch-line" />
+                    
+                    <!-- Ramificación desde línea inferior -->
+                    <line x1="450" y1="300" x2="550" y2="450" class="connect-line branch-line" />
+                </svg>
+
+                <!-- Círculos con características -->
+                <div class="features-circles">
+                    <div class="feature-circle circle-1" data-aos="fade-left" data-aos-delay="100">
+                        <div class="circle-content">
+                            <span>OFERTA INTEGRAL<br>ACTUALIZADA</span>
+                        </div>
                     </div>
-                    <div class="feature-circle circle-2">
-                        <span>DATA ESTRUCTURADA<br>FIEL Y CONFIABLE</span>
+                    <div class="feature-circle circle-2" data-aos="fade-left" data-aos-delay="200">
+                        <div class="circle-content">
+                            <span>DATA ESTRUCTURADA<br>FIEL Y CONFIABLE</span>
+                        </div>
                     </div>
-                    <div class="feature-circle circle-3">
-                        <span>FILTROS DE BÚSQUEDA<br>SEGÚN INMUEBLE</span>
+                    <div class="feature-circle circle-3" data-aos="fade-left" data-aos-delay="300">
+                        <div class="circle-content">
+                            <span>FILTROS DE BÚSQUEDA<br>SEGÚN INMUEBLE</span>
+                        </div>
                     </div>
-                    <div class="feature-circle circle-4">
-                        <span>PROCESO INTUITIVO CON AI<br>PARA MAXIMIZAR RESULTADOS</span>
+                    <div class="feature-circle circle-4" data-aos="fade-left" data-aos-delay="400">
+                        <div class="circle-content">
+                            <span>PROCESO INTUITIVO CON AI<br>PARA MAXIMIZAR RESULTADOS</span>
+                        </div>
                     </div>
                 </div>
             </div>
