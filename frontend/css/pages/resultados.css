@@ -1370,14 +1370,70 @@
    =========================== */
 
 @media (max-width: 1024px) {
-  .main-container { grid-template-columns: 1fr; padding: 1rem; }
+  /* Header móvil - 2 filas */
+  .header-content {
+    display: grid !important;
+    grid-template-columns: auto 1fr auto auto;
+    grid-template-rows: auto auto;
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  .logo {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .header-info {
+    grid-column: 1 / 4;
+    grid-row: 2;
+    min-width: auto;
+    text-align: left !important;
+  }
+
+  .header-info h1 {
+    font-size: 1.1rem !important;
+    margin-bottom: 0.25rem !important;
+    text-align: left !important;
+  }
+
+  .filtros-aplicados {
+    font-size: 0.85rem !important;
+    text-align: left !important;
+  }
+
+  .btn-filter-mobile {
+    grid-column: 4;
+    grid-row: 2;
+  }
+
+  .hamburger {
+    grid-column: 4;
+    grid-row: 1;
+  }
+
+  .header-actions {
+    display: none; /* Ocultar en móvil, usar menú hamburguesa */
+  }
+
+  .main-container { 
+    grid-template-columns: 1fr !important; 
+    padding: 0 !important;
+    gap: 0 !important;
+    display: grid !important;
+    min-height: auto !important;
+  }
+  
   .filters-section { display: none !important; } /* Ocultar filtros en móvil */
   .imagen-referencial { display: none !important; } /* Ocultar imagen referencial en móvil */
 
   /* En móvil siempre mostrar mapa y resultados, ocultar placeholders */
   .placeholder-resultados { display: none !important; }
   .map-placeholder { display: none !important; }
-  #propertiesList { display: flex !important; }
+  #propertiesList { 
+    display: flex !important; 
+    flex-direction: column !important;
+  }
   #map { 
     display: block !important;
     width: 100% !important;
@@ -1387,28 +1443,34 @@
   /* Forzar que mainContainer sea visible */
   #mainContainer {
     display: grid !important;
+    margin-top: 0 !important;
   }
 
   .map-section {
     position: relative !important;
     top: 0 !important;
-    height: clamp(350px, 50vh, 450px);
+    height: 400px !important;
+    min-height: 400px !important;
     order: 1; /* mapa primero en móvil/tablet */
-    width: 100%;
+    width: 100% !important;
     padding: 0 !important;
     background: transparent !important;
+    margin-bottom: 1rem !important;
   }
 
   .map-canvas {
     border-radius: 0 !important;
     height: 100% !important;
+    width: 100% !important;
   }
 
   .listings-section {
     order: 2; /* resultados después del mapa */
-    height: auto;
-    overflow-y: visible;
-    padding: 0.5rem !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow-y: visible !important;
+    padding: 0 1rem 1rem 1rem !important;
+    background: transparent !important;
   }
 }
 

@@ -130,22 +130,42 @@ class ResultadosPage {
 
     // 7. En móvil, forzar mostrar mapa y resultados
     if (window.innerWidth <= 1024) {
+      console.log('🔧 Modo móvil detectado, configurando vista...');
+      
       // Ocultar imagenReferencial y mostrar mainContainer
       const imagenRef = document.getElementById('imagenReferencial');
       const mainContainer = document.getElementById('mainContainer');
+      const mapPlaceholder = document.getElementById('mapPlaceholder');
+      const mapCanvas = document.getElementById('map');
+      const propertiesList = document.getElementById('propertiesList');
+      const placeholderResultados = document.getElementById('placeholderResultados');
+      
       if (imagenRef) imagenRef.style.display = 'none';
       if (mainContainer) mainContainer.style.display = 'grid';
       
+      // Ocultar placeholders y mostrar contenido real
+      if (mapPlaceholder) mapPlaceholder.style.display = 'none';
+      if (placeholderResultados) placeholderResultados.style.display = 'none';
+      if (mapCanvas) mapCanvas.style.display = 'block';
+      if (propertiesList) propertiesList.style.display = 'flex';
+      
+      console.log('📍 Renderizando resultados y mapa...');
+      
       // Renderizar contenido
       this.renderResultados();
-      this.renderMapa();
       
-      // Forzar invalidateSize del mapa después de un momento
+      // Esperar un momento antes de inicializar el mapa
       setTimeout(() => {
-        if (this.map) {
-          this.map.invalidateSize();
-        }
-      }, 300);
+        this.renderMapa();
+        
+        // Forzar invalidateSize del mapa después de inicializar
+        setTimeout(() => {
+          if (this.map) {
+            console.log('🗺️ Ajustando tamaño del mapa...');
+            this.map.invalidateSize();
+          }
+        }, 200);
+      }, 100);
     }
   }
 
@@ -1573,13 +1593,30 @@ class ResultadosPage {
   renderMapa() {
     const mapCanvas = document.getElementById('map');
     
-    // Solo inicializar si el mapa es visible
-    if (!this.map && mapCanvas && mapCanvas.style.display !== 'none') {
-      this.map = L.map('map').setView([-12.0464, -77.0428], 13);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors',
-        maxZoom: 19
-      }).addTo(this.map);
+    // Forzar que el mapa sea visible antes de inicializar
+    if (mapCanvas) {
+      mapCanvas.style.display = 'block';
+    }
+    
+    // Inicializar mapa si no existe
+    if (!this.map && mapCanvas) {
+      try {
+        this.map = L.map('map').setView([-12.0464, -77.0428], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '© OpenStreetMap contributors',
+          maxZoom: 19
+        }).addTo(this.map);
+        
+        // Forzar redimensionamiento
+        setTimeout(() => {
+          if (this.map) {
+            this.map.invalidateSize();
+          }
+        }, 100);
+      } catch (error) {
+        console.error('Error inicializando mapa:', error);
+        return;
+      }
     }
 
     if (!this.map) return;
