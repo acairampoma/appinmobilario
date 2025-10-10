@@ -62,12 +62,30 @@ class ResultadosPage {
   setupMobileFilters() {
     const btnOpen = document.getElementById('btnToggleMobileFilters');
     const drawer = document.getElementById('mobileFiltersDrawer');
+    const backdrop = document.getElementById('drawerBackdrop');
     const btnClose = document.getElementById('btnCloseMobileFilters');
     const btnAplicar = document.getElementById('btnAplicarFiltrosMobile');
     const btnLimpiar = document.getElementById('btnLimpiarFiltrosMobile');
 
-    const open = () => { if (drawer) { drawer.classList.add('open'); drawer.setAttribute('aria-hidden','false'); } };
-    const close = () => { if (drawer) { drawer.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); } };
+    const open = () => { 
+      if (drawer) { 
+        drawer.classList.add('open'); 
+        drawer.setAttribute('aria-hidden','false'); 
+      }
+      if (backdrop) {
+        backdrop.classList.add('active');
+      }
+    };
+    
+    const close = () => { 
+      if (drawer) { 
+        drawer.classList.remove('open'); 
+        drawer.setAttribute('aria-hidden','true'); 
+      }
+      if (backdrop) {
+        backdrop.classList.remove('active');
+      }
+    };
 
     btnOpen?.addEventListener('click', () => {
       // Pintar contenido al abrir
@@ -86,6 +104,7 @@ class ResultadosPage {
       this.setupAccordion();
     });
     btnClose?.addEventListener('click', close);
+    backdrop?.addEventListener('click', close); // Cerrar al hacer click en el backdrop
 
     btnAplicar?.addEventListener('click', () => {
       this.aplicarFiltrosCompletos();
@@ -789,7 +808,14 @@ class ResultadosPage {
   setupAccordion() {
     // Lógica del acordeón: solo un panel abierto a la vez
     document.querySelectorAll('.accordion-header').forEach(header => {
-      header.addEventListener('click', (e) => {
+      // Remover listener anterior si existe
+      const oldListener = header._accordionListener;
+      if (oldListener) {
+        header.removeEventListener('click', oldListener);
+      }
+      
+      // Crear nuevo listener
+      const newListener = (e) => {
         const acordeonId = e.currentTarget.getAttribute('data-accordion');
         const content = document.querySelector(`.accordion-content[data-accordion="${acordeonId}"]`);
 
@@ -817,7 +843,11 @@ class ResultadosPage {
 
         // Verificar si debe mostrar resultados
         this.verificarMostrarResultadosPorAcordeon();
-      });
+      };
+      
+      // Guardar referencia y agregar listener
+      header._accordionListener = newListener;
+      header.addEventListener('click', newListener);
     });
 
     // Abrir "Filtros Genéricos" por defecto en desktop
