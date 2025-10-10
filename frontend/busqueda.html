@@ -34,18 +34,58 @@
     <!-- Búsqueda Simplificada Section -->
     <section class="busqueda-section">
         <div class="container">
-            <h1 class="page-title">🎯 Encuentra tu Propiedad Ideal</h1>
-
             <!-- Filtro Simplificado -->
             <div class="filtro-simplificado-card">
-                <h2>Búsqueda Simplificada</h2>
+                <h2>Búsqueda Basica</h2>
 
-                <!-- Distritos -->
-                <div class="form-group">
-                    <label>📍 Distritos (selecciona uno o varios)</label>
-                    <div id="distritosCheckboxes" class="checkboxes-grid">
-                        <!-- Se carga dinámicamente -->
+                <!-- Ubicación en Cascada -->
+                <div class="ubicacion-row">
+                    <div class="form-group">
+                        <label>🌎 País</label>
+                        <select id="pais" class="form-control">
+                            <option value="PERU">Perú</option>
+                        </select>
                     </div>
+
+                    <div class="form-group">
+                        <label>🏙️ Departamento</label>
+                        <select id="departamento" class="form-control">
+                            <option value="">Selecciona departamento...</option>
+                            <option value="LIMA" selected>Lima</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>🏛️ Provincia</label>
+                        <select id="provincia" class="form-control">
+                            <option value="">Selecciona provincia...</option>
+                            <option value="LIMA" selected>Lima</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>📍 Distritos</label>
+                    <div id="distritoMulti" class="multi-select">
+                        <button type="button" class="multi-select__button" id="distritoToggle" aria-expanded="false" aria-haspopup="listbox">
+                            <span class="multi-select__placeholder" id="distritoPlaceholder">Selecciona distritos...</span>
+                            <span class="multi-select__tags" id="distritoTags"></span>
+                            <span class="multi-select__arrow">▾</span>
+                        </button>
+                        <div class="multi-select__panel" id="distritoPanel" role="listbox" aria-multiselectable="true" hidden>
+                            <div class="multi-select__search">
+                                <input type="text" id="distritoSearch" placeholder="Buscar distrito..." class="multi-select__search-input">
+                            </div>
+                            <div class="multi-select__options" id="distritoOptions">
+                                <!-- Opciones renderizadas por JS -->
+                            </div>
+                            <div class="multi-select__actions">
+                                <button type="button" id="distritoSelectAll" class="multi-select__action">Seleccionar todos</button>
+                                <button type="button" id="distritoClear" class="multi-select__action alt">Limpiar</button>
+                            </div>
+                        </div>
+                    </div>
+                    <small>💡 Busca y selecciona múltiples distritos.</small>
                 </div>
 
                 <!-- Tipo de Inmueble -->

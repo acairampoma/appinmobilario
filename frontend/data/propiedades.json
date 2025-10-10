@@ -25,15 +25,15 @@
         "https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=800"
       ],
       "caracteristicas_valores": [
-        { "caracteristica_id": 1, "valor": "2" },
-        { "caracteristica_id": 2, "valor": "4" },
-        { "caracteristica_id": 3, "valor": "6" },
-        { "caracteristica_id": 4, "valor": "true" },
-        { "caracteristica_id": 8, "valor": "true" },
-        { "caracteristica_id": 19, "valor": "true" },
-        { "caracteristica_id": 25, "valor": "true" },
-        { "caracteristica_id": 32, "valor": "true" },
-        { "caracteristica_id": 39, "valor": "true" }
+        { "caracteristica_id": 1, "valor": 2 },
+        { "caracteristica_id": 2, "valor": 4 },
+        { "caracteristica_id": 3, "valor": 6 },
+        { "caracteristica_id": 4, "valor": true },
+        { "caracteristica_id": 8, "valor": true },
+        { "caracteristica_id": 19, "valor": true },
+        { "caracteristica_id": 25, "valor": true },
+        { "caracteristica_id": 32, "valor": true },
+        { "caracteristica_id": 39, "valor": true }
       ]
     },
     {
@@ -61,12 +61,12 @@
         "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800"
       ],
       "caracteristicas_valores": [
-        { "caracteristica_id": 1, "valor": "3" },
-        { "caracteristica_id": 2, "valor": "2" },
-        { "caracteristica_id": 25, "valor": "true" },
-        { "caracteristica_id": 27, "valor": "true" },
-        { "caracteristica_id": 32, "valor": "true" },
-        { "caracteristica_id": 47, "valor": "true" }
+        { "caracteristica_id": 1, "valor": 3 },
+        { "caracteristica_id": 2, "valor": 2 },
+        { "caracteristica_id": 25, "valor": true },
+        { "caracteristica_id": 27, "valor": true },
+        { "caracteristica_id": 32, "valor": true },
+        { "caracteristica_id": 47, "valor": true }
       ]
     },
     {
@@ -94,13 +94,13 @@
         "https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=800"
       ],
       "caracteristicas_valores": [
-        { "caracteristica_id": 1, "valor": "5" },
-        { "caracteristica_id": 2, "valor": "5" },
-        { "caracteristica_id": 8, "valor": "true" },
-        { "caracteristica_id": 9, "valor": "true" },
-        { "caracteristica_id": 19, "valor": "true" },
-        { "caracteristica_id": 25, "valor": "true" },
-        { "caracteristica_id": 38, "valor": "true" }
+        { "caracteristica_id": 1, "valor": 5 },
+        { "caracteristica_id": 2, "valor": 5 },
+        { "caracteristica_id": 8, "valor": true },
+        { "caracteristica_id": 9, "valor": true },
+        { "caracteristica_id": 19, "valor": true },
+        { "caracteristica_id": 25, "valor": true },
+        { "caracteristica_id": 38, "valor": true }
       ]
     },
     {
@@ -128,12 +128,12 @@
         "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800"
       ],
       "caracteristicas_valores": [
-        { "caracteristica_id": 1, "valor": "4" },
-        { "caracteristica_id": 2, "valor": "3" },
-        { "caracteristica_id": 8, "valor": "true" },
-        { "caracteristica_id": 25, "valor": "true" },
-        { "caracteristica_id": 27, "valor": "true" },
-        { "caracteristica_id": 32, "valor": "true" }
+        { "caracteristica_id": 1, "valor": 4 },
+        { "caracteristica_id": 2, "valor": 3 },
+        { "caracteristica_id": 8, "valor": true },
+        { "caracteristica_id": 25, "valor": true },
+        { "caracteristica_id": 27, "valor": true },
+        { "caracteristica_id": 32, "valor": true }
       ]
     },
     {
@@ -161,15 +161,15 @@
         "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800"
       ],
       "caracteristicas_valores": [
-        { "caracteristica_id": 1, "valor": "5" },
-        { "caracteristica_id": 2, "valor": "4" },
-        { "caracteristica_id": 8, "valor": "true" },
-        { "caracteristica_id": 11, "valor": "true" },
-        { "caracteristica_id": 19, "valor": "true" },
-        { "caracteristica_id": 25, "valor": "true" },
-        { "caracteristica_id": 27, "valor": "true" },
-        { "caracteristica_id": 32, "valor": "true" },
-        { "caracteristica_id": 38, "valor": "true" }
+        { "caracteristica_id": 1, "valor": 5 },
+        { "caracteristica_id": 2, "valor": 4 },
+        { "caracteristica_id": 8, "valor": true },
+        { "caracteristica_id": 11, "valor": true },
+        { "caracteristica_id": 19, "valor": true },
+        { "caracteristica_id": 25, "valor": true },
+        { "caracteristica_id": 27, "valor": true },
+        { "caracteristica_id": 32, "valor": true },
+        { "caracteristica_id": 38, "valor": true }
       ]
     },
     {
@@ -197,10 +197,10 @@
         "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800"
       ],
       "caracteristicas_valores": [
-        { "caracteristica_id": 1, "valor": "3" },
-        { "caracteristica_id": 2, "valor": "2" },
-        { "caracteristica_id": 27, "valor": "true" },
-        { "caracteristica_id": 47, "valor": "true" }
+        { "caracteristica_id": 1, "valor": 3 },
+        { "caracteristica_id": 2, "valor": 2 },
+        { "caracteristica_id": 27, "valor": true },
+        { "caracteristica_id": 47, "valor": true }
       ]
     }
   ]

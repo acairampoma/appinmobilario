@@ -200,6 +200,173 @@
 }
 
 /* ===========================
+   MULTI-SELECT (Dropdown con checkboxes)
+   =========================== */
+.multi-select {
+  position: relative;
+}
+
+.multi-select__button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: clamp(10px, 2vw, 14px);
+  border: 2px solid var(--borde);
+  border-radius: clamp(6px, 1vw, 10px);
+  background: #fff;
+  cursor: pointer;
+}
+
+.multi-select__button:focus {
+  outline: none;
+  border-color: var(--azul-medio);
+  box-shadow: 0 0 0 3px rgba(26, 77, 122, 0.1);
+}
+
+.multi-select__placeholder {
+  color: var(--gris-medio);
+  flex: 1;
+  text-align: left;
+}
+
+.multi-select__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  flex: 1;
+}
+
+.multi-select__tag {
+  background: rgba(245,166,35,0.15);
+  color: var(--azul-corporativo);
+  border: 1px solid var(--dorado);
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: 0.85rem;
+}
+
+.multi-select__arrow {
+  color: var(--gris-medio);
+}
+
+.multi-select__panel {
+  position: static; /* en flujo normal */
+  margin-top: 6px;
+  background: var(--blanco, #fff);
+  border: 2px solid var(--borde);
+  border-radius: clamp(6px, 1vw, 10px);
+  box-shadow: var(--shadow-md);
+  padding: 8px;
+  max-height: 360px; /* evitar desbordar la tarjeta */
+  overflow: hidden; /* el scroll va en options */
+  background-clip: padding-box;
+}
+
+.multi-select__options, .multi-select__actions {
+  position: relative;
+}
+
+/* Estado flotante ya no se usa (overlay deshabilitado) */
+/* .multi-select__panel--floating removido intencionalmente */
+
+/* Backdrop no usado en modo en-flujo */
+.multi-select__backdrop { display: none; }
+
+/* Sin bloqueo de scroll en modo en-flujo */
+
+.multi-select__search {
+  padding: 6px;
+}
+
+.multi-select__search-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid var(--borde);
+  border-radius: 8px;
+  background: var(--blanco, #fff);
+}
+.multi-select__search-input:focus {
+  outline: none;
+  border-color: var(--azul-medio);
+  box-shadow: 0 0 0 3px rgba(26,77,122,0.1);
+}
+
+.multi-select__options {
+  max-height: 260px;
+  overflow: auto;
+  padding: 4px 6px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+  background: var(--blanco, #fff);
+}
+
+.multi-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  background: var(--blanco, #fff);
+}
+
+.multi-option:hover {
+  background: rgba(245,166,35,0.08);
+}
+
+.multi-option input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--dorado);
+  cursor: pointer;
+}
+
+.multi-select__actions {
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+  padding: 6px;
+}
+
+.multi-select__action {
+  flex: 1;
+  background: var(--azul-corporativo);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.multi-select__action.alt {
+  background: #e0e0e0;
+  color: #333;
+}
+
+/* Estado abierto: elevar contenedor completo */
+.multi-select.open {
+  z-index: 1001;
+}
+
+/* ===========================
+   UBICACIÓN ROW (País/Depto/Provincia)
+   =========================== */
+.ubicacion-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(0.75rem, 2vw, 1rem);
+  align-items: end;
+  margin-bottom: clamp(1.25rem, 3vw, 1.75rem);
+}
+
+.ubicacion-row .form-group {
+  margin-bottom: 0;
+}
+
+/* ===========================
    CHECKBOXES GRID (Auto-fit)
    =========================== */
 .checkboxes-grid {
@@ -288,7 +455,7 @@
    =========================== */
 .boton-match-container {
   margin-top: clamp(2rem, 4vw, 3rem);
-  text-align: center;
+  text-align: right;
 }
 
 .btn-match {
@@ -335,6 +502,12 @@
   .radio-label {
     min-width: 100%;
   }
+  
+  /* En contenedores pequeños, apilar filtros de ubicación */
+  .ubicacion-row {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
 }
 
 /* ===========================
@@ -377,6 +550,11 @@
     width: 100%;
     color: var(--blanco);
   }
+
+  /* Fallback por viewport: en tablet puede ir 2 columnas si hay espacio */
+  .filtro-simplificado-card .ubicacion-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 /* Mobile pequeño */
@@ -386,6 +564,11 @@
   }
   
   .checkboxes-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* En móviles pequeños, forzar columna única */
+  .filtro-simplificado-card .ubicacion-row {
     grid-template-columns: 1fr;
   }
 }
