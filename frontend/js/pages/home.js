@@ -100,5 +100,41 @@ class HomePage {
 
 // Inicializar página
 document.addEventListener('DOMContentLoaded', () => {
+  // Manejar video de intro
+  const introVideo = document.getElementById('introVideo');
+  const loadingScreen = document.querySelector('.loading-screen');
+  
+  if (introVideo) {
+    // Cuando el video termina, ocultar loading screen y mostrar home
+    introVideo.addEventListener('ended', () => {
+      console.log('✅ Video terminado, mostrando home...');
+      loadingScreen.classList.add('hidden');
+      document.body.classList.add('video-finished');
+    });
+    
+    // Manejo de errores del video
+    introVideo.addEventListener('error', (e) => {
+      console.error('❌ Error cargando video:', e);
+      // Si hay error, mostrar home inmediatamente
+      loadingScreen.classList.add('hidden');
+      document.body.classList.add('video-finished');
+    });
+    
+    // Permitir saltar el video haciendo click
+    loadingScreen.addEventListener('click', () => {
+      console.log('⏭️ Video saltado por el usuario');
+      introVideo.pause();
+      loadingScreen.classList.add('hidden');
+      document.body.classList.add('video-finished');
+    });
+  } else {
+    // Si no hay video, ocultar loading screen inmediatamente
+    if (loadingScreen) {
+      loadingScreen.classList.add('hidden');
+      document.body.classList.add('video-finished');
+    }
+  }
+  
+  // Inicializar home page
   new HomePage();
 });
