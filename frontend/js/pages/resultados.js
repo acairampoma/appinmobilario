@@ -67,6 +67,18 @@ class ResultadosPage {
     const btnAplicar = document.getElementById('btnAplicarFiltrosMobile');
     const btnLimpiar = document.getElementById('btnLimpiarFiltrosMobile');
 
+    // Deshabilitar botones inicialmente (solo filtros genéricos abiertos)
+    if (btnAplicar) {
+      btnAplicar.disabled = true;
+      btnAplicar.style.opacity = '0.5';
+      btnAplicar.style.cursor = 'not-allowed';
+    }
+    if (btnLimpiar) {
+      btnLimpiar.disabled = true;
+      btnLimpiar.style.opacity = '0.5';
+      btnLimpiar.style.cursor = 'not-allowed';
+    }
+
     const open = () => { 
       if (drawer) { 
         drawer.classList.add('open'); 
@@ -87,6 +99,20 @@ class ResultadosPage {
       }
     };
 
+    // Función para habilitar botones cuando se abren filtros básicos o avanzados
+    const habilitarBotones = () => {
+      if (btnAplicar) {
+        btnAplicar.disabled = false;
+        btnAplicar.style.opacity = '1';
+        btnAplicar.style.cursor = 'pointer';
+      }
+      if (btnLimpiar) {
+        btnLimpiar.disabled = false;
+        btnLimpiar.style.opacity = '1';
+        btnLimpiar.style.cursor = 'pointer';
+      }
+    };
+
     btnOpen?.addEventListener('click', () => {
       // Pintar contenido al abrir
       this.renderResumenGenericosMobile();
@@ -102,11 +128,29 @@ class ResultadosPage {
       // Los filtros genéricos ya están abiertos por defecto en el HTML
       // Listeners acordeón móvil (reutiliza setupAccordion visual)
       this.setupAccordion();
+      
+      // Agregar listeners para habilitar botones cuando se abran filtros básicos o avanzados
+      setTimeout(() => {
+        const headerBasico = document.querySelector('.drawer-body .accordion-header[data-accordion="basico"]');
+        const headerAvanzado = document.querySelector('.drawer-body .accordion-header[data-accordion="avanzado"]');
+        
+        if (headerBasico) {
+          headerBasico.addEventListener('click', () => {
+            setTimeout(habilitarBotones, 100);
+          });
+        }
+        if (headerAvanzado) {
+          headerAvanzado.addEventListener('click', () => {
+            setTimeout(habilitarBotones, 100);
+          });
+        }
+      }, 200);
     });
     btnClose?.addEventListener('click', close);
     backdrop?.addEventListener('click', close); // Cerrar al hacer click en el backdrop
 
     btnAplicar?.addEventListener('click', () => {
+      if (btnAplicar.disabled) return;
       this.aplicarFiltrosCompletos();
       close();
     });

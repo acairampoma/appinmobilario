@@ -32,7 +32,7 @@
 }
 
 .logo-img {
-  height: clamp(60px, 8vw, 80px);
+  height: clamp(60px, 10vw, 80px);
   width: auto;
 }
 
