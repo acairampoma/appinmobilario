@@ -1410,10 +1410,35 @@
   .hamburger {
     grid-column: 4;
     grid-row: 1;
+    display: flex; /* Mostrar hamburger en móvil */
   }
 
   .header-actions {
-    display: none; /* Ocultar en móvil, usar menú hamburguesa */
+    position: fixed;
+    top: 80px;
+    right: -100%;
+    width: min(280px, 80vw);
+    background: var(--azul-corporativo);
+    flex-direction: column;
+    padding: 1rem;
+    box-shadow: -4px 0 12px rgba(0, 0, 0, 0.3);
+    transition: right 0.3s ease;
+    border-radius: 12px 0 0 12px;
+    z-index: 9997;
+    display: flex !important; /* Forzar display flex */
+  }
+
+  .header-actions.active {
+    right: 0;
+  }
+
+  .header-actions .btn {
+    width: 100%;
+  }
+
+  .usuario-info {
+    width: 100%;
+    text-align: center;
   }
 
   .main-container { 
@@ -1599,37 +1624,6 @@
 }
 
 @media (max-width: 768px) {
-  .hamburger {
-    display: flex;
-  }
-
-  .header-actions {
-    position: fixed;
-    top: 80px;
-    right: -100%;
-    width: min(280px, 80vw);
-    background: var(--azul-corporativo);
-    flex-direction: column;
-    padding: clamp(1rem, 3vw, 1.5rem);
-    box-shadow: -4px 0 12px rgba(0, 0, 0, 0.3);
-    transition: right 0.3s ease;
-    border-radius: clamp(12px, 2vw, 16px) 0 0 clamp(12px, 2vw, 16px);
-    z-index: 999;
-  }
-
-  .header-actions.active {
-    right: 0;
-  }
-
-  .header-actions .btn {
-    width: 100%;
-  }
-
-  .usuario-info {
-    width: 100%;
-    text-align: center;
-  }
-
   .property-card {
     flex-direction: column;
   }
