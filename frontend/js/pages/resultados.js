@@ -887,6 +887,9 @@ class ResultadosPage {
 
         // Verificar si debe mostrar resultados
         this.verificarMostrarResultadosPorAcordeon();
+        
+        // Actualizar estado de botones
+        this.actualizarEstadoBotones();
       };
       
       // Guardar referencia y agregar listener
@@ -904,19 +907,49 @@ class ResultadosPage {
     // Verificar estado inicial
     this.verificarMostrarResultadosPorAcordeon();
 
+    // Deshabilitar botones inicialmente (solo genéricos abiertos)
+    this.actualizarEstadoBotones();
+
     // Botones aplicar/limpiar de la columna
-    document.getElementById('btnAplicarFiltrosCol')?.addEventListener('click', () => {
-      this.aplicarFiltrosCompletos();
+    const btnAplicarCol = document.getElementById('btnAplicarFiltrosCol');
+    const btnLimpiarCol = document.getElementById('btnLimpiarFiltrosCol');
+
+    btnAplicarCol?.addEventListener('click', () => {
+      if (!btnAplicarCol.disabled) {
+        this.aplicarFiltrosCompletos();
+      }
     });
 
-    document.getElementById('btnLimpiarFiltrosCol')?.addEventListener('click', () => {
-      this.limpiarFiltrosAdicionales();
-      // Re-render contenido básico y avanzado vacíos
-      document.getElementById('contenedorBasico').innerHTML = this.generarHTMLFiltroBasico();
-      document.getElementById('contenedorAvanzado').innerHTML = this.generarHTMLFiltroAvanzado();
-      this.attachBasicoInlineListeners();
-      this.attachAvanzadoInlineListeners();
-      this.renderChipsActivos();
+    btnLimpiarCol?.addEventListener('click', () => {
+      if (!btnLimpiarCol.disabled) {
+        this.limpiarFiltrosAdicionales();
+        // Re-render contenido básico y avanzado vacíos
+        document.getElementById('contenedorBasico').innerHTML = this.generarHTMLFiltroBasico();
+        document.getElementById('contenedorAvanzado').innerHTML = this.generarHTMLFiltroAvanzado();
+        this.attachBasicoInlineListeners();
+        this.attachAvanzadoInlineListeners();
+        this.renderChipsActivos();
+      }
+    });
+  }
+
+  // Actualizar estado de botones según acordeones abiertos
+  actualizarEstadoBotones() {
+    const basicoAbierto = document.querySelector('.accordion-header[data-accordion="basico"][aria-expanded="true"]') !== null;
+    const avanzadoAbierto = document.querySelector('.accordion-header[data-accordion="avanzado"][aria-expanded="true"]') !== null;
+    
+    const habilitarBotones = basicoAbierto || avanzadoAbierto;
+
+    // Botones de la columna desktop
+    const btnAplicarCol = document.getElementById('btnAplicarFiltrosCol');
+    const btnLimpiarCol = document.getElementById('btnLimpiarFiltrosCol');
+
+    [btnAplicarCol, btnLimpiarCol].forEach(btn => {
+      if (btn) {
+        btn.disabled = !habilitarBotones;
+        btn.style.opacity = habilitarBotones ? '1' : '0.5';
+        btn.style.cursor = habilitarBotones ? 'pointer' : 'not-allowed';
+      }
     });
   }
 

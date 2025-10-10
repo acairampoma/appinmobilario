@@ -104,6 +104,20 @@ document.addEventListener('DOMContentLoaded', () => {
   const introVideo = document.getElementById('introVideo');
   const loadingScreen = document.querySelector('.loading-screen');
   
+  // Verificar si el video ya se mostró antes (localStorage)
+  const videoYaMostrado = localStorage.getItem('matchPropertyVideoMostrado');
+  
+  if (videoYaMostrado === 'true') {
+    // Si ya se mostró, saltar directamente al home
+    if (loadingScreen) {
+      loadingScreen.classList.add('hidden');
+      document.body.classList.add('video-finished');
+    }
+    // Inicializar home page
+    new HomePage();
+    return; // Salir de la función
+  }
+  
   if (introVideo) {
     // Intentar reproducir el video automáticamente
     const playPromise = introVideo.play();
@@ -127,6 +141,8 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log('✅ Video terminado, mostrando home...');
       loadingScreen.classList.add('hidden');
       document.body.classList.add('video-finished');
+      // Marcar video como mostrado en localStorage
+      localStorage.setItem('matchPropertyVideoMostrado', 'true');
     });
     
     // Manejo de errores del video
@@ -149,6 +165,8 @@ document.addEventListener('DOMContentLoaded', () => {
         introVideo.pause();
         loadingScreen.classList.add('hidden');
         document.body.classList.add('video-finished');
+        // Marcar video como mostrado en localStorage
+        localStorage.setItem('matchPropertyVideoMostrado', 'true');
       }
     });
   } else {
