@@ -191,12 +191,12 @@
     font-size: 0.9rem;
   }
 
-  /* Flechas a la altura del subtítulo "Objetivo, rápido y confiable" */
+  /* Flechas a la altura de "Objetivo, rápido y confiable" */
   .carousel-arrow {
     width: 45px;
     height: 45px;
     font-size: 22px;
-    top: 45%; /* A la altura del subtítulo dorado */
+    top: 45%; /* A la altura del texto dorado "Objetivo, rápido y confiable" */
   }
 
   .carousel-arrow.prev {
