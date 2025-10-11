@@ -1,0 +1,466 @@
+/* Globo 3D con Edificios Épico - Match Property */
+
+.globe-container {
+  position: relative;
+  width: 100%;
+  min-height: 700px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  perspective: 1500px;
+  overflow: hidden;
+  padding: 40px 20px;
+  /* Fondo universo oscuro */
+  background: radial-gradient(ellipse at center, #0a1628 0%, #000814 100%);
+}
+
+/* Estrellas brillantes */
+.globe-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(2px 2px at 20% 30%, white, transparent),
+    radial-gradient(2px 2px at 60% 70%, white, transparent),
+    radial-gradient(1px 1px at 50% 50%, white, transparent),
+    radial-gradient(1px 1px at 80% 10%, white, transparent),
+    radial-gradient(2px 2px at 90% 60%, #f5a623, transparent),
+    radial-gradient(1px 1px at 33% 80%, #f5a623, transparent),
+    radial-gradient(1px 1px at 15% 60%, white, transparent),
+    radial-gradient(2px 2px at 70% 20%, white, transparent);
+  background-size: 200% 200%;
+  background-position: 0% 0%;
+  animation: twinkle 8s ease-in-out infinite;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+/* Más estrellas pequeñas */
+.globe-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(1px 1px at 10% 20%, white, transparent),
+    radial-gradient(1px 1px at 40% 40%, white, transparent),
+    radial-gradient(1px 1px at 75% 65%, white, transparent),
+    radial-gradient(1px 1px at 25% 90%, #f5a623, transparent),
+    radial-gradient(1px 1px at 85% 85%, white, transparent),
+    radial-gradient(1px 1px at 45% 15%, white, transparent),
+    radial-gradient(1px 1px at 95% 45%, #f5a623, transparent);
+  background-size: 250% 250%;
+  background-position: 50% 50%;
+  animation: twinkle 10s ease-in-out infinite reverse;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+/* Título arriba del globo */
+.globe-title {
+  font-size: 2.5rem;
+  font-weight: 400;
+  text-align: center;
+  margin-bottom: 60px;
+  z-index: 10;
+  line-height: 1.3;
+}
+
+.title-porque {
+  font-weight: 400;
+  color: var(--azul-claro);
+  font-size: 2.5rem;
+  text-transform: uppercase;
+  text-shadow: 
+    -1px -1px 0 white,
+    1px -1px 0 white,
+    -1px 1px 0 white,
+    1px 1px 0 white,
+    0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.title-match {
+  font-weight: 700;
+  color: var(--azul-corporativo);
+  font-size: 3rem;
+  text-transform: uppercase;
+  text-shadow: 
+    -1px -1px 0 white,
+    1px -1px 0 white,
+    -1px 1px 0 white,
+    1px 1px 0 white,
+    0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.title-property {
+  font-weight: 400;
+  color: var(--dorado);
+  font-size: 3rem;
+}
+
+/* Contenedor del globo */
+.globe-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Canvas Three.js - Globo 3D REAL */
+.globe-canvas {
+  display: block;
+  width: 450px !important;
+  height: 450px !important;
+  filter: drop-shadow(0 20px 60px rgba(0, 0, 0, 0.4))
+          drop-shadow(0 0 40px rgba(245, 166, 35, 0.2));
+}
+
+/* Contenedor de edificios orbitando */
+.buildings-orbit {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 750px;
+  height: 750px;
+  transform: translate(-50%, -50%);
+  transform-style: preserve-3d;
+  animation: orbitRotate 30s linear infinite;
+}
+
+/* Edificio individual - MÁS GRANDE EN WEB */
+.building-item {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 220px;
+  height: 160px;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  z-index: 10;
+}
+
+.building-item:hover {
+  transform: scale(1.2) translateZ(60px);
+  z-index: 100;
+}
+
+/* Click: Se agranda y resalta (SIN moverse) */
+.building-item.active {
+  transform: scale(1.4) translateZ(80px) !important;
+  z-index: 200 !important;
+}
+
+/* Posiciones de los 4 edificios - SIN INVERTIR LETRA */
+.building-item:nth-child(1) {
+  transform: translate(-50%, -50%) rotateY(0deg) translateZ(375px) rotateY(0deg);
+}
+
+.building-item:nth-child(2) {
+  transform: translate(-50%, -50%) rotateY(90deg) translateZ(375px) rotateY(-90deg);
+}
+
+.building-item:nth-child(3) {
+  transform: translate(-50%, -50%) rotateY(180deg) translateZ(375px) rotateY(-180deg);
+}
+
+.building-item:nth-child(4) {
+  transform: translate(-50%, -50%) rotateY(270deg) translateZ(375px) rotateY(-270deg);
+}
+
+/* Contenido del edificio - CARD CELESTE/AZUL CLARO */
+.building-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: 
+    linear-gradient(135deg, 
+      rgba(45, 95, 143, 0.95) 0%,
+      rgba(26, 77, 122, 0.92) 100%
+    );
+  border-radius: 20px;
+  border: 2px solid rgba(245, 166, 35, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 15px 20px;
+  text-align: center;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 0 20px rgba(245, 166, 35, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  transition: all 0.4s;
+  backdrop-filter: blur(15px);
+  overflow: hidden;
+}
+
+/* Efecto de brillo superior */
+.building-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), transparent);
+  border-radius: 20px 20px 0 0;
+  pointer-events: none;
+}
+
+.building-item:hover .building-content {
+  background: linear-gradient(135deg, rgba(45, 95, 143, 0.98), rgba(70, 120, 170, 0.95));
+  border-color: rgba(245, 166, 35, 0.8);
+  box-shadow: 
+    0 15px 40px rgba(0, 0, 0, 0.5),
+    0 0 30px rgba(245, 166, 35, 0.4);
+}
+
+/* Active: Borde dorado brillante pulsante */
+.building-item.active .building-content {
+  background: linear-gradient(135deg, rgba(45, 95, 143, 0.98), rgba(26, 77, 122, 0.95));
+  border: 3px solid var(--dorado);
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.7),
+    0 0 50px rgba(245, 166, 35, 0.8),
+    inset 0 0 20px rgba(245, 166, 35, 0.15);
+  animation: borderGlow 2s ease-in-out infinite;
+}
+
+/* Ícono del edificio - BLANCO Y PEQUEÑO */
+.building-icon {
+  font-size: 1.8rem;
+  color: var(--blanco);
+  margin-bottom: 8px;
+  transition: all 0.4s;
+  position: relative;
+  z-index: 2;
+}
+
+.building-item:hover .building-icon {
+  color: var(--blanco);
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
+}
+
+.building-item.active .building-icon {
+  color: var(--dorado);
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 12px rgba(245, 166, 35, 0.8));
+}
+
+/* Texto del edificio - MÁS LEGIBLE Y COMPACTO */
+.building-text {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--blanco);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  line-height: 1.3;
+  transition: all 0.4s;
+  position: relative;
+  z-index: 2;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.building-item:hover .building-text {
+  color: var(--dorado);
+  font-size: 0.8rem;
+  text-shadow: 0 2px 8px rgba(245, 166, 35, 0.6);
+}
+
+.building-item.active .building-text {
+  color: var(--dorado);
+  font-size: 0.85rem;
+  text-shadow: 0 2px 10px rgba(245, 166, 35, 0.8);
+}
+
+/* Partículas flotantes */
+.particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: var(--dorado);
+  border-radius: 50%;
+  opacity: 0.6;
+  animation: particleFloat 8s ease-in-out infinite;
+  box-shadow: 0 0 10px var(--dorado);
+}
+
+.particle:nth-child(1) { left: 10%; animation-delay: 0s; }
+.particle:nth-child(2) { left: 20%; animation-delay: 1s; }
+.particle:nth-child(3) { left: 30%; animation-delay: 2s; }
+.particle:nth-child(4) { left: 40%; animation-delay: 3s; }
+.particle:nth-child(5) { left: 50%; animation-delay: 4s; }
+.particle:nth-child(6) { left: 60%; animation-delay: 5s; }
+.particle:nth-child(7) { left: 70%; animation-delay: 6s; }
+.particle:nth-child(8) { left: 80%; animation-delay: 7s; }
+
+/* Animaciones */
+@keyframes orbitRotate {
+  0% { transform: translate(-50%, -50%) rotateY(0deg); }
+  100% { transform: translate(-50%, -50%) rotateY(360deg); }
+}
+
+@keyframes borderGlow {
+  0%, 100% {
+    box-shadow: 
+      0 20px 60px rgba(0, 0, 0, 0.7),
+      0 0 40px rgba(245, 166, 35, 0.7),
+      inset 0 0 20px rgba(245, 166, 35, 0.1);
+  }
+  50% {
+    box-shadow: 
+      0 25px 70px rgba(0, 0, 0, 0.8),
+      0 0 80px rgba(245, 166, 35, 1),
+      inset 0 0 40px rgba(245, 166, 35, 0.3);
+  }
+}
+
+@keyframes particleFloat {
+  0%, 100% {
+    transform: translateY(100vh) translateX(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  90% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(-100px) translateX(50px);
+    opacity: 0;
+  }
+}
+
+/* Responsive - Móvil */
+@media (max-width: 768px) {
+  .globe-container {
+    min-height: 600px;
+  }
+
+  .globe-title {
+    font-size: 1.8rem;
+    margin-bottom: 40px;
+  }
+
+  .globe-title strong {
+    font-size: 2.2rem;
+  }
+
+  .globe-canvas {
+    width: 320px !important;
+    height: 320px !important;
+  }
+
+  .buildings-orbit {
+    width: 550px;
+    height: 550px;
+  }
+
+  .building-item {
+    width: 170px;
+    height: 135px;
+  }
+
+  .building-item:nth-child(1),
+  .building-item:nth-child(2),
+  .building-item:nth-child(3),
+  .building-item:nth-child(4) {
+    transform: translate(-50%, -50%) rotateY(var(--angle)) translateZ(275px);
+  }
+
+  .building-icon {
+    font-size: 1.5rem;
+  }
+
+  .building-text {
+    font-size: 0.7rem;
+  }
+
+  .building-item:hover .building-text {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .globe-container {
+    min-height: 550px;
+  }
+
+  .globe-title {
+    font-size: 1.3rem;
+    margin-bottom: 30px;
+  }
+
+  .title-match {
+    font-size: 1.8rem;
+  }
+
+  .title-property {
+    font-size: 1.8rem;
+  }
+
+  .globe-canvas {
+    width: 260px !important;
+    height: 260px !important;
+  }
+
+  .buildings-orbit {
+    width: 450px;
+    height: 450px;
+  }
+
+  .building-item {
+    width: 145px;
+    height: 115px;
+  }
+
+  .building-item:nth-child(1),
+  .building-item:nth-child(2),
+  .building-item:nth-child(3),
+  .building-item:nth-child(4) {
+    transform: translate(-50%, -50%) rotateY(var(--angle)) translateZ(225px);
+  }
+
+  .building-icon {
+    font-size: 1.3rem;
+  }
+
+  .building-text {
+    font-size: 0.65rem;
+  }
+
+  .building-item:hover .building-text {
+    font-size: 0.7rem;
+  }
+}

@@ -8,10 +8,13 @@
     <link rel="stylesheet" href="css/global.css">
     <link rel="stylesheet" href="css/components/carousel.css">
     <link rel="stylesheet" href="css/components/logo-animation.css">
+    <link rel="stylesheet" href="css/components/globe-3d.css">
     <link rel="stylesheet" href="css/pages/home.css">
     <link rel="stylesheet" href="css/pages/why-match.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Three.js para globo 3D real -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
     <!-- Loading Screen con Video de Intro -->
@@ -93,53 +96,9 @@
     <!-- Why Match Property Section -->
     <section class="why-match-section">
         <div class="container">
-            <div class="why-match-container">
-                <!-- Título a la izquierda -->
-                <div class="why-match-title">
-                    <h2>Por qué<br><strong>MATCH Property?</strong></h2>
-                </div>
-
-                <!-- Líneas conectoras -->
-                <svg class="connection-lines" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid meet">
-                    <!-- 3 líneas principales desde el título -->
-                    <line x1="280" y1="220" x2="450" y2="220" class="connect-line main-line" stroke-width="3" />
-                    <line x1="280" y1="260" x2="450" y2="260" class="connect-line main-line" stroke-width="3" />
-                    <line x1="280" y1="300" x2="450" y2="300" class="connect-line main-line" stroke-width="3" />
-                    
-                    <!-- Ramificaciones desde línea superior -->
-                    <line x1="450" y1="220" x2="550" y2="150" class="connect-line branch-line" />
-                    <line x1="450" y1="220" x2="750" y2="150" class="connect-line branch-line" />
-                    
-                    <!-- Ramificación desde línea media -->
-                    <line x1="450" y1="260" x2="750" y2="350" class="connect-line branch-line" />
-                    
-                    <!-- Ramificación desde línea inferior -->
-                    <line x1="450" y1="300" x2="550" y2="450" class="connect-line branch-line" />
-                </svg>
-
-                <!-- Círculos con características -->
-                <div class="features-circles">
-                    <div class="feature-circle circle-1" data-aos="fade-left" data-aos-delay="100">
-                        <div class="circle-content">
-                            <span>OFERTA INTEGRAL<br>ACTUALIZADA</span>
-                        </div>
-                    </div>
-                    <div class="feature-circle circle-2" data-aos="fade-left" data-aos-delay="200">
-                        <div class="circle-content">
-                            <span>DATA ESTRUCTURADA<br>FIEL Y CONFIABLE</span>
-                        </div>
-                    </div>
-                    <div class="feature-circle circle-3" data-aos="fade-left" data-aos-delay="300">
-                        <div class="circle-content">
-                            <span>FILTROS DE BÚSQUEDA<br>SEGÚN INMUEBLE</span>
-                        </div>
-                    </div>
-                    <div class="feature-circle circle-4" data-aos="fade-left" data-aos-delay="400">
-                        <div class="circle-content">
-                            <span>PROCESO INTUITIVO CON AI<br>PARA MAXIMIZAR RESULTADOS</span>
-                        </div>
-                    </div>
-                </div>
+            <!-- Globo 3D con Edificios Épico (título incluido arriba) -->
+            <div class="globe-container">
+                <!-- El título y globo se crean dinámicamente con JS -->
             </div>
         </div>
     </section>
@@ -199,6 +158,7 @@
     <!-- Scripts propios -->
     <!-- <script src="js/components/logo-animation.js"></script> (comentado para usar video de intro) -->
     <script src="js/components/carousel.js"></script>
+    <script src="js/components/globe-3d.js"></script>
     <script src="js/pages/home.js"></script>
 </body>
 </html>
