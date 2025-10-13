@@ -10,6 +10,8 @@ class HomePage {
     this.renderServices();
     this.renderFooter();
     this.setupHamburgerMenu();
+    this.setupBusquedaScroll();
+    this.checkOpenModal();
   }
 
   setupHamburgerMenu() {
@@ -95,6 +97,96 @@ class HomePage {
     if (direccionEl) direccionEl.innerHTML = `📍 ${this.textos.contacto.direccion}`;
     if (telefonoEl) telefonoEl.innerHTML = `📞 ${this.textos.contacto.telefono}`;
     if (emailEl) emailEl.innerHTML = `📧 ${this.textos.contacto.email}`;
+  }
+
+  setupBusquedaScroll() {
+    const btnBuscarHero = document.getElementById('btnBuscarHero');
+    const btnBuscarNav = document.getElementById('btnBuscarNav');
+    const modalBusqueda = document.getElementById('modalBusqueda');
+    const btnCerrarModal = document.getElementById('btnCerrarModal');
+
+    const abrirModal = (e) => {
+      e.preventDefault();
+      
+      if (modalBusqueda) {
+        // Mostrar modal
+        modalBusqueda.style.display = 'flex';
+        document.body.classList.add('modal-open');
+        
+        // Prevenir scroll en el fondo
+        document.body.style.overflow = 'hidden';
+      }
+    };
+
+    const cerrarModal = () => {
+      if (modalBusqueda) {
+        // Agregar clase de cierre para animación
+        modalBusqueda.classList.add('closing');
+        
+        // Esperar a que termine la animación
+        setTimeout(() => {
+          modalBusqueda.style.display = 'none';
+          modalBusqueda.classList.remove('closing');
+          document.body.classList.remove('modal-open');
+          document.body.style.overflow = '';
+        }, 300);
+      }
+    };
+
+    // Abrir modal
+    if (btnBuscarHero) {
+      btnBuscarHero.addEventListener('click', abrirModal);
+    }
+
+    if (btnBuscarNav) {
+      btnBuscarNav.addEventListener('click', abrirModal);
+    }
+
+    // Cerrar modal con botón X
+    if (btnCerrarModal) {
+      btnCerrarModal.addEventListener('click', cerrarModal);
+    }
+
+    // Cerrar modal al hacer click en el overlay
+    if (modalBusqueda) {
+      modalBusqueda.addEventListener('click', (e) => {
+        if (e.target === modalBusqueda) {
+          cerrarModal();
+        }
+      });
+    }
+
+    // Cerrar modal con tecla ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modalBusqueda.style.display === 'flex') {
+        cerrarModal();
+      }
+    });
+
+    // Guardar referencia para uso externo
+    this.abrirModalBusqueda = abrirModal;
+  }
+
+  checkOpenModal() {
+    // Verificar si hay parámetro en la URL para abrir el modal
+    const urlParams = new URLSearchParams(window.location.search);
+    const openModal = urlParams.get('openModal');
+    
+    if (openModal === 'true') {
+      // Esperar un poco para que todo esté cargado
+      setTimeout(() => {
+        const modalBusqueda = document.getElementById('modalBusqueda');
+        if (modalBusqueda) {
+          modalBusqueda.style.display = 'flex';
+          document.body.classList.add('modal-open');
+          document.body.style.overflow = 'hidden';
+        }
+        
+        // Limpiar el parámetro de la URL sin recargar la página
+        const newUrl = window.location.pathname;
+        window.history.replaceState({}, '', newUrl);
+      }, 500);
+    }
   }
 }
 

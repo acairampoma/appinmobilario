@@ -10,75 +10,21 @@
   justify-content: center;
   perspective: 1500px;
   overflow: hidden;
-  padding: 40px 20px;
-  /* Fondo universo oscuro */
-  background: radial-gradient(ellipse at center, #0a1628 0%, #000814 100%);
+  padding: 20px 20px 40px 20px;
+  /* Fondo transparente */
+  background: transparent;
 }
 
-/* Estrellas brillantes */
-.globe-container::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: 
-    radial-gradient(2px 2px at 20% 30%, white, transparent),
-    radial-gradient(2px 2px at 60% 70%, white, transparent),
-    radial-gradient(1px 1px at 50% 50%, white, transparent),
-    radial-gradient(1px 1px at 80% 10%, white, transparent),
-    radial-gradient(2px 2px at 90% 60%, #f5a623, transparent),
-    radial-gradient(1px 1px at 33% 80%, #f5a623, transparent),
-    radial-gradient(1px 1px at 15% 60%, white, transparent),
-    radial-gradient(2px 2px at 70% 20%, white, transparent);
-  background-size: 200% 200%;
-  background-position: 0% 0%;
-  animation: twinkle 8s ease-in-out infinite;
-  pointer-events: none;
-  opacity: 0.6;
-}
+/* Sin destellos */
 
-/* Más estrellas pequeñas */
-.globe-container::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: 
-    radial-gradient(1px 1px at 10% 20%, white, transparent),
-    radial-gradient(1px 1px at 40% 40%, white, transparent),
-    radial-gradient(1px 1px at 75% 65%, white, transparent),
-    radial-gradient(1px 1px at 25% 90%, #f5a623, transparent),
-    radial-gradient(1px 1px at 85% 85%, white, transparent),
-    radial-gradient(1px 1px at 45% 15%, white, transparent),
-    radial-gradient(1px 1px at 95% 45%, #f5a623, transparent);
-  background-size: 250% 250%;
-  background-position: 50% 50%;
-  animation: twinkle 10s ease-in-out infinite reverse;
-  pointer-events: none;
-  opacity: 0.5;
-}
-
-@keyframes twinkle {
-  0%, 100% {
-    opacity: 0.5;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.05);
-  }
-}
-
-/* Título arriba del globo */
+/* Título arriba del globo - BIEN PEGADO AL INICIO */
 .globe-title {
   font-size: 2.5rem;
   font-weight: 400;
   text-align: center;
-  margin-bottom: 60px;
+  margin-bottom: 20px;
+  margin-top: 0;
+  padding-top: 0;
   z-index: 10;
   line-height: 1.3;
 }
@@ -129,11 +75,10 @@
   display: block;
   width: 450px !important;
   height: 450px !important;
-  filter: drop-shadow(0 20px 60px rgba(0, 0, 0, 0.4))
-          drop-shadow(0 0 40px rgba(245, 166, 35, 0.2));
+  filter: drop-shadow(0 20px 60px rgba(0, 0, 0, 0.2));
 }
 
-/* Contenedor de edificios orbitando */
+/* Contenedor de edificios FIJOS (sin rotación) */
 .buildings-orbit {
   position: absolute;
   top: 50%;
@@ -142,10 +87,10 @@
   height: 750px;
   transform: translate(-50%, -50%);
   transform-style: preserve-3d;
-  animation: orbitRotate 30s linear infinite;
+  /* SIN animación de rotación */
 }
 
-/* Edificio individual - MÁS GRANDE EN WEB */
+/* Tarjeta individual - FIJA con efecto flotante */
 .building-item {
   position: absolute;
   top: 50%;
@@ -154,50 +99,83 @@
   height: 160px;
   transform-style: preserve-3d;
   cursor: pointer;
-  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
   z-index: 10;
+  animation: floatCard 3s ease-in-out infinite;
+}
+
+/* Animación de flotación sutil */
+@keyframes floatCard {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 .building-item:hover {
-  transform: scale(1.2) translateZ(60px);
+  animation: none;
+  transform: translateY(-15px) scale(1.05);
   z-index: 100;
 }
 
-/* Click: Se agranda y resalta (SIN moverse) */
+/* Click: Se mueve al CENTRO del planeta con efecto elegante */
 .building-item.active {
-  transform: scale(1.4) translateZ(80px) !important;
+  animation: none;
+  transform: translate(-50%, -50%) scale(1.3) !important;
   z-index: 200 !important;
+  top: 50% !important;
+  left: 50% !important;
+  right: auto !important;
+  transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
 }
 
-/* Posiciones de los 4 edificios - SIN INVERTIR LETRA */
+/* Posiciones FIJAS: 2 tarjetas FUERA a la IZQUIERDA, 2 FUERA a la DERECHA */
 .building-item:nth-child(1) {
-  transform: translate(-50%, -50%) rotateY(0deg) translateZ(375px) rotateY(0deg);
+  /* Izquierda arriba - FUERA del planeta */
+  top: 25%;
+  left: 5%;
+  transform: translate(0, -50%);
 }
 
 .building-item:nth-child(2) {
-  transform: translate(-50%, -50%) rotateY(90deg) translateZ(375px) rotateY(-90deg);
+  /* Izquierda abajo - FUERA del planeta */
+  top: 65%;
+  left: 5%;
+  transform: translate(0, -50%);
 }
 
 .building-item:nth-child(3) {
-  transform: translate(-50%, -50%) rotateY(180deg) translateZ(375px) rotateY(-180deg);
+  /* Derecha arriba - FUERA del planeta */
+  top: 25%;
+  right: 5%;
+  left: auto;
+  transform: translate(0, -50%);
 }
 
 .building-item:nth-child(4) {
-  transform: translate(-50%, -50%) rotateY(270deg) translateZ(375px) rotateY(-270deg);
+  /* Derecha abajo - FUERA del planeta */
+  top: 65%;
+  right: 5%;
+  left: auto;
+  transform: translate(0, -50%);
 }
 
-/* Contenido del edificio - CARD CELESTE/AZUL CLARO */
+/* Delay de animación para cada tarjeta */
+.building-item:nth-child(1) { animation-delay: 0s; }
+.building-item:nth-child(2) { animation-delay: 0.75s; }
+.building-item:nth-child(3) { animation-delay: 1.5s; }
+.building-item:nth-child(4) { animation-delay: 2.25s; }
+
+/* Contenido de la tarjeta - BLANCA FLOTANTE con icono de ubicación */
 .building-content {
   position: relative;
   width: 100%;
   height: 100%;
-  background: 
-    linear-gradient(135deg, 
-      rgba(45, 95, 143, 0.95) 0%,
-      rgba(26, 77, 122, 0.92) 100%
-    );
+  background: rgba(255, 255, 255, 0.98);
   border-radius: 20px;
-  border: 2px solid rgba(245, 166, 35, 0.3);
+  border: 3px solid rgba(74, 123, 167, 0.3);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -205,12 +183,35 @@
   padding: 15px 20px;
   text-align: center;
   box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.4),
-    0 0 20px rgba(245, 166, 35, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    0 10px 30px rgba(0, 51, 102, 0.15),
+    0 5px 15px rgba(74, 123, 167, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
   transition: all 0.4s;
-  backdrop-filter: blur(15px);
-  overflow: hidden;
+  backdrop-filter: blur(10px);
+  overflow: visible;
+}
+
+/* Icono de ubicación 📍 en cada tarjeta */
+.building-content::after {
+  content: '📍';
+  position: absolute;
+  top: -15px;
+  right: -10px;
+  font-size: 2rem;
+  opacity: 0.9;
+  animation: pulsePin 2s ease-in-out infinite;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+@keyframes pulsePin {
+  0%, 100% {
+    transform: scale(1) translateY(0);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.15) translateY(-3px);
+    opacity: 1;
+  }
 }
 
 /* Efecto de brillo superior */
@@ -227,28 +228,30 @@
 }
 
 .building-item:hover .building-content {
-  background: linear-gradient(135deg, rgba(45, 95, 143, 0.98), rgba(70, 120, 170, 0.95));
-  border-color: rgba(245, 166, 35, 0.8);
+  background: rgba(255, 255, 255, 1);
+  border-color: rgba(74, 123, 167, 0.6);
   box-shadow: 
-    0 15px 40px rgba(0, 0, 0, 0.5),
-    0 0 30px rgba(245, 166, 35, 0.4);
+    0 15px 40px rgba(0, 51, 102, 0.2),
+    0 5px 20px rgba(74, 123, 167, 0.15),
+    0 0 25px rgba(74, 123, 167, 0.1);
 }
 
-/* Active: Borde dorado brillante pulsante */
+/* Active: Borde azul brillante elegante */
 .building-item.active .building-content {
-  background: linear-gradient(135deg, rgba(45, 95, 143, 0.98), rgba(26, 77, 122, 0.95));
-  border: 3px solid var(--dorado);
+  background: rgba(255, 255, 255, 1);
+  border: 3px solid #4a7ba7;
   box-shadow: 
-    0 20px 60px rgba(0, 0, 0, 0.7),
-    0 0 50px rgba(245, 166, 35, 0.8),
-    inset 0 0 20px rgba(245, 166, 35, 0.15);
-  animation: borderGlow 2s ease-in-out infinite;
+    0 20px 50px rgba(0, 51, 102, 0.25),
+    0 10px 30px rgba(74, 123, 167, 0.2),
+    0 0 40px rgba(74, 123, 167, 0.15),
+    inset 0 0 20px rgba(74, 123, 167, 0.05);
+  animation: borderGlowBlue 2s ease-in-out infinite;
 }
 
-/* Ícono del edificio - BLANCO Y PEQUEÑO */
+/* Ícono del edificio - AZUL CORPORATIVO */
 .building-icon {
   font-size: 1.8rem;
-  color: var(--blanco);
+  color: #003366;
   margin-bottom: 8px;
   transition: all 0.4s;
   position: relative;
@@ -256,121 +259,134 @@
 }
 
 .building-item:hover .building-icon {
-  color: var(--blanco);
+  color: #1a4d7a;
   transform: scale(1.05);
-  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
+  filter: drop-shadow(0 0 8px rgba(74, 123, 167, 0.4));
 }
 
 .building-item.active .building-icon {
-  color: var(--dorado);
+  color: #4a7ba7;
   transform: scale(1.1);
-  filter: drop-shadow(0 0 12px rgba(245, 166, 35, 0.8));
+  filter: drop-shadow(0 0 12px rgba(74, 123, 167, 0.6));
 }
 
-/* Texto del edificio - MÁS LEGIBLE Y COMPACTO */
+/* Texto del edificio - AZUL CORPORATIVO */
 .building-text {
   font-size: 0.75rem;
   font-weight: 700;
-  color: var(--blanco);
+  color: #003366;
   text-transform: uppercase;
   letter-spacing: 0.3px;
   line-height: 1.3;
   transition: all 0.4s;
   position: relative;
   z-index: 2;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  text-shadow: none;
 }
 
 .building-item:hover .building-text {
-  color: var(--dorado);
+  color: #1a4d7a;
   font-size: 0.8rem;
-  text-shadow: 0 2px 8px rgba(245, 166, 35, 0.6);
+  text-shadow: none;
 }
 
 .building-item.active .building-text {
-  color: var(--dorado);
+  color: #4a7ba7;
   font-size: 0.85rem;
-  text-shadow: 0 2px 10px rgba(245, 166, 35, 0.8);
+  text-shadow: none;
 }
 
-/* Partículas flotantes */
+/* Partículas deshabilitadas */
 .particles {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  overflow: hidden;
+  display: none;
 }
 
-.particle {
-  position: absolute;
-  width: 4px;
-  height: 4px;
-  background: var(--dorado);
-  border-radius: 50%;
-  opacity: 0.6;
-  animation: particleFloat 8s ease-in-out infinite;
-  box-shadow: 0 0 10px var(--dorado);
-}
+/* Animaciones - SIN rotación orbital */
 
-.particle:nth-child(1) { left: 10%; animation-delay: 0s; }
-.particle:nth-child(2) { left: 20%; animation-delay: 1s; }
-.particle:nth-child(3) { left: 30%; animation-delay: 2s; }
-.particle:nth-child(4) { left: 40%; animation-delay: 3s; }
-.particle:nth-child(5) { left: 50%; animation-delay: 4s; }
-.particle:nth-child(6) { left: 60%; animation-delay: 5s; }
-.particle:nth-child(7) { left: 70%; animation-delay: 6s; }
-.particle:nth-child(8) { left: 80%; animation-delay: 7s; }
-
-/* Animaciones */
-@keyframes orbitRotate {
-  0% { transform: translate(-50%, -50%) rotateY(0deg); }
-  100% { transform: translate(-50%, -50%) rotateY(360deg); }
-}
-
-@keyframes borderGlow {
+@keyframes borderGlowBlue {
   0%, 100% {
     box-shadow: 
-      0 20px 60px rgba(0, 0, 0, 0.7),
-      0 0 40px rgba(245, 166, 35, 0.7),
-      inset 0 0 20px rgba(245, 166, 35, 0.1);
+      0 20px 50px rgba(0, 51, 102, 0.25),
+      0 10px 30px rgba(74, 123, 167, 0.2),
+      0 0 35px rgba(74, 123, 167, 0.15),
+      inset 0 0 15px rgba(74, 123, 167, 0.05);
   }
   50% {
     box-shadow: 
-      0 25px 70px rgba(0, 0, 0, 0.8),
-      0 0 80px rgba(245, 166, 35, 1),
-      inset 0 0 40px rgba(245, 166, 35, 0.3);
+      0 25px 60px rgba(0, 51, 102, 0.3),
+      0 15px 40px rgba(74, 123, 167, 0.25),
+      0 0 50px rgba(74, 123, 167, 0.2),
+      inset 0 0 25px rgba(74, 123, 167, 0.08);
   }
 }
 
-@keyframes particleFloat {
-  0%, 100% {
-    transform: translateY(100vh) translateX(0);
-    opacity: 0;
-  }
-  10% {
-    opacity: 0.6;
-  }
-  90% {
-    opacity: 0.6;
-  }
-  100% {
-    transform: translateY(-100px) translateX(50px);
-    opacity: 0;
-  }
-}
 
 /* Responsive - Móvil */
 @media (max-width: 768px) {
   .globe-container {
-    min-height: 600px;
+    min-height: 650px;
+    padding: 10px 10px 20px 10px;
+    justify-content: flex-start;
   }
 
   .globe-title {
-    font-size: 1.8rem;
-    margin-bottom: 40px;
+    font-size: 1.3rem;
+    margin-bottom: 30px;
+    margin-top: 0;
+    padding-top: 0;
+    line-height: 1.2;
+  }
+
+  /* Bajar el globo en móvil */
+  .globe-wrapper {
+    margin-top: 20px;
+  }
+
+  .title-porque {
+    font-size: 1.3rem;
+  }
+
+  .title-match {
+    font-size: 1.5rem;
+  }
+
+  .title-property {
+    font-size: 1.5rem;
+  }
+
+  /* Deshabilitar COMPLETAMENTE el click en móvil */
+  .building-item {
+    pointer-events: none;
+  }
+
+  .building-item.active {
+    transform: none !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+  }
+
+  /* Planeta más grande en móvil */
+  .globe-canvas {
+    width: 350px !important;
+    height: 350px !important;
+  }
+
+  /* Tarjetas móvil - bajadas para no cruzarse con título */
+  .building-item:nth-child(1) {
+    top: 28%;
+  }
+
+  .building-item:nth-child(2) {
+    top: 68%;
+  }
+
+  .building-item:nth-child(3) {
+    top: 28%;
+  }
+
+  .building-item:nth-child(4) {
+    top: 68%;
   }
 
   .globe-title strong {
@@ -414,12 +430,57 @@
 
 @media (max-width: 480px) {
   .globe-container {
-    min-height: 550px;
+    min-height: 600px;
+    padding: 10px 5px 15px 5px;
+    justify-content: flex-start;
   }
 
   .globe-title {
+    font-size: 1.1rem;
+    margin-bottom: 25px;
+    margin-top: 0;
+    padding-top: 0;
+    line-height: 1.1;
+  }
+
+  /* Bajar el globo en móvil pequeño */
+  .globe-wrapper {
+    margin-top: 15px;
+  }
+
+  .title-porque {
+    font-size: 1.1rem;
+  }
+
+  .title-match {
     font-size: 1.3rem;
-    margin-bottom: 30px;
+  }
+
+  .title-property {
+    font-size: 1.3rem;
+  }
+
+  /* Planeta más grande en móvil pequeño */
+  .globe-canvas {
+    width: 280px !important;
+    height: 280px !important;
+  }
+
+  /* Tarjetas móvil pequeño - bajadas */
+  .building-item:nth-child(1) {
+    top: 26%;
+  }
+
+  .building-item:nth-child(2) {
+    top: 66%;
+  }
+
+  .building-item:nth-child(3) {
+    top: 26%;
+  }
+
+  .building-item:nth-child(4) {
+    top: 66%;
   }
 
   .title-match {

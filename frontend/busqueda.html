@@ -40,17 +40,26 @@
             <div class="filtro-simplificado-card">
                 <h2>Búsqueda Generica</h2>
 
-                <!-- Ubicación en Cascada -->
+                <!-- Fila 1: Tipo de Inmueble -->
+                <div class="form-group">
+                    <label>Tipo de Inmueble</label>
+                    <select id="tipoInmueble" class="form-control">
+                        <option value="">Selecciona un tipo...</option>
+                        <!-- Se carga dinámicamente -->
+                    </select>
+                </div>
+
+                <!-- Fila 2: País + Departamento + Provincia -->
                 <div class="ubicacion-row">
                     <div class="form-group">
-                        <label>🌎 País</label>
+                        <label>País</label>
                         <select id="pais" class="form-control">
                             <option value="PERU">Perú</option>
                         </select>
                     </div>
 
                     <div class="form-group">
-                        <label>🏙️ Departamento</label>
+                        <label>Departamento</label>
                         <select id="departamento" class="form-control">
                             <option value="">Selecciona departamento...</option>
                             <option value="LIMA" selected>Lima</option>
@@ -58,7 +67,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label>🏛️ Provincia</label>
+                        <label>Provincia</label>
                         <select id="provincia" class="form-control">
                             <option value="">Selecciona provincia...</option>
                             <option value="LIMA" selected>Lima</option>
@@ -66,8 +75,9 @@
                     </div>
                 </div>
 
+                <!-- Fila 2: Distritos -->
                 <div class="form-group">
-                    <label>📍 Distritos</label>
+                    <label>Distritos</label>
                     <div id="distritoMulti" class="multi-select">
                         <button type="button" class="multi-select__button" id="distritoToggle" aria-expanded="false" aria-haspopup="listbox">
                             <span class="multi-select__placeholder" id="distritoPlaceholder">Selecciona distritos...</span>
@@ -87,51 +97,36 @@
                             </div>
                         </div>
                     </div>
-                    <small>💡 Busca y selecciona múltiples distritos.</small>
+                    <small>Busca y selecciona múltiples distritos.</small>
                 </div>
 
-                <!-- Tipo de Inmueble -->
-                <div class="form-group">
-                    <label>🏢 Tipo de Inmueble</label>
-                    <select id="tipoInmueble" class="form-control">
-                        <option value="">Selecciona un tipo...</option>
-                        <!-- Se carga dinámicamente -->
-                    </select>
-                </div>
-
-                <!-- Metraje -->
-                <div class="form-group">
-                    <label for="metraje">📐 Metraje (m²)</label>
-                    <input type="number" id="metraje" class="form-control" placeholder="Ej: 460">
-                    <small>💡 El sistema busca ±15%</small>
-                </div>
-
-                <!-- Transacción -->
-                <div class="form-group">
-                    <label>💼 Tipo de Transacción</label>
-                    <div class="radio-group">
-                        <label class="radio-label">
-                            <input type="radio" name="transaccion" value="compra" checked>
-                            <span>Compra</span>
-                        </label>
-                        <label class="radio-label">
-                            <input type="radio" name="transaccion" value="alquiler">
-                            <span>Alquiler</span>
-                        </label>
+                <!-- Fila 4: Tipo de Transacción + Metraje + Presupuesto -->
+                <div class="ubicacion-row">
+                    <div class="form-group">
+                        <label for="transaccion">Tipo de Transacción</label>
+                        <select id="transaccion" name="transaccion" class="form-control">
+                            <option value="compra" selected>Compra</option>
+                            <option value="alquiler">Alquiler</option>
+                        </select>
                     </div>
-                </div>
 
-                <!-- Presupuesto Dinámico -->
-                <div class="form-group">
-                    <label for="presupuesto" id="labelPresupuesto">💰 Presupuesto Compra (USD)</label>
-                    <input type="number" id="presupuesto" class="form-control" placeholder="750,000">
-                    <small id="helperPresupuesto">💡 Tolerancia ±15%</small>
+                    <div class="form-group">
+                        <label for="metraje">Metraje (m²)</label>
+                        <input type="number" id="metraje" class="form-control" placeholder="Ej: 460">
+                        <small>El sistema busca ±15%</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="presupuesto" id="labelPresupuesto">Presupuesto Compra (USD)</label>
+                        <input type="number" id="presupuesto" class="form-control" placeholder="750,000">
+                        <small id="helperPresupuesto">Tolerancia ±15%</small>
+                    </div>
                 </div>
 
                 <!-- Botón Hacer MATCH -->
                 <div class="boton-match-container">
                     <button id="btnHacerMatch" class="btn btn-match">
-                        🎯 Hacer MATCH
+                        Hacer MATCH
                     </button>
                 </div>
             </div>

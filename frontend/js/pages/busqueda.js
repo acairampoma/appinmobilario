@@ -147,7 +147,9 @@ class BusquedaPage {
     const renderOptions = (filterText = '') => {
       const term = (filterText || '').toLowerCase();
       const selectedSet = new Set(this.filtrosSeleccionados.distritos_ids || []);
-      const listaFiltrada = this.distritos.filter(d => d.nombre.toLowerCase().includes(term));
+      const listaFiltrada = this.distritos
+        .filter(d => d.nombre.toLowerCase().includes(term))
+        .sort((a, b) => a.nombre.localeCompare(b.nombre, 'es')); // Orden alfabético
       optionsContainer.innerHTML = listaFiltrada.map(d => `
         <label class="multi-option">
           <input type="checkbox" value="${d.id}" ${selectedSet.has(d.id) ? 'checked' : ''}>

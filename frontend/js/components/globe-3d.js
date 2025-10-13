@@ -63,7 +63,8 @@ class Globe3D {
     const renderer = new THREE.WebGLRenderer({ 
       canvas: canvas, 
       alpha: true,
-      antialias: true 
+      antialias: true,
+      powerPreference: 'low-power'
     });
     renderer.setSize(450, 450);
     renderer.setPixelRatio(window.devicePixelRatio);
@@ -80,20 +81,16 @@ class Globe3D {
     textureCanvas.height = 512;
     const ctx = textureCanvas.getContext('2d');
     
-    // Fondo azul corporativo
-    const gradient = ctx.createRadialGradient(512, 256, 0, 512, 256, 512);
-    gradient.addColorStop(0, '#2d5f8f');
-    gradient.addColorStop(0.5, '#1a4d7a');
-    gradient.addColorStop(1, '#003366');
-    ctx.fillStyle = gradient;
+    // Fondo azul corporativo uniforme
+    ctx.fillStyle = '#1a4d7a';
     ctx.fillRect(0, 0, 1024, 512);
     
-    // Agregar imágenes de edificios
+    // Agregar imágenes de edificios - ALTA CALIDAD
     const images = [
-      'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=200&h=200&fit=crop',
-      'https://images.unsplash.com/photo-1497366216548-37526070297c?w=200&h=200&fit=crop',
-      'https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=200&h=200&fit=crop',
-      'https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=200&h=200&fit=crop'
+      'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=400&fit=crop&q=90',
+      'https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=400&fit=crop&q=90',
+      'https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=400&h=400&fit=crop&q=90',
+      'https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=400&h=400&fit=crop&q=90'
     ];
     
     let loadedImages = 0;
@@ -103,7 +100,7 @@ class Globe3D {
       img.onload = () => {
         const x = (index % 2) * 512;
         const y = Math.floor(index / 2) * 256;
-        ctx.globalAlpha = 0.3;
+        ctx.globalAlpha = 0.4;
         ctx.drawImage(img, x, y, 512, 256);
         loadedImages++;
         if (loadedImages === images.length) {
@@ -115,11 +112,9 @@ class Globe3D {
     
     const texture = new THREE.CanvasTexture(textureCanvas);
     
-    // Material con textura (SIN brillo que causa puntos)
-    const material = new THREE.MeshLambertMaterial({
+    // Material con textura - SIN emisión de luz
+    const material = new THREE.MeshBasicMaterial({
       map: texture,
-      emissive: 0x003366,
-      emissiveIntensity: 0.2,
       transparent: true,
       opacity: 0.95
     });
@@ -127,33 +122,22 @@ class Globe3D {
     const sphere = new THREE.Mesh(geometry, material);
     scene.add(sphere);
     
-    // Agregar líneas de latitud/longitud
-    const wireframe = new THREE.WireframeGeometry(geometry);
-    const lineMaterial = new THREE.LineBasicMaterial({ 
-      color: 0xf5a623, 
+    // Agregar malla amarilla sutil (wireframe)
+    const wireframeGeo = new THREE.WireframeGeometry(geometry);
+    const wireframeMat = new THREE.LineBasicMaterial({ 
+      color: 0xf5a623,
       transparent: true, 
-      opacity: 0.15 
+      opacity: 0.15,
+      linewidth: 1
     });
-    const lines = new THREE.LineSegments(wireframe, lineMaterial);
-    scene.add(lines);
+    const wireframe = new THREE.LineSegments(wireframeGeo, wireframeMat);
+    scene.add(wireframe);
     
-    // Luces para dar profundidad (SIN puntos brillantes)
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-    scene.add(ambientLight);
-    
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-    directionalLight.position.set(5, 5, 5);
-    scene.add(directionalLight);
-    
-    const directionalLight2 = new THREE.DirectionalLight(0xf5a623, 0.3);
-    directionalLight2.position.set(-5, -5, 5);
-    scene.add(directionalLight2);
-    
-    // Animación de rotación
+    // Animación de rotación simple (esfera + malla)
     const animate = () => {
       requestAnimationFrame(animate);
       sphere.rotation.y += 0.002;
-      lines.rotation.y += 0.002;
+      wireframe.rotation.y += 0.002;
       renderer.render(scene, camera);
     };
     animate();
@@ -238,44 +222,7 @@ class Globe3D {
   }
 
   createClickEffect(building) {
-    // Crear efecto de partículas al hacer click
-    const rect = building.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-
-    for (let i = 0; i < 12; i++) {
-      const particle = document.createElement('div');
-      particle.style.cssText = `
-        position: fixed;
-        width: 8px;
-        height: 8px;
-        background: var(--dorado);
-        border-radius: 50%;
-        pointer-events: none;
-        z-index: 9999;
-        left: ${centerX}px;
-        top: ${centerY}px;
-        box-shadow: 0 0 10px var(--dorado);
-      `;
-
-      document.body.appendChild(particle);
-
-      const angle = (360 / 12) * i;
-      const radian = (angle * Math.PI) / 180;
-      const distance = 100;
-      const x = Math.cos(radian) * distance;
-      const y = Math.sin(radian) * distance;
-
-      particle.animate([
-        { transform: 'translate(0, 0) scale(1)', opacity: 1 },
-        { transform: `translate(${x}px, ${y}px) scale(0)`, opacity: 0 }
-      ], {
-        duration: 800,
-        easing: 'ease-out'
-      });
-
-      setTimeout(() => particle.remove(), 800);
-    }
+    // Efecto de click deshabilitado
   }
 
   makeGlobeDraggable() {
