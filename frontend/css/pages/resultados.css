@@ -815,9 +815,11 @@
 }
 
 .accordion-content-avanzado.open {
-  max-height: 600px;
-  opacity: 1;
-  padding: 12px 8px;
+  max-height: 2000px !important;
+  overflow: visible !important;
+  opacity: 1 !important;
+  padding: 12px 8px !important;
+  display: block !important;
   animation: slideDownSub 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -827,7 +829,7 @@
     opacity: 0;
   }
   to {
-    max-height: 600px;
+    max-height: 2000px;
     opacity: 1;
   }
 }
@@ -952,6 +954,176 @@
 }
 .pill:hover { border-color: var(--dorado); }
 .pill.active { background: rgba(245,166,35,0.15); border-color: var(--dorado); }
+
+/* Pills con iconos - Diseño compacto y hermoso */
+.pill-icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  background: var(--blanco);
+  border: 2px solid var(--borde);
+  color: var(--azul-corporativo);
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.pill-icon:hover {
+  border-color: var(--dorado);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 12px rgba(245, 166, 35, 0.2);
+  background: rgba(245, 166, 35, 0.05);
+}
+
+.pill-icon.active {
+  background: var(--dorado);
+  border-color: var(--dorado);
+  color: var(--blanco);
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(245, 166, 35, 0.4);
+}
+
+.pill-icon i {
+  pointer-events: none;
+}
+
+/* Tooltips para pills */
+.pill-icon[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: rgba(0, 51, 102, 0.95);
+  color: var(--blanco);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  pointer-events: none;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-weight: 500;
+}
+
+.pill-icon[data-tooltip]::before {
+  content: '';
+  position: absolute;
+  bottom: calc(100% + 2px);
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: rgba(0, 51, 102, 0.95);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  z-index: 1000;
+}
+
+.pill-icon:hover[data-tooltip]::after,
+.pill-icon:hover[data-tooltip]::before {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Number filters compactos */
+.number-filter-compact {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--blanco);
+  border: 2px solid var(--borde);
+  border-radius: 24px;
+  padding: 6px 12px 6px 10px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.number-filter-compact:hover {
+  border-color: var(--dorado);
+  box-shadow: 0 4px 12px rgba(245, 166, 35, 0.15);
+}
+
+.number-filter-compact i {
+  color: var(--azul-corporativo);
+  font-size: 0.95rem;
+  flex-shrink: 0;
+}
+
+.form-control-compact {
+  width: 50px;
+  border: none;
+  background: transparent;
+  padding: 4px 6px;
+  font-size: 0.9rem;
+  text-align: center;
+  color: var(--azul-corporativo);
+  font-weight: 600;
+  outline: none;
+}
+
+.form-control-compact:focus {
+  outline: none;
+}
+
+.number-filter-compact .unit-label {
+  font-size: 0.75rem;
+  color: var(--gris-medio);
+  font-weight: 500;
+}
+
+/* Tooltip para number filter */
+.number-filter-compact[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: rgba(0, 51, 102, 0.95);
+  color: var(--blanco);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  pointer-events: none;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-weight: 500;
+}
+
+.number-filter-compact[data-tooltip]::before {
+  content: '';
+  position: absolute;
+  bottom: calc(100% + 2px);
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: rgba(0, 51, 102, 0.95);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  z-index: 1000;
+}
+
+.number-filter-compact:hover[data-tooltip]::after,
+.number-filter-compact:hover[data-tooltip]::before {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
 
 /* Favoritos en card */
 .property-card { position: relative; }

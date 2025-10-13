@@ -11,6 +11,7 @@ class ResultadosPage {
     this.caracteristicas = [];
     this.tiposInmuebles = [];
     this.distritos = [];
+    this.configFiltros = null;
     this.usuarioLogueado = null;
     this.map = null;
     this.markers = [];
@@ -106,19 +107,35 @@ class ResultadosPage {
     };
 
     btnOpen?.addEventListener('click', () => {
+      console.log('📱 Abriendo drawer móvil...');
       // Pintar contenido al abrir
       this.renderResumenGenericosMobile();
       const contBasMob = document.getElementById('contenedorBasicoMobile');
       const contAvzMob = document.getElementById('contenedorAvanzadoMobile');
+      console.log('   contenedorBasicoMobile:', contBasMob ? 'SÍ' : 'NO');
+      console.log('   contenedorAvanzadoMobile:', contAvzMob ? 'SÍ' : 'NO');
+      
       if (contBasMob) contBasMob.innerHTML = this.generarHTMLFiltroBasico();
-      if (contAvzMob) contAvzMob.innerHTML = this.generarHTMLFiltroAvanzado();
+      if (contAvzMob) {
+        const htmlAvz = this.generarHTMLFiltroAvanzado();
+        console.log('   HTML avanzado generado:', htmlAvz.length, 'chars');
+        contAvzMob.innerHTML = htmlAvz;
+        console.log('   HTML insertado en DOM móvil');
+      }
+      
       this.attachBasicoInlineListeners();
-      this.attachAvanzadoInlineListeners();
+      
       // Abrir
       open();
-      // Abrir acordeón genéricos por defecto en móvil (ya configurado en HTML)
-      // Los filtros genéricos ya están abiertos por defecto en el HTML
+      
+      // Adjuntar listeners DESPUÉS de que el drawer esté abierto
+      setTimeout(() => {
+        console.log('   ⏭️ Llamando a attachAvanzadoInlineListeners...');
+        this.attachAvanzadoInlineListeners();
+      }, 200);
+      
       // Listeners acordeón móvil (reutiliza setupAccordion visual)
+      console.log('   ⏭️ Llamando a setupAccordion...');
       this.setupAccordion();
       
       // Agregar listeners para habilitar botones cuando se abran filtros básicos o avanzados
@@ -256,28 +273,32 @@ class ResultadosPage {
   async cargarDatos() {
     try {
       console.log('📡 Cargando datos del backend...');
-      const [propiedadesRes, caracteristicasRes, tiposRes, distritosRes] = await Promise.all([
+      const [propiedadesRes, caracteristicasRes, tiposRes, distritosRes, configFiltrosRes] = await Promise.all([
         fetch('data/propiedades.json'),
         fetch('data/caracteristicas.json'),
         fetch('data/tipos-inmuebles.json'),
-        fetch('data/distritos.json')
+        fetch('data/distritos.json'),
+        fetch('data/caracteristicas_x_filtro.json')
       ]);
 
       const propiedadesData = await propiedadesRes.json();
       const caracteristicasData = await caracteristicasRes.json();
       const tiposData = await tiposRes.json();
       const distritosData = await distritosRes.json();
+      const configFiltrosData = await configFiltrosRes.json();
 
       this.propiedades = propiedadesData.propiedades;
       this.caracteristicas = caracteristicasData.caracteristicas;
       this.tiposInmuebles = tiposData.tipos;
       this.distritos = distritosData.distritos;
+      this.configFiltros = configFiltrosData;
 
       console.log('✅ Datos cargados:');
       console.log('   - Propiedades:', this.propiedades.length);
       console.log('   - Características:', this.caracteristicas.length);
       console.log('   - Tipos Inmuebles:', this.tiposInmuebles.length);
       console.log('   - Distritos:', this.distritos.length);
+      console.log('   - Config Filtros:', this.configFiltros ? 'OK' : 'ERROR');
     } catch (error) {
       console.error('❌ Error cargando datos:', error);
     }
@@ -453,111 +474,170 @@ class ResultadosPage {
   }
 
   attachBasicoInlineListeners() {
-    // Guardar al vuelo para chips/estado
-    const radios = document.querySelectorAll('input[name="transaccion_basico"]');
-    if (!this.debouncedPreview) this.debouncedPreview = this.debounce(this.actualizarPreview.bind(this), 350);
+    if (!this.debouncedPreview) {
+      this.debouncedPreview = this.debounce(this.actualizarPreview.bind(this), 350);
+    }
 
-    radios.forEach(r => r.addEventListener('change', (e) => {
-      this.filtrosAdicionales.basico.transaccion = e.target.value;
-      this.renderChipsActivos();
-      this.debouncedPreview();
-    }));
+    // Listeners para pills de transacción (con prevención de duplicados)
+    document.querySelectorAll('.pill-transaccion').forEach(pill => {
+      // Remover listener anterior si existe
+      if (pill._basicoListener) {
+        pill.removeEventListener('click', pill._basicoListener);
+      }
 
-    ['area_basico','parqueos_basico','presupuesto_compra_basico','presupuesto_alquiler_basico','antiguedad_basico'].forEach(id => {
-      const el = document.getElementById(id);
-      el?.addEventListener('input', () => { this.renderChipsActivos(); this.debouncedPreview(); });
-    });
+      // Crear nuevo listener
+      const clickHandler = (e) => {
+        const filtroId = e.currentTarget.getAttribute('data-filtro-id');
+        const value = e.currentTarget.getAttribute('data-value');
 
-    // Pills de transacción
-    document.querySelectorAll('.pill-tx').forEach(pill => {
-      pill.addEventListener('click', (e) => {
-        const value = e.currentTarget.dataset.tx;
-        // Toggle única selección
-        document.querySelectorAll('.pill-tx').forEach(p => { p.classList.remove('active'); p.setAttribute('aria-pressed','false'); });
-        e.currentTarget.classList.add('active');
-        e.currentTarget.setAttribute('aria-pressed','true');
-        // Sincronizar radios ocultos
-        document.querySelectorAll('input[name="transaccion_basico"]').forEach(r => { r.checked = (r.value === value); });
-        this.filtrosAdicionales.basico.transaccion = value;
+        // Actualizar estado
+        this.filtrosAdicionales.basico[filtroId] = value;
+
+        // Re-renderizar filtros básicos para mostrar/ocultar campos condicionales
+        this.rerenderFiltrosBasicos();
+
         this.renderChipsActivos();
         this.debouncedPreview();
-      });
+      };
+
+      // Guardar referencia y agregar listener
+      pill._basicoListener = clickHandler;
+      pill.addEventListener('click', clickHandler);
     });
 
-    // Pills genéricas que apuntan a inputs numéricos
-    document.querySelectorAll('.pills-row[data-target-input] .pill').forEach(pill => {
-      pill.addEventListener('click', (e) => {
-        const row = e.currentTarget.closest('.pills-row');
-        const targetSel = row.getAttribute('data-target-input');
-        const input = document.querySelector(targetSel);
-        const val = e.currentTarget.getAttribute('data-val');
-        if (input) input.value = val;
-        // Activar visual
-        row.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
-        e.currentTarget.classList.add('active');
-        this.renderChipsActivos();
-        this.debouncedPreview();
-      });
-    });
+    // Listeners dinámicos para inputs number (con prevención de duplicados)
+    document.querySelectorAll('input[data-filtro-id][type="number"]').forEach(input => {
+      // Remover listener anterior si existe
+      if (input._basicoInputListener) {
+        input.removeEventListener('input', input._basicoInputListener);
+      }
 
-    // Pills de implementación (sin select)
-    document.querySelectorAll('.pill-implementacion').forEach(pill => {
-      pill.addEventListener('click', (e) => {
-        const value = e.currentTarget.dataset.val;
-        const wasActive = e.currentTarget.classList.contains('active');
-        
-        // Toggle: si ya estaba activo, lo desactivamos
-        document.querySelectorAll('.pill-implementacion').forEach(p => {
-          p.classList.remove('active');
-          p.setAttribute('aria-pressed', 'false');
-        });
-        
-        if (!wasActive) {
-          e.currentTarget.classList.add('active');
-          e.currentTarget.setAttribute('aria-pressed', 'true');
-          this.filtrosAdicionales.basico.implementacion = value;
+      // Crear nuevo listener
+      const inputHandler = (e) => {
+        const filtroId = e.currentTarget.getAttribute('data-filtro-id');
+        const value = e.currentTarget.value;
+
+        if (value && value.trim() !== '') {
+          this.filtrosAdicionales.basico[filtroId] = parseFloat(value);
         } else {
-          this.filtrosAdicionales.basico.implementacion = null;
+          delete this.filtrosAdicionales.basico[filtroId];
         }
-        
+
         this.renderChipsActivos();
         this.debouncedPreview();
-      });
+      };
+
+      // Guardar referencia y agregar listener
+      input._basicoInputListener = inputHandler;
+      input.addEventListener('input', inputHandler);
+    });
+
+    // Listeners dinámicos para selects (con prevención de duplicados)
+    document.querySelectorAll('select[data-filtro-id]').forEach(select => {
+      // Remover listener anterior si existe
+      if (select._basicoSelectListener) {
+        select.removeEventListener('change', select._basicoSelectListener);
+      }
+
+      // Crear nuevo listener
+      const changeHandler = (e) => {
+        const filtroId = e.currentTarget.getAttribute('data-filtro-id');
+        const value = e.currentTarget.value;
+
+        if (value && value.trim() !== '') {
+          this.filtrosAdicionales.basico[filtroId] = value;
+        } else {
+          delete this.filtrosAdicionales.basico[filtroId];
+        }
+
+        this.renderChipsActivos();
+        this.debouncedPreview();
+      };
+
+      // Guardar referencia y agregar listener
+      select._basicoSelectListener = changeHandler;
+      select.addEventListener('change', changeHandler);
     });
   }
 
-  attachAvanzadoInlineListeners() {
-    // Sub-accordion headers (categorías)
-    document.querySelectorAll('.accordion-header-avanzado').forEach(header => {
-      header.addEventListener('click', (e) => {
-        const categoria = e.currentTarget.getAttribute('data-categoria');
-        const content = document.querySelector(`.accordion-content-avanzado[data-categoria="${categoria}"]`);
+  rerenderFiltrosBasicos() {
+    // Re-renderizar en todos los contenedores
+    const contenedores = [
+      'contenedorBasico',
+      'contenedorBasicoMobile',
+      'filtrosInline'
+    ];
+    
+    contenedores.forEach(id => {
+      const container = document.getElementById(id);
+      if (container) {
+        container.innerHTML = this.generarHTMLFiltroBasico();
+      }
+    });
+    
+    // Re-attach listeners
+    this.attachBasicoInlineListeners();
+  }
 
-        if (!content) return;
+  attachAvanzadoInlineListeners() {
+    console.log('🔧 Adjuntando listeners a filtros avanzados...');
+
+    // Sub-accordion headers (categorías)
+    const headers = document.querySelectorAll('.accordion-header-avanzado');
+    console.log(`   📌 Headers encontrados: ${headers.length}`);
+
+    headers.forEach((header, index) => {
+      console.log(`   📌 Adjuntando listener #${index + 1} a: ${header.getAttribute('data-categoria')}`);
+
+      // Remover listener anterior si existe para evitar duplicados
+      if (header._avanzadoListener) {
+        header.removeEventListener('click', header._avanzadoListener);
+      }
+
+      // Crear el nuevo listener
+      const clickHandler = (e) => {
+        console.log('🖱️ ¡CLICK DETECTADO!');
+        e.preventDefault();
+        e.stopPropagation();
+
+        const categoria = e.currentTarget.getAttribute('data-categoria');
+        console.log(`   Categoría clickeada: ${categoria}`);
+
+        const content = document.querySelector(`.accordion-content-avanzado[data-categoria="${categoria}"]`);
+        console.log(`   Contenido encontrado:`, content ? 'SÍ' : 'NO');
+
+        if (!content) {
+          console.error('   ❌ NO SE ENCONTRÓ EL CONTENIDO');
+          return;
+        }
 
         const wasExpanded = e.currentTarget.getAttribute('aria-expanded') === 'true';
+        console.log(`   Estado previo: ${wasExpanded ? 'ABIERTO' : 'CERRADO'}`);
 
-        // Close all panels in same container
-        const container = e.currentTarget.closest('.contenedor-avanzado');
-        if (container) {
-          container.querySelectorAll('.accordion-header-avanzado').forEach(h => {
-            h.setAttribute('aria-expanded', 'false');
-          });
-          container.querySelectorAll('.accordion-content-avanzado').forEach(c => {
-            c.classList.remove('open');
-          });
-        }
-
-        // Toggle current panel
-        if (!wasExpanded) {
+        // Toggle current panel (no cerrar otros)
+        if (wasExpanded) {
+          // Cerrar este panel
+          e.currentTarget.setAttribute('aria-expanded', 'false');
+          e.currentTarget.classList.remove('active');
+          content.classList.remove('open');
+          console.log('   ✅ ACORDEÓN CERRADO');
+        } else {
+          // Abrir este panel
           e.currentTarget.setAttribute('aria-expanded', 'true');
+          e.currentTarget.classList.add('active');
           content.classList.add('open');
+          console.log('   ✅ ACORDEÓN ABIERTO - Clase "open" agregada');
+          console.log('   Clases del contenido:', content.className);
         }
-      });
+      };
+
+      // Guardar referencia al listener y agregarlo
+      header._avanzadoListener = clickHandler;
+      header.addEventListener('click', clickHandler);
     });
 
-    // Pill buttons (checkbox filters)
-    document.querySelectorAll('.pill[data-tipo="checkbox"]').forEach(pill => {
+    // Pill icon buttons (checkbox filters)
+    document.querySelectorAll('.pill-icon[data-tipo="checkbox"]').forEach(pill => {
       pill.addEventListener('click', (e) => {
         const categoria = e.currentTarget.getAttribute('data-cat');
         const caracId = parseInt(e.currentTarget.getAttribute('data-carac-id'));
@@ -588,8 +668,8 @@ class ResultadosPage {
       });
     });
 
-    // Number inputs
-    document.querySelectorAll('.number-filter-inline input[type="number"]').forEach(inp => {
+    // Number inputs (compact)
+    document.querySelectorAll('.number-filter-compact input[type="number"]').forEach(inp => {
       inp.addEventListener('input', (e) => {
         const categoria = e.currentTarget.getAttribute('data-cat');
         const caracId = parseInt(e.currentTarget.getAttribute('data-carac-id'));
@@ -770,10 +850,31 @@ class ResultadosPage {
 
     // Cargar resumen de genéricos y filtros en acordeón
     this.renderResumenGenericos();
-    document.getElementById('contenedorBasico').innerHTML = this.generarHTMLFiltroBasico();
-    document.getElementById('contenedorAvanzado').innerHTML = this.generarHTMLFiltroAvanzado();
+    
+    const contBasico = document.getElementById('contenedorBasico');
+    const contAvanzado = document.getElementById('contenedorAvanzado');
+    
+    console.log('📦 Contenedores encontrados:');
+    console.log('   contenedorBasico:', contBasico ? 'SÍ' : 'NO');
+    console.log('   contenedorAvanzado:', contAvanzado ? 'SÍ' : 'NO');
+    
+    if (contBasico) contBasico.innerHTML = this.generarHTMLFiltroBasico();
+    if (contAvanzado) {
+      const htmlAvanzado = this.generarHTMLFiltroAvanzado();
+      console.log('   HTML avanzado generado:', htmlAvanzado.length, 'chars');
+      contAvanzado.innerHTML = htmlAvanzado;
+      console.log('   HTML insertado en DOM');
+    }
+    
     this.attachBasicoInlineListeners();
-    this.attachAvanzadoInlineListeners();
+    
+    // Adjuntar listeners de acordeón avanzado DESPUÉS de que el DOM esté listo
+    console.log('⏰ Programando attachAvanzadoInlineListeners en 100ms...');
+    setTimeout(() => {
+      console.log('⏰ ¡Ejecutando setTimeout ahora!');
+      this.attachAvanzadoInlineListeners();
+    }, 100);
+    
     this.setupAccordion();
     this.renderChipsActivos();
 
@@ -788,7 +889,11 @@ class ResultadosPage {
     if (contBasMob) contBasMob.innerHTML = this.generarHTMLFiltroBasico();
     if (contAvzMob) contAvzMob.innerHTML = this.generarHTMLFiltroAvanzado();
     this.attachBasicoInlineListeners();
-    this.attachAvanzadoInlineListeners();
+    
+    // Adjuntar listeners con delay
+    setTimeout(() => {
+      this.attachAvanzadoInlineListeners();
+    }, 100);
   }
 
   // Resumen de filtros simplificados en columna izquierda
@@ -1090,13 +1195,13 @@ class ResultadosPage {
             delete this.filtrosAdicionales.avanzado[categoria][caracId];
 
             // Update UI
-            const pill = document.querySelector(`.pill[data-cat="${categoria}"][data-carac-id="${caracId}"]`);
+            const pill = document.querySelector(`.pill-icon[data-cat="${categoria}"][data-carac-id="${caracId}"]`);
             if (pill) {
               pill.classList.remove('active');
               pill.setAttribute('aria-pressed', 'false');
             }
 
-            const input = document.querySelector(`.number-filter-inline input[data-cat="${categoria}"][data-carac-id="${caracId}"]`);
+            const input = document.querySelector(`.number-filter-compact input[data-cat="${categoria}"][data-carac-id="${caracId}"]`);
             if (input) input.value = '';
 
             // Update badge
@@ -1130,104 +1235,106 @@ class ResultadosPage {
   }
 
   generarHTMLFiltroBasico() {
+    if (!this.configFiltros || !this.configFiltros.filtros_basicos) {
+      return '<p class="mensaje-info">⚠️ Error cargando configuración de filtros</p>';
+    }
+
+    const filtros = this.configFiltros.filtros_basicos;
+    
+    // Inicializar transacción desde filtros simplificados si existe
+    if (this.filtrosSimplificados?.transaccion && !this.filtrosAdicionales.basico.transaccion) {
+      this.filtrosAdicionales.basico.transaccion = this.filtrosSimplificados.transaccion;
+    }
+    
+    // Inicializar área desde filtros simplificados si existe
+    if (this.filtrosSimplificados?.area && !this.filtrosAdicionales.basico.area) {
+      this.filtrosAdicionales.basico.area = this.filtrosSimplificados.area;
+    }
+    
+    // Inicializar presupuesto desde filtros simplificados si existe
+    if (this.filtrosSimplificados?.presupuesto_compra && !this.filtrosAdicionales.basico.precio_compra) {
+      this.filtrosAdicionales.basico.precio_compra = this.filtrosSimplificados.presupuesto_compra;
+    }
+    if (this.filtrosSimplificados?.presupuesto_alquiler && !this.filtrosAdicionales.basico.precio_alquiler) {
+      this.filtrosAdicionales.basico.precio_alquiler = this.filtrosSimplificados.presupuesto_alquiler;
+    }
+    
     return `
       <div class="filtro-section">
-        <div class="form-group">
-          <label>Transacción</label>
-          <div class="pills-row" role="group" aria-label="Transacción">
-            <button type="button" class="pill pill-tx" data-tx="compra" aria-pressed="${this.filtrosAdicionales.basico.transaccion === 'compra' ? 'true' : 'false'}">
-              <i class="fa-solid fa-hand-holding-dollar"></i> Compra
-            </button>
-            <button type="button" class="pill pill-tx" data-tx="alquiler" aria-pressed="${this.filtrosAdicionales.basico.transaccion === 'alquiler' ? 'true' : 'false'}">
-              <i class="fa-solid fa-key"></i> Alquiler
-            </button>
-          </div>
-          <!-- Radios ocultos por accesibilidad -->
-          <div class="radio-group" style="display:none;">
-            <label class="radio-label">
-              <input type="radio" name="transaccion_basico" value="compra" ${this.filtrosAdicionales.basico.transaccion === 'compra' ? 'checked' : ''}>
-              <span>Compra</span>
-            </label>
-            <label class="radio-label">
-              <input type="radio" name="transaccion_basico" value="alquiler" ${this.filtrosAdicionales.basico.transaccion === 'alquiler' ? 'checked' : ''}>
-              <span>Alquiler</span>
-            </label>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="area_basico">Área Requerida (m²)</label>
-          <div class="pills-row" data-target-input="#area_basico">
-            <button type="button" class="pill" data-val="300">≥ 300</button>
-            <button type="button" class="pill" data-val="500">≥ 500</button>
-            <button type="button" class="pill" data-val="1000">≥ 1000</button>
-          </div>
-          <input type="number" id="area_basico" class="form-control" placeholder="460" value="${this.filtrosAdicionales.basico.area || ''}">
-          <small>💡 El sistema busca ±15%</small>
-        </div>
-
-        <div class="form-group">
-          <label for="parqueos_basico">Parqueos Requeridos</label>
-          <div class="pills-row" data-target-input="#parqueos_basico">
-            <button type="button" class="pill" data-val="2">≥ 2</button>
-            <button type="button" class="pill" data-val="4">≥ 4</button>
-            <button type="button" class="pill" data-val="8">≥ 8</button>
-          </div>
-          <input type="number" id="parqueos_basico" class="form-control" placeholder="8" value="${this.filtrosAdicionales.basico.parqueos || ''}">
-          <small>💡 El sistema contempla ±20%</small>
-        </div>
-
-        <div class="form-group">
-          <label for="presupuesto_compra_basico">Presupuesto Compra (USD)</label>
-          <div class="pills-row" data-target-input="#presupuesto_compra_basico">
-            <button type="button" class="pill" data-val="500000">≤ 500,000</button>
-            <button type="button" class="pill" data-val="750000">≤ 750,000</button>
-            <button type="button" class="pill" data-val="1000000">≤ 1,000,000</button>
-          </div>
-          <input type="number" id="presupuesto_compra_basico" class="form-control" placeholder="750,000" value="${this.filtrosAdicionales.basico.presupuesto_compra || ''}">
-          <small>(Sin IGV) 💡 Tolerancia ±15%</small>
-        </div>
-
-        <div class="form-group">
-          <label for="presupuesto_alquiler_basico">Presupuesto Alquiler (USD/mes)</label>
-          <div class="pills-row" data-target-input="#presupuesto_alquiler_basico">
-            <button type="button" class="pill" data-val="5000">≤ 5,000</button>
-            <button type="button" class="pill" data-val="8000">≤ 8,000</button>
-            <button type="button" class="pill" data-val="12000">≤ 12,000</button>
-          </div>
-          <input type="number" id="presupuesto_alquiler_basico" class="form-control" placeholder="8,500" value="${this.filtrosAdicionales.basico.presupuesto_alquiler || ''}">
-          <small>💡 Tolerancia ±15%</small>
-        </div>
-
-        <div class="form-group">
-          <label for="antiguedad_basico">Antigüedad (No mayor a años)</label>
-          <div class="pills-row" data-target-input="#antiguedad_basico">
-            <button type="button" class="pill" data-val="5">≤ 5</button>
-            <button type="button" class="pill" data-val="10">≤ 10</button>
-            <button type="button" class="pill" data-val="15">≤ 15</button>
-          </div>
-          <input type="number" id="antiguedad_basico" class="form-control" placeholder="15" value="${this.filtrosAdicionales.basico.antiguedad || ''}">
-        </div>
-
-        <div class="form-group">
-          <label>Nivel de Implementación</label>
-          <div class="pills-row" role="group" aria-label="Nivel de Implementación">
-            <button type="button" class="pill pill-implementacion ${this.filtrosAdicionales.basico.implementacion === 'Amoblado FULL' ? 'active' : ''}" data-val="Amoblado FULL" aria-pressed="${this.filtrosAdicionales.basico.implementacion === 'Amoblado FULL' ? 'true' : 'false'}">
-              <i class="fa-solid fa-couch"></i> FULL
-            </button>
-            <button type="button" class="pill pill-implementacion ${this.filtrosAdicionales.basico.implementacion === 'Implementada' ? 'active' : ''}" data-val="Implementada" aria-pressed="${this.filtrosAdicionales.basico.implementacion === 'Implementada' ? 'true' : 'false'}">
-              <i class="fa-solid fa-toolbox"></i> Impl.
-            </button>
-            <button type="button" class="pill pill-implementacion ${this.filtrosAdicionales.basico.implementacion === 'Semi Implementada' ? 'active' : ''}" data-val="Semi Implementada" aria-pressed="${this.filtrosAdicionales.basico.implementacion === 'Semi Implementada' ? 'true' : 'false'}">
-              <i class="fa-solid fa-screwdriver-wrench"></i> Semi
-            </button>
-            <button type="button" class="pill pill-implementacion ${this.filtrosAdicionales.basico.implementacion === 'Por Implementar' ? 'active' : ''}" data-val="Por Implementar" aria-pressed="${this.filtrosAdicionales.basico.implementacion === 'Por Implementar' ? 'true' : 'false'}">
-              <i class="fa-solid fa-box-open"></i> Por impl.
-            </button>
-          </div>
-        </div>
+        ${filtros.map(filtro => this.renderFiltroBasicoItem(filtro)).join('')}
       </div>
     `;
+  }
+
+  renderFiltroBasicoItem(filtro) {
+    const value = this.filtrosAdicionales.basico[filtro.id] || '';
+    const transaccionActual = this.filtrosAdicionales.basico.transaccion || '';
+    
+    // Verificar visibilidad condicional
+    if (filtro.visible_cuando) {
+      const [campo, valorRequerido] = filtro.visible_cuando.split('=');
+      if (this.filtrosAdicionales.basico[campo] !== valorRequerido) {
+        return ''; // No mostrar este campo
+      }
+    }
+    
+    if (filtro.tipo_input === 'pills') {
+      return `
+        <div class="form-group">
+          <label>${filtro.nombre}</label>
+          <div class="pills-row" role="group" aria-label="${filtro.nombre}">
+            ${filtro.opciones.map(opt => `
+              <button 
+                type="button" 
+                class="pill pill-transaccion ${value === opt.value ? 'active' : ''}" 
+                data-filtro-id="${filtro.id}"
+                data-value="${opt.value}" 
+                aria-pressed="${value === opt.value ? 'true' : 'false'}"
+              >
+                <i class="fa-solid ${opt.icon}"></i> ${opt.label}
+              </button>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+    
+    if (filtro.tipo_input === 'number') {
+      return `
+        <div class="form-group" data-filtro-group="${filtro.id}">
+          <label for="${filtro.id}_basico">${filtro.nombre}</label>
+          <input 
+            type="number" 
+            id="${filtro.id}_basico" 
+            class="form-control" 
+            placeholder="${filtro.placeholder || ''}" 
+            value="${value}"
+            data-filtro-id="${filtro.id}"
+          >
+        </div>
+      `;
+    }
+    
+    if (filtro.tipo_input === 'select') {
+      return `
+        <div class="form-group">
+          <label for="${filtro.id}_basico">${filtro.nombre}</label>
+          <select 
+            id="${filtro.id}_basico" 
+            class="form-control"
+            data-filtro-id="${filtro.id}"
+          >
+            ${filtro.opciones.map(opt => `
+              <option value="${opt.value}" ${value === opt.value ? 'selected' : ''}>
+                ${opt.label}
+              </option>
+            `).join('')}
+          </select>
+        </div>
+      `;
+    }
+    
+    return '';
   }
 
   cargarValoresFiltroBasico() {
@@ -1251,6 +1358,12 @@ class ResultadosPage {
       contenido.innerHTML = '<p class="mensaje-info">⚠️ Debes seleccionar un tipo de inmueble primero</p>';
     } else {
       contenido.innerHTML = this.generarHTMLFiltroAvanzado();
+      
+      // Adjuntar listeners DESPUÉS de insertar el HTML
+      setTimeout(() => {
+        console.log('🔧 Adjuntando listeners desde mostrarFiltroAvanzado...');
+        this.attachAvanzadoInlineListeners();
+      }, 100);
     }
     
     panel.style.display = 'block';
@@ -1259,11 +1372,15 @@ class ResultadosPage {
   generarHTMLFiltroAvanzado() {
     console.log('🔍 Generando filtros avanzados...');
     console.log('   tipo_inmueble_id:', this.filtrosSimplificados?.tipo_inmueble_id);
-    console.log('   características totales:', this.caracteristicas.length);
+
+    // Validar configuración
+    if (!this.configFiltros || !this.configFiltros.filtros_avanzados_por_tipo) {
+      return '<p class="mensaje-info">⚠️ Error cargando configuración de filtros avanzados</p>';
+    }
 
     // Si no hay tipo de inmueble, mostrar mensaje
-    if (!this.filtrosSimplificados?.tipo_inmueble_id || this.caracteristicas.length === 0) {
-      console.warn('⚠️ No hay tipo_inmueble_id o no hay características');
+    if (!this.filtrosSimplificados?.tipo_inmueble_id) {
+      console.warn('⚠️ No hay tipo_inmueble_id');
       return `
         <div style="padding: 20px; text-align: center; color: var(--gris-medio);">
           <p><i class="fa-solid fa-info-circle"></i></p>
@@ -1272,14 +1389,13 @@ class ResultadosPage {
       `;
     }
 
-    // Filtrar características por tipo de inmueble
-    const caracsDelTipo = this.caracteristicas.filter(
-      c => c.tipo_inmueble_id === this.filtrosSimplificados.tipo_inmueble_id
+    // Buscar configuración para este tipo de inmueble
+    const configTipo = this.configFiltros.filtros_avanzados_por_tipo.find(
+      t => t.tipo_inmueble_id === this.filtrosSimplificados.tipo_inmueble_id
     );
 
-    console.log('   características del tipo:', caracsDelTipo.length);
-
-    if (caracsDelTipo.length === 0) {
+    if (!configTipo || !configTipo.categorias || configTipo.categorias.length === 0) {
+      console.warn('⚠️ No hay configuración de filtros para este tipo de inmueble');
       return `
         <div style="padding: 20px; text-align: center; color: var(--gris-medio);">
           <p>No hay filtros avanzados disponibles para este tipo de inmueble</p>
@@ -1287,18 +1403,20 @@ class ResultadosPage {
       `;
     }
 
-    // Agrupar por categoría
-    const categorias = {};
-    caracsDelTipo.forEach(carac => {
-      if (!categorias[carac.categoria]) {
-        categorias[carac.categoria] = [];
-      }
-      categorias[carac.categoria].push(carac);
-    });
+    console.log('   categorías configuradas:', configTipo.categorias.length);
 
     // Mapa de iconos por categoría
     const iconMap = {
       'AREAS_COMUNES_EDIFICIO': 'fa-building',
+      'ASCENSORES': 'fa-elevator',
+      'IMPLEMENTACION_DETALLE': 'fa-toolbox',
+      'SOPORTE_EDIFICIO': 'fa-wrench',
+      'CERCANIA_ESTRATEGICA': 'fa-map-marker-alt',
+      'VISTA_OFICINA': 'fa-eye',
+      'CARACTERISTICAS_CASA': 'fa-home',
+      'CARACTERISTICAS_DEPTO': 'fa-building',
+      'CARACTERISTICAS_TERRENO': 'fa-map',
+      'CARACTERISTICAS_LOCAL': 'fa-store',
       'SERVICIOS': 'fa-wrench',
       'SEGURIDAD': 'fa-shield-halved',
       'TECNOLOGIA_CONECTIVIDAD': 'fa-wifi',
@@ -1308,28 +1426,51 @@ class ResultadosPage {
       'OTROS': 'fa-circle-info'
     };
 
-    // Renderizar con acordeón interno por categoría
-    return Object.entries(categorias).map(([categoria, items]) => {
-      const icon = iconMap[categoria] || 'fa-circle-info';
-      const countActive = this.contarCriteriosActivosCategoria(categoria);
-      const badgeHTML = countActive > 0 ? `<span class="badge-counter">${countActive}</span>` : '';
+    // Renderizar categorías según configuración
+    return configTipo.categorias
+      .sort((a, b) => a.orden - b.orden)
+      .map((catConfig, index) => {
+        // Obtener características de esta categoría
+        const caracteristicasCategoria = catConfig.caracteristicas_ids
+          .map(id => this.caracteristicas.find(c => c.id === id))
+          .filter(c => c); // Filtrar nulls
 
-      return `
-        <div class="accordion-item-avanzado">
-          <button class="accordion-header-avanzado" type="button" data-categoria="${categoria}" aria-expanded="false">
-            <i class="fa-solid ${icon}"></i>
-            <span>${this.formatCategoria(categoria)}</span>
-            ${badgeHTML}
-            <i class="fa-solid fa-chevron-down accordion-arrow"></i>
-          </button>
-          <div class="accordion-content-avanzado" data-categoria="${categoria}">
-            <div class="pills-row">
-              ${items.map(item => this.renderCaracteristicaPill(item)).join('')}
+        if (caracteristicasCategoria.length === 0) {
+          return ''; // No renderizar categorías vacías
+        }
+
+        const icon = iconMap[catConfig.codigo] || 'fa-circle-info';
+        const countActive = this.contarCriteriosActivosCategoria(catConfig.codigo);
+        const badgeHTML = countActive > 0 ? `<span class="badge-counter">${countActive}</span>` : '';
+
+        // Todos los acordeones cerrados por defecto
+        const expandedState = 'false';
+        const activeClass = '';
+        const openClass = '';
+
+        // Renderizar pills de características
+        const pillsHTML = caracteristicasCategoria.map(item => this.renderCaracteristicaPill(item, catConfig.codigo)).join('');
+
+        console.log(`🎯 Categoría ${catConfig.nombre}: ${caracteristicasCategoria.length} características, HTML generado: ${pillsHTML.length} chars`);
+
+        return `
+          <div class="accordion-item-avanzado">
+            <button class="accordion-header-avanzado ${activeClass}" type="button" data-categoria="${catConfig.codigo}" aria-expanded="${expandedState}">
+              <i class="fa-solid ${icon}"></i>
+              <span>${catConfig.nombre}</span>
+              ${badgeHTML}
+              <i class="fa-solid fa-chevron-down accordion-arrow"></i>
+            </button>
+            <div class="accordion-content-avanzado ${openClass}" data-categoria="${catConfig.codigo}" style="background: #f5f5f5;">
+              <div class="pills-row" style="display: flex; flex-wrap: wrap; gap: 8px; padding: 10px;">
+                ${pillsHTML}
+              </div>
             </div>
           </div>
-        </div>
-      `;
-    }).join('');
+        `;
+      })
+      .filter(html => html) // Eliminar strings vacíos
+      .join('');
   }
 
   contarCriteriosActivosCategoria(categoria) {
@@ -1337,40 +1478,143 @@ class ResultadosPage {
     return Object.keys(this.filtrosAdicionales.avanzado[categoria]).length;
   }
 
-  renderCaracteristicaPill(item) {
+  renderCaracteristicaPill(item, codigoCategoria) {
+    // Usar el código de categoría pasado como parámetro o el de la característica
+    const categoria = codigoCategoria || item.categoria;
+
+    console.log(`   🔹 Renderizando: ${item.nombre} (tipo: ${item.tipo_input})`);
+
+    // Mapa de iconos según tipo de característica (sin repeticiones)
+    const getIcon = (nombre) => {
+      const n = nombre.toLowerCase();
+
+      // Conectividad y tecnología
+      if (n.includes('wifi') || n.includes('internet')) return 'fa-wifi';
+      if (n.includes('fibra') || n.includes('banda ancha')) return 'fa-network-wired';
+      if (n.includes('cable') || n.includes('tv')) return 'fa-tv';
+      if (n.includes('telefon')) return 'fa-phone';
+      if (n.includes('interfon') || n.includes('intercomunicador')) return 'fa-walkie-talkie';
+
+      // Climatización
+      if (n.includes('aire acondicionado') || n.includes('a/c')) return 'fa-snowflake';
+      if (n.includes('clima')) return 'fa-temperature-half';
+      if (n.includes('calefac')) return 'fa-fire';
+      if (n.includes('ventilac')) return 'fa-fan';
+
+      // Movilidad vertical
+      if (n.includes('ascensor')) return 'fa-elevator';
+      if (n.includes('escalera')) return 'fa-stairs';
+      if (n.includes('rampa')) return 'fa-wheelchair';
+
+      // Estacionamiento
+      if (n.includes('parqueo') || n.includes('estacionamiento')) return 'fa-square-parking';
+      if (n.includes('cochera') || n.includes('garage')) return 'fa-car';
+      if (n.includes('moto') || n.includes('bicicleta')) return 'fa-bicycle';
+
+      // Áreas recreativas
+      if (n.includes('piscina')) return 'fa-person-swimming';
+      if (n.includes('gym') || n.includes('gimnasio')) return 'fa-dumbbell';
+      if (n.includes('sauna')) return 'fa-hot-tub-person';
+      if (n.includes('spa') || n.includes('jacuzzi')) return 'fa-spa';
+      if (n.includes('juegos') || n.includes('niños')) return 'fa-children';
+      if (n.includes('cancha') || n.includes('deporte')) return 'fa-basketball';
+      if (n.includes('parque') || n.includes('área verde')) return 'fa-tree';
+      if (n.includes('jardín')) return 'fa-leaf';
+      if (n.includes('bbq') || n.includes('parrilla')) return 'fa-fire-flame-curved';
+
+      // Seguridad
+      if (n.includes('seguridad') || n.includes('vigilancia')) return 'fa-shield-halved';
+      if (n.includes('cámara') || n.includes('circuito')) return 'fa-video';
+      if (n.includes('alarma')) return 'fa-bell';
+      if (n.includes('reja') || n.includes('cerco')) return 'fa-fence';
+      if (n.includes('garita') || n.includes('caseta')) return 'fa-house-circle-check';
+
+      // Servicios básicos
+      if (n.includes('luz') || n.includes('electric')) return 'fa-lightbulb';
+      if (n.includes('agua')) return 'fa-droplet';
+      if (n.includes('gas')) return 'fa-fire-burner';
+      if (n.includes('desagüe') || n.includes('alcantarillado')) return 'fa-faucet-drip';
+
+      // Espacios interiores
+      if (n.includes('terraza')) return 'fa-building-flag';
+      if (n.includes('balcón')) return 'fa-border-all';
+      if (n.includes('cocina')) return 'fa-kitchen-set';
+      if (n.includes('baño')) return 'fa-toilet';
+      if (n.includes('closet') || n.includes('armario')) return 'fa-box-archive';
+      if (n.includes('sala')) return 'fa-couch';
+      if (n.includes('comedor')) return 'fa-utensils';
+      if (n.includes('lavander')) return 'fa-soap';
+      if (n.includes('deposito') || n.includes('almacén')) return 'fa-warehouse';
+      if (n.includes('estudio') || n.includes('oficina')) return 'fa-desktop';
+      if (n.includes('dormitorio') || n.includes('habitación')) return 'fa-bed';
+
+      // Vistas y acabados
+      if (n.includes('vista')) return 'fa-eye';
+      if (n.includes('puerta')) return 'fa-door-open';
+      if (n.includes('ventana')) return 'fa-window-maximize';
+      if (n.includes('piso')) return 'fa-layer-group';
+      if (n.includes('techo')) return 'fa-house-chimney';
+      if (n.includes('muro') || n.includes('pared')) return 'fa-cubes';
+      if (n.includes('pintura')) return 'fa-paint-roller';
+      if (n.includes('porcelanato') || n.includes('cerámico')) return 'fa-grip';
+
+      // Servicios adicionales
+      if (n.includes('ascensor de servicio')) return 'fa-dolly';
+      if (n.includes('sala de reuniones')) return 'fa-users';
+      if (n.includes('salón de eventos')) return 'fa-champagne-glasses';
+      if (n.includes('co-working') || n.includes('coworking')) return 'fa-laptop';
+      if (n.includes('lounge')) return 'fa-mug-saucer';
+      if (n.includes('lobby')) return 'fa-door-closed';
+      if (n.includes('recepción')) return 'fa-bell-concierge';
+
+      // Por defecto
+      return 'fa-circle-check';
+    };
+
     if (item.tipo_input === 'checkbox') {
-      const isActive = this.filtrosAdicionales.avanzado[item.categoria]?.[item.id] === true;
-      return `
+      const isActive = this.filtrosAdicionales.avanzado[categoria]?.[item.id] === true;
+      const icon = getIcon(item.nombre);
+      const html = `
         <button
           type="button"
-          class="pill ${isActive ? 'active' : ''}"
-          data-cat="${item.categoria}"
+          class="pill-icon ${isActive ? 'active' : ''}"
+          data-cat="${categoria}"
           data-carac-id="${item.id}"
           data-tipo="checkbox"
+          data-tooltip="${item.nombre}"
           aria-pressed="${isActive ? 'true' : 'false'}"
+          title="${item.nombre}"
         >
-          ${item.nombre}
+          <i class="fa-solid ${icon}"></i>
         </button>
       `;
+      console.log(`      ✅ Checkbox generado: ${html.substring(0, 50)}...`);
+      return html;
     }
 
     if (item.tipo_input === 'number') {
-      const value = this.filtrosAdicionales.avanzado[item.categoria]?.[item.id] || '';
-      return `
-        <div class="number-filter-inline">
-          <label>${item.nombre}</label>
+      const value = this.filtrosAdicionales.avanzado[categoria]?.[item.id] || '';
+      const icon = getIcon(item.nombre);
+      const html = `
+        <div class="number-filter-compact" data-tooltip="${item.nombre} ${item.unidad ? `(${item.unidad})` : ''}">
+          <i class="fa-solid ${icon}"></i>
           <input
             type="number"
-            class="form-control form-control-sm"
+            class="form-control-compact"
             value="${value}"
-            data-cat="${item.categoria}"
+            data-cat="${categoria}"
             data-carac-id="${item.id}"
             placeholder="0"
+            title="${item.nombre}"
           >
+          ${item.unidad ? `<span class="unit-label">${item.unidad}</span>` : ''}
         </div>
       `;
+      console.log(`      ✅ Number generado: ${html.substring(0, 50)}...`);
+      return html;
     }
 
+    console.warn(`      ⚠️ Tipo no reconocido: ${item.tipo_input}`);
     return '';
   }
 
@@ -1408,76 +1652,90 @@ class ResultadosPage {
   }
 
   aplicarFiltrosCompletos() {
-    // Capturar valores del filtro básico
-    this.filtrosAdicionales.basico = {
-      transaccion: document.querySelector('input[name="transaccion_basico"]:checked')?.value,
-      area: document.getElementById('area_basico')?.value,
-      parqueos: document.getElementById('parqueos_basico')?.value,
-      presupuesto_compra: document.getElementById('presupuesto_compra_basico')?.value,
-      presupuesto_alquiler: document.getElementById('presupuesto_alquiler_basico')?.value,
-      antiguedad: document.getElementById('antiguedad_basico')?.value,
-      implementacion: this.filtrosAdicionales.basico.implementacion // Ya se actualiza con los pills
-    };
-
-    // Capturar valores del filtro avanzado
-    const checkboxes = document.querySelectorAll('input[name="caracteristicas_avanzado"]:checked');
-    const caracsChecked = Array.from(checkboxes).map(cb => parseInt(cb.value));
-
-    const numbers = Array.from(document.querySelectorAll('input[data-carac-id]'))
-      .map(inp => ({ id: parseInt(inp.dataset.caracId), val: parseFloat(inp.value) }))
-      .filter(x => !isNaN(x.val) && x.val > 0);
-
-    this.filtrosAdicionales.avanzado = {
-      checkboxes: caracsChecked,
-      numbers: numbers
-    };
-
+    // Los valores ya están en this.filtrosAdicionales.basico gracias a los listeners
+    // Solo necesitamos aplicar los filtros
+    
     // Aplicar filtros
     this.aplicarFiltrosIniciales();
     this.aplicarFiltrosBasicos();
     this.aplicarFiltrosAvanzados();
+
+    // Guardar estado
+    this.guardarFiltrosAdicionales();
 
     // Mostrar resultados
     this.mostrarResultados();
   }
 
   aplicarFiltrosBasicos() {
-    if (!this.filtrosAdicionales.basico.area && 
-        !this.filtrosAdicionales.basico.parqueos && 
-        !this.filtrosAdicionales.basico.antiguedad) {
-      return; // No hay filtros adicionales
+    const filtros = this.filtrosAdicionales.basico;
+    
+    // Si no hay filtros básicos, salir
+    if (Object.keys(filtros).length === 0) {
+      return;
     }
 
     this.propiedadesFiltradas = this.propiedadesFiltradas.filter(prop => {
-      // Filtro por área (±15%)
-      if (this.filtrosAdicionales.basico.area) {
-        const area = parseInt(this.filtrosAdicionales.basico.area);
-        const margen = area * 0.15;
-        if (prop.area < (area - margen) || prop.area > (area + margen)) {
+      // Filtro por transacción (compra/alquiler)
+      if (filtros.transaccion === 'compra') {
+        // Si busca compra, la propiedad debe tener precio de venta
+        if (!prop.precio_venta) {
+          return false;
+        }
+        
+        // Filtro por precio de compra
+        if (filtros.precio_compra) {
+          const precioMax = parseFloat(filtros.precio_compra);
+          if (prop.precio_venta > precioMax) {
+            return false;
+          }
+        }
+      }
+      
+      if (filtros.transaccion === 'alquiler') {
+        // Si busca alquiler, la propiedad debe tener precio de alquiler
+        if (!prop.precio_alquiler) {
+          return false;
+        }
+        
+        // Filtro por precio de alquiler
+        if (filtros.precio_alquiler) {
+          const precioMax = parseFloat(filtros.precio_alquiler);
+          if (prop.precio_alquiler > precioMax) {
+            return false;
+          }
+        }
+      }
+
+      // Filtro por área (±15% tolerancia)
+      if (filtros.area) {
+        const areaBuscada = parseFloat(filtros.area);
+        const margen = areaBuscada * 0.15;
+        if (prop.area < (areaBuscada - margen) || prop.area > (areaBuscada + margen)) {
           return false;
         }
       }
 
-      // Filtro por parqueos (±20%)
-      if (this.filtrosAdicionales.basico.parqueos) {
-        const parqueos = parseInt(this.filtrosAdicionales.basico.parqueos);
-        const margen = Math.ceil(parqueos * 0.2);
-        if (prop.parqueos < (parqueos - margen) || prop.parqueos > (parqueos + margen)) {
+      // Filtro por parqueos (±20% tolerancia)
+      if (filtros.parqueos) {
+        const parqueosBuscados = parseInt(filtros.parqueos);
+        const margen = Math.ceil(parqueosBuscados * 0.2);
+        if (prop.parqueos < (parqueosBuscados - margen) || prop.parqueos > (parqueosBuscados + margen)) {
           return false;
         }
       }
 
-      // Filtro por antigüedad
-      if (this.filtrosAdicionales.basico.antiguedad) {
-        const antiguedad = parseInt(this.filtrosAdicionales.basico.antiguedad);
-        if (prop.antiguedad > antiguedad) {
+      // Filtro por antigüedad (no mayor a)
+      if (filtros.antiguedad) {
+        const antiguedadMax = parseInt(filtros.antiguedad);
+        if (prop.antiguedad > antiguedadMax) {
           return false;
         }
       }
 
       // Filtro por implementación
-      if (this.filtrosAdicionales.basico.implementacion) {
-        if (prop.implementacion !== this.filtrosAdicionales.basico.implementacion) {
+      if (filtros.implementacion && filtros.implementacion !== '') {
+        if (prop.implementacion !== filtros.implementacion) {
           return false;
         }
       }
