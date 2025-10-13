@@ -127,16 +127,12 @@ class ResultadosPage {
       
       // Abrir
       open();
-      
+
       // Adjuntar listeners DESPUÉS de que el drawer esté abierto
       setTimeout(() => {
         console.log('   ⏭️ Llamando a attachAvanzadoInlineListeners...');
         this.attachAvanzadoInlineListeners();
       }, 200);
-      
-      // Listeners acordeón móvil (reutiliza setupAccordion visual)
-      console.log('   ⏭️ Llamando a setupAccordion...');
-      this.setupAccordion();
       
       // Agregar listeners para habilitar botones cuando se abran filtros básicos o avanzados
       setTimeout(() => {
