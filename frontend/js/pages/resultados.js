@@ -107,32 +107,31 @@ class ResultadosPage {
     };
 
     btnOpen?.addEventListener('click', () => {
-      console.log('📱 Abriendo drawer móvil...');
       // Pintar contenido al abrir
       this.renderResumenGenericosMobile();
       const contBasMob = document.getElementById('contenedorBasicoMobile');
       const contAvzMob = document.getElementById('contenedorAvanzadoMobile');
-      console.log('   contenedorBasicoMobile:', contBasMob ? 'SÍ' : 'NO');
-      console.log('   contenedorAvanzadoMobile:', contAvzMob ? 'SÍ' : 'NO');
-      
+
       if (contBasMob) contBasMob.innerHTML = this.generarHTMLFiltroBasico();
       if (contAvzMob) {
-        const htmlAvz = this.generarHTMLFiltroAvanzado();
-        console.log('   HTML avanzado generado:', htmlAvz.length, 'chars');
-        contAvzMob.innerHTML = htmlAvz;
-        console.log('   HTML insertado en DOM móvil');
+        contAvzMob.innerHTML = this.generarHTMLFiltroAvanzado();
       }
-      
+
       this.attachBasicoInlineListeners();
-      
-      // Abrir
+
+      // Abrir drawer
       open();
 
       // Adjuntar listeners DESPUÉS de que el drawer esté abierto
+      // IMPORTANTE: Buscar SOLO dentro del drawer móvil
       setTimeout(() => {
-        console.log('   ⏭️ Llamando a attachAvanzadoInlineListeners...');
-        this.attachAvanzadoInlineListeners();
-      }, 200);
+        const drawerMobile = document.getElementById('mobileFiltersDrawer');
+        if (drawerMobile) {
+          this.attachAvanzadoInlineListeners(drawerMobile);
+        } else {
+          this.attachAvanzadoInlineListeners();
+        }
+      }, 250);
       
       // Agregar listeners para habilitar botones cuando se abran filtros básicos o avanzados
       setTimeout(() => {
@@ -575,16 +574,11 @@ class ResultadosPage {
     this.attachBasicoInlineListeners();
   }
 
-  attachAvanzadoInlineListeners() {
-    console.log('🔧 Adjuntando listeners a filtros avanzados...');
+  attachAvanzadoInlineListeners(container = document) {
+    // Sub-accordion headers (categorías) - buscar en el contenedor especificado
+    const headers = container.querySelectorAll('.accordion-header-avanzado');
 
-    // Sub-accordion headers (categorías)
-    const headers = document.querySelectorAll('.accordion-header-avanzado');
-    console.log(`   📌 Headers encontrados: ${headers.length}`);
-
-    headers.forEach((header, index) => {
-      console.log(`   📌 Adjuntando listener #${index + 1} a: ${header.getAttribute('data-categoria')}`);
-
+    headers.forEach((header) => {
       // Remover listener anterior si existe para evitar duplicados
       if (header._avanzadoListener) {
         header.removeEventListener('click', header._avanzadoListener);
@@ -592,44 +586,39 @@ class ResultadosPage {
 
       // Crear el nuevo listener
       const clickHandler = (e) => {
-        console.log('🖱️ ¡CLICK DETECTADO!');
         e.preventDefault();
         e.stopPropagation();
 
         const categoria = e.currentTarget.getAttribute('data-categoria');
-        console.log(`   Categoría clickeada: ${categoria}`);
 
-        const content = document.querySelector(`.accordion-content-avanzado[data-categoria="${categoria}"]`);
-        console.log(`   Contenido encontrado:`, content ? 'SÍ' : 'NO');
+        // Buscar contenido en el mismo contenedor que el header
+        const parentContainer = e.currentTarget.closest('.accordion-item-avanzado');
+        const content = parentContainer?.querySelector(`.accordion-content-avanzado[data-categoria="${categoria}"]`);
 
-        if (!content) {
-          console.error('   ❌ NO SE ENCONTRÓ EL CONTENIDO');
-          return;
-        }
+        if (!content) return;
 
         const wasExpanded = e.currentTarget.getAttribute('aria-expanded') === 'true';
-        console.log(`   Estado previo: ${wasExpanded ? 'ABIERTO' : 'CERRADO'}`);
 
-        // Toggle current panel (no cerrar otros)
+        // Toggle current panel
         if (wasExpanded) {
-          // Cerrar este panel
           e.currentTarget.setAttribute('aria-expanded', 'false');
           e.currentTarget.classList.remove('active');
           content.classList.remove('open');
-          console.log('   ✅ ACORDEÓN CERRADO');
         } else {
-          // Abrir este panel
           e.currentTarget.setAttribute('aria-expanded', 'true');
           e.currentTarget.classList.add('active');
           content.classList.add('open');
-          console.log('   ✅ ACORDEÓN ABIERTO - Clase "open" agregada');
-          console.log('   Clases del contenido:', content.className);
         }
       };
 
       // Guardar referencia al listener y agregarlo
       header._avanzadoListener = clickHandler;
       header.addEventListener('click', clickHandler);
+
+      // También intentar con touchstart para móvil
+      if ('ontouchstart' in window) {
+        header.addEventListener('touchstart', clickHandler, { passive: false });
+      }
     });
 
     // Pill icon buttons (checkbox filters)
@@ -1366,9 +1355,6 @@ class ResultadosPage {
   }
 
   generarHTMLFiltroAvanzado() {
-    console.log('🔍 Generando filtros avanzados...');
-    console.log('   tipo_inmueble_id:', this.filtrosSimplificados?.tipo_inmueble_id);
-
     // Validar configuración
     if (!this.configFiltros || !this.configFiltros.filtros_avanzados_por_tipo) {
       return '<p class="mensaje-info">⚠️ Error cargando configuración de filtros avanzados</p>';
@@ -1376,7 +1362,6 @@ class ResultadosPage {
 
     // Si no hay tipo de inmueble, mostrar mensaje
     if (!this.filtrosSimplificados?.tipo_inmueble_id) {
-      console.warn('⚠️ No hay tipo_inmueble_id');
       return `
         <div style="padding: 20px; text-align: center; color: var(--gris-medio);">
           <p><i class="fa-solid fa-info-circle"></i></p>
@@ -1391,15 +1376,12 @@ class ResultadosPage {
     );
 
     if (!configTipo || !configTipo.categorias || configTipo.categorias.length === 0) {
-      console.warn('⚠️ No hay configuración de filtros para este tipo de inmueble');
       return `
         <div style="padding: 20px; text-align: center; color: var(--gris-medio);">
           <p>No hay filtros avanzados disponibles para este tipo de inmueble</p>
         </div>
       `;
     }
-
-    console.log('   categorías configuradas:', configTipo.categorias.length);
 
     // Mapa de iconos por categoría
     const iconMap = {
@@ -1423,9 +1405,9 @@ class ResultadosPage {
     };
 
     // Renderizar categorías según configuración
-    return configTipo.categorias
+    const htmlResult = configTipo.categorias
       .sort((a, b) => a.orden - b.orden)
-      .map((catConfig, index) => {
+      .map((catConfig) => {
         // Obtener características de esta categoría
         const caracteristicasCategoria = catConfig.caracteristicas_ids
           .map(id => this.caracteristicas.find(c => c.id === id))
@@ -1447,8 +1429,6 @@ class ResultadosPage {
         // Renderizar pills de características
         const pillsHTML = caracteristicasCategoria.map(item => this.renderCaracteristicaPill(item, catConfig.codigo)).join('');
 
-        console.log(`🎯 Categoría ${catConfig.nombre}: ${caracteristicasCategoria.length} características, HTML generado: ${pillsHTML.length} chars`);
-
         return `
           <div class="accordion-item-avanzado">
             <button class="accordion-header-avanzado ${activeClass}" type="button" data-categoria="${catConfig.codigo}" aria-expanded="${expandedState}">
@@ -1465,8 +1445,9 @@ class ResultadosPage {
           </div>
         `;
       })
-      .filter(html => html) // Eliminar strings vacíos
-      .join('');
+      .filter(html => html); // Eliminar strings vacíos
+
+    return htmlResult.join('');
   }
 
   contarCriteriosActivosCategoria(categoria) {
@@ -1477,8 +1458,6 @@ class ResultadosPage {
   renderCaracteristicaPill(item, codigoCategoria) {
     // Usar el código de categoría pasado como parámetro o el de la característica
     const categoria = codigoCategoria || item.categoria;
-
-    console.log(`   🔹 Renderizando: ${item.nombre} (tipo: ${item.tipo_input})`);
 
     // Mapa de iconos según tipo de característica (sin repeticiones)
     const getIcon = (nombre) => {
@@ -1584,14 +1563,13 @@ class ResultadosPage {
           <i class="fa-solid ${icon}"></i>
         </button>
       `;
-      console.log(`      ✅ Checkbox generado: ${html.substring(0, 50)}...`);
       return html;
     }
 
     if (item.tipo_input === 'number') {
       const value = this.filtrosAdicionales.avanzado[categoria]?.[item.id] || '';
       const icon = getIcon(item.nombre);
-      const html = `
+      return `
         <div class="number-filter-compact" data-tooltip="${item.nombre} ${item.unidad ? `(${item.unidad})` : ''}">
           <i class="fa-solid ${icon}"></i>
           <input
@@ -1606,11 +1584,8 @@ class ResultadosPage {
           ${item.unidad ? `<span class="unit-label">${item.unidad}</span>` : ''}
         </div>
       `;
-      console.log(`      ✅ Number generado: ${html.substring(0, 50)}...`);
-      return html;
     }
 
-    console.warn(`      ⚠️ Tipo no reconocido: ${item.tipo_input}`);
     return '';
   }
 
